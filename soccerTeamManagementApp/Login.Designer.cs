@@ -82,7 +82,7 @@ namespace soccerTeamManagementApp
             this.label2.BackColor = System.Drawing.Color.White;
             this.label2.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label2.ForeColor = System.Drawing.SystemColors.MenuHighlight;
-            this.label2.Location = new System.Drawing.Point(377, 194);
+            this.label2.Location = new System.Drawing.Point(377, 205);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(91, 20);
             this.label2.TabIndex = 5;
@@ -102,13 +102,14 @@ namespace soccerTeamManagementApp
             // 
             // button1
             // 
-            this.button1.BackColor = System.Drawing.Color.DimGray;
+            this.button1.BackColor = System.Drawing.Color.White;
             this.button1.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.button1.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.button1.Location = new System.Drawing.Point(419, 360);
+            this.button1.ForeColor = System.Drawing.SystemColors.MenuHighlight;
+            this.button1.Location = new System.Drawing.Point(430, 364);
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(167, 38);
-            this.button1.TabIndex = 7;
+            this.button1.TabIndex = 40;
             this.button1.Text = "LOGIN";
             this.button1.UseVisualStyleBackColor = false;
             // 

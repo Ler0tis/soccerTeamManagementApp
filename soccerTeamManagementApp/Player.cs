@@ -10,19 +10,19 @@ using System.Windows.Forms;
 
 namespace soccerTeamManagementApp
 {
-    public partial class Teams : Form
+    public partial class Player : Form
     {
-        public Teams()
+        public Player()
         {
             InitializeComponent();
         }
 
-        private void label4_Click(object sender, EventArgs e)
+        private void label2_Click(object sender, EventArgs e)
         {
 
         }
 
-        private void label2_Click(object sender, EventArgs e)
+        private void comboBox2_SelectedIndexChanged(object sender, EventArgs e)
         {
 
         }
