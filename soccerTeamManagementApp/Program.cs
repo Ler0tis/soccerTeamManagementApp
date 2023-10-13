@@ -16,7 +16,7 @@ namespace soccerTeamManagementApp
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new Teams());
+            Application.Run(new Team());
         }
     }
 }

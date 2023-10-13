@@ -58,6 +58,7 @@
     <Compile Include="Coach.Designer.cs">
       <DependentUpon>Coach.cs</DependentUpon>
     </Compile>
+    <Compile Include="Functions.cs" />
     <Compile Include="Login.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -72,11 +73,11 @@
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Teams.cs">
+    <Compile Include="Team.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Teams.Designer.cs">
-      <DependentUpon>Teams.cs</DependentUpon>
+    <Compile Include="Team.Designer.cs">
+      <DependentUpon>Team.cs</DependentUpon>
     </Compile>
     <EmbeddedResource Include="Coach.resx">
       <DependentUpon>Coach.cs</DependentUpon>
@@ -96,8 +97,8 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
-    <EmbeddedResource Include="Teams.resx">
-      <DependentUpon>Teams.cs</DependentUpon>
+    <EmbeddedResource Include="Team.resx">
+      <DependentUpon>Team.cs</DependentUpon>
     </EmbeddedResource>
     <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
