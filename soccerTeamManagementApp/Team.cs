@@ -60,5 +60,71 @@ namespace soccerTeamManagementApp
                 MessageBox.Show(Ex.Message);
             }
         }
+
+        int Key = 0;
+        private void TeamList_CellContentClick(object sender, DataGridViewCellEventArgs e)
+        {
+            TeamName.Text = TeamList.SelectedRows[0].Cells[1].Value.ToString();
+            if(TeamName.Text == "")
+            {
+                Key = 0;
+            }
+            else
+            {
+                Key = Convert.ToInt32(TeamList.SelectedRows[0].Cells[0].Value.ToString());
+            }
+        }
+
+        private void EditBtn_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                if (TeamName.Text == "")
+                {
+                    MessageBox.Show("Missing Data");
+                }
+                else
+                {
+                    string Team = TeamName.Text;
+                    String Query = "update Team set TeamName = '{0}' where TeamId = {1}";
+
+                    Query = string.Format(Query, TeamName.Text,Key);
+                    Con.SetData(Query);
+                    ShowTeams();
+                    MessageBox.Show("Team updated");
+                    TeamName.Text = "";
+                }
+            }
+            catch (Exception Ex)
+            {
+                MessageBox.Show(Ex.Message);
+            }
+        }
+
+        private void DeleteBtn_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                if (TeamName.Text == "")
+                {
+                    MessageBox.Show("Missing Data");
+                }
+                else
+                {
+                    string Team = TeamName.Text;
+                    String Query = "delete from Team where TeamId = {0}";
+
+                    Query = string.Format(Query,Key);
+                    Con.SetData(Query);
+                    ShowTeams();
+                    MessageBox.Show("Team deleted");
+                    TeamName.Text = "";
+                }
+            }
+            catch (Exception Ex)
+            {
+                MessageBox.Show(Ex.Message);
+            }
+        }
     }
 }
