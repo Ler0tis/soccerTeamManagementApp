@@ -126,5 +126,13 @@ namespace soccerTeamManagementApp
                 MessageBox.Show(Ex.Message);
             }
         }
+
+        private void PlayersMenu_Click(object sender, EventArgs e)
+        {
+            Player Obj = new Player();
+            Obj.Show();
+            this.Hide();
+
+        }
     }
 }

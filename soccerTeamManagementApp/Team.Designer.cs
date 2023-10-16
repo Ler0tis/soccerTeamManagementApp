@@ -45,7 +45,7 @@ namespace soccerTeamManagementApp
             this.pictureBox4 = new System.Windows.Forms.PictureBox();
             this.label11 = new System.Windows.Forms.Label();
             this.pictureBox3 = new System.Windows.Forms.PictureBox();
-            this.label10 = new System.Windows.Forms.Label();
+            this.PlayersMenu = new System.Windows.Forms.Label();
             this.pictureBox2 = new System.Windows.Forms.PictureBox();
             this.label9 = new System.Windows.Forms.Label();
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
@@ -188,17 +188,18 @@ namespace soccerTeamManagementApp
             this.pictureBox3.TabIndex = 74;
             this.pictureBox3.TabStop = false;
             // 
-            // label10
+            // PlayersMenu
             // 
-            this.label10.AutoSize = true;
-            this.label10.BackColor = System.Drawing.Color.White;
-            this.label10.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label10.ForeColor = System.Drawing.SystemColors.MenuHighlight;
-            this.label10.Location = new System.Drawing.Point(584, 96);
-            this.label10.Name = "label10";
-            this.label10.Size = new System.Drawing.Size(54, 16);
-            this.label10.TabIndex = 73;
-            this.label10.Text = "Players";
+            this.PlayersMenu.AutoSize = true;
+            this.PlayersMenu.BackColor = System.Drawing.Color.White;
+            this.PlayersMenu.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.PlayersMenu.ForeColor = System.Drawing.SystemColors.MenuHighlight;
+            this.PlayersMenu.Location = new System.Drawing.Point(584, 96);
+            this.PlayersMenu.Name = "PlayersMenu";
+            this.PlayersMenu.Size = new System.Drawing.Size(54, 16);
+            this.PlayersMenu.TabIndex = 73;
+            this.PlayersMenu.Text = "Players";
+            this.PlayersMenu.Click += new System.EventHandler(this.PlayersMenu_Click);
             // 
             // pictureBox2
             // 
@@ -285,7 +286,7 @@ namespace soccerTeamManagementApp
             dataGridViewCellStyle3.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
             this.TeamList.DefaultCellStyle = dataGridViewCellStyle3;
             this.TeamList.GridColor = System.Drawing.Color.FromArgb(((int)(((byte)(231)))), ((int)(((byte)(229)))), ((int)(((byte)(255)))));
-            this.TeamList.Location = new System.Drawing.Point(358, 189);
+            this.TeamList.Location = new System.Drawing.Point(373, 178);
             this.TeamList.Name = "TeamList";
             this.TeamList.RowHeadersVisible = false;
             this.TeamList.Size = new System.Drawing.Size(712, 456);
@@ -342,7 +343,7 @@ namespace soccerTeamManagementApp
             this.Controls.Add(this.pictureBox4);
             this.Controls.Add(this.label11);
             this.Controls.Add(this.pictureBox3);
-            this.Controls.Add(this.label10);
+            this.Controls.Add(this.PlayersMenu);
             this.Controls.Add(this.pictureBox2);
             this.Controls.Add(this.label9);
             this.Controls.Add(this.pictureBox1);
@@ -385,7 +386,7 @@ namespace soccerTeamManagementApp
         private System.Windows.Forms.PictureBox pictureBox4;
         private System.Windows.Forms.Label label11;
         private System.Windows.Forms.PictureBox pictureBox3;
-        private System.Windows.Forms.Label label10;
+        private System.Windows.Forms.Label PlayersMenu;
         private System.Windows.Forms.PictureBox pictureBox2;
         private System.Windows.Forms.Label label9;
         private System.Windows.Forms.PictureBox pictureBox1;
