@@ -39,7 +39,7 @@ namespace soccerTeamManagementApp
             this.label3 = new System.Windows.Forms.Label();
             this.TeamName = new System.Windows.Forms.TextBox();
             this.label4 = new System.Windows.Forms.Label();
-            this.textBox2 = new System.Windows.Forms.TextBox();
+            this.TeamAddress = new System.Windows.Forms.TextBox();
             this.panel2 = new System.Windows.Forms.Panel();
             this.label12 = new System.Windows.Forms.Label();
             this.pictureBox4 = new System.Windows.Forms.PictureBox();
@@ -127,13 +127,13 @@ namespace soccerTeamManagementApp
             this.label4.Text = "Address";
             this.label4.Click += new System.EventHandler(this.label4_Click);
             // 
-            // textBox2
+            // TeamAddress
             // 
-            this.textBox2.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.textBox2.Location = new System.Drawing.Point(30, 272);
-            this.textBox2.Name = "textBox2";
-            this.textBox2.Size = new System.Drawing.Size(265, 26);
-            this.textBox2.TabIndex = 8;
+            this.TeamAddress.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.TeamAddress.Location = new System.Drawing.Point(30, 272);
+            this.TeamAddress.Name = "TeamAddress";
+            this.TeamAddress.Size = new System.Drawing.Size(265, 26);
+            this.TeamAddress.TabIndex = 8;
             // 
             // panel2
             // 
@@ -240,7 +240,7 @@ namespace soccerTeamManagementApp
             this.AddBtn.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.AddBtn.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.AddBtn.ForeColor = System.Drawing.Color.White;
-            this.AddBtn.Location = new System.Drawing.Point(30, 499);
+            this.AddBtn.Location = new System.Drawing.Point(30, 577);
             this.AddBtn.Name = "AddBtn";
             this.AddBtn.Size = new System.Drawing.Size(92, 38);
             this.AddBtn.TabIndex = 78;
@@ -255,7 +255,7 @@ namespace soccerTeamManagementApp
             this.EditBtn.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.EditBtn.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.EditBtn.ForeColor = System.Drawing.Color.Black;
-            this.EditBtn.Location = new System.Drawing.Point(203, 499);
+            this.EditBtn.Location = new System.Drawing.Point(203, 577);
             this.EditBtn.Name = "EditBtn";
             this.EditBtn.Size = new System.Drawing.Size(92, 38);
             this.EditBtn.TabIndex = 79;
@@ -321,7 +321,7 @@ namespace soccerTeamManagementApp
             this.DeleteBtn.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.DeleteBtn.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.DeleteBtn.ForeColor = System.Drawing.Color.Black;
-            this.DeleteBtn.Location = new System.Drawing.Point(203, 566);
+            this.DeleteBtn.Location = new System.Drawing.Point(203, 636);
             this.DeleteBtn.Name = "DeleteBtn";
             this.DeleteBtn.Size = new System.Drawing.Size(92, 38);
             this.DeleteBtn.TabIndex = 81;
@@ -349,7 +349,7 @@ namespace soccerTeamManagementApp
             this.Controls.Add(this.pictureBox1);
             this.Controls.Add(this.panel2);
             this.Controls.Add(this.label4);
-            this.Controls.Add(this.textBox2);
+            this.Controls.Add(this.TeamAddress);
             this.Controls.Add(this.label3);
             this.Controls.Add(this.TeamName);
             this.Controls.Add(this.label2);
@@ -380,7 +380,7 @@ namespace soccerTeamManagementApp
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.TextBox TeamName;
         private System.Windows.Forms.Label label4;
-        private System.Windows.Forms.TextBox textBox2;
+        private System.Windows.Forms.TextBox TeamAddress;
         private System.Windows.Forms.Panel panel2;
         private System.Windows.Forms.Label label12;
         private System.Windows.Forms.PictureBox pictureBox4;

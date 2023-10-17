@@ -30,9 +30,9 @@ namespace soccerTeamManagementApp
         private void InitializeComponent()
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Player));
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle3 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle4 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle5 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle6 = new System.Windows.Forms.DataGridViewCellStyle();
             this.panel1 = new System.Windows.Forms.Panel();
             this.label1 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
@@ -49,19 +49,20 @@ namespace soccerTeamManagementApp
             this.JerseyNumberTb = new System.Windows.Forms.TextBox();
             this.DOBTb = new Guna.UI2.WinForms.Guna2DateTimePicker();
             this.AddBtn = new System.Windows.Forms.Button();
-            this.UpdateBtn = new System.Windows.Forms.Button();
+            this.EditBtn = new System.Windows.Forms.Button();
             this.label12 = new System.Windows.Forms.Label();
             this.pictureBox4 = new System.Windows.Forms.PictureBox();
             this.label11 = new System.Windows.Forms.Label();
             this.pictureBox3 = new System.Windows.Forms.PictureBox();
             this.label10 = new System.Windows.Forms.Label();
             this.pictureBox2 = new System.Windows.Forms.PictureBox();
-            this.label13 = new System.Windows.Forms.Label();
+            this.TeamsMenu = new System.Windows.Forms.Label();
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
             this.PlayerList = new Guna.UI2.WinForms.Guna2DataGridView();
             this.selectTeamTb = new System.Windows.Forms.ComboBox();
             this.label4 = new System.Windows.Forms.Label();
             this.LastNameTb = new System.Windows.Forms.TextBox();
+            this.DeleteBtn = new System.Windows.Forms.Button();
             this.panel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox4)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox3)).BeginInit();
@@ -96,7 +97,7 @@ namespace soccerTeamManagementApp
             this.label2.AutoSize = true;
             this.label2.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label2.ForeColor = System.Drawing.SystemColors.Desktop;
-            this.label2.Location = new System.Drawing.Point(31, 122);
+            this.label2.Location = new System.Drawing.Point(31, 96);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(126, 20);
             this.label2.TabIndex = 2;
@@ -109,7 +110,7 @@ namespace soccerTeamManagementApp
             this.label7.BackColor = System.Drawing.Color.White;
             this.label7.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label7.ForeColor = System.Drawing.SystemColors.MenuHighlight;
-            this.label7.Location = new System.Drawing.Point(31, 415);
+            this.label7.Location = new System.Drawing.Point(31, 382);
             this.label7.Name = "label7";
             this.label7.Size = new System.Drawing.Size(73, 20);
             this.label7.TabIndex = 29;
@@ -121,7 +122,7 @@ namespace soccerTeamManagementApp
             this.label8.BackColor = System.Drawing.Color.White;
             this.label8.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label8.ForeColor = System.Drawing.SystemColors.MenuHighlight;
-            this.label8.Location = new System.Drawing.Point(31, 544);
+            this.label8.Location = new System.Drawing.Point(31, 511);
             this.label8.Name = "label8";
             this.label8.Size = new System.Drawing.Size(111, 20);
             this.label8.TabIndex = 27;
@@ -130,7 +131,7 @@ namespace soccerTeamManagementApp
             // SalaryTb
             // 
             this.SalaryTb.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.SalaryTb.Location = new System.Drawing.Point(35, 567);
+            this.SalaryTb.Location = new System.Drawing.Point(35, 534);
             this.SalaryTb.Name = "SalaryTb";
             this.SalaryTb.Size = new System.Drawing.Size(265, 26);
             this.SalaryTb.TabIndex = 26;
@@ -141,7 +142,7 @@ namespace soccerTeamManagementApp
             this.label5.BackColor = System.Drawing.Color.White;
             this.label5.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label5.ForeColor = System.Drawing.SystemColors.MenuHighlight;
-            this.label5.Location = new System.Drawing.Point(31, 350);
+            this.label5.Location = new System.Drawing.Point(31, 319);
             this.label5.Name = "label5";
             this.label5.Size = new System.Drawing.Size(53, 20);
             this.label5.TabIndex = 25;
@@ -153,7 +154,7 @@ namespace soccerTeamManagementApp
             this.label6.BackColor = System.Drawing.Color.White;
             this.label6.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label6.ForeColor = System.Drawing.SystemColors.MenuHighlight;
-            this.label6.Location = new System.Drawing.Point(31, 289);
+            this.label6.Location = new System.Drawing.Point(31, 258);
             this.label6.Name = "label6";
             this.label6.Size = new System.Drawing.Size(110, 20);
             this.label6.TabIndex = 23;
@@ -165,7 +166,7 @@ namespace soccerTeamManagementApp
             this.label3.BackColor = System.Drawing.Color.White;
             this.label3.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label3.ForeColor = System.Drawing.SystemColors.MenuHighlight;
-            this.label3.Location = new System.Drawing.Point(31, 167);
+            this.label3.Location = new System.Drawing.Point(31, 136);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(94, 20);
             this.label3.TabIndex = 19;
@@ -174,7 +175,7 @@ namespace soccerTeamManagementApp
             // FirstNameTb
             // 
             this.FirstNameTb.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.FirstNameTb.Location = new System.Drawing.Point(35, 190);
+            this.FirstNameTb.Location = new System.Drawing.Point(35, 159);
             this.FirstNameTb.Name = "FirstNameTb";
             this.FirstNameTb.Size = new System.Drawing.Size(265, 26);
             this.FirstNameTb.TabIndex = 18;
@@ -194,7 +195,7 @@ namespace soccerTeamManagementApp
             this.label9.BackColor = System.Drawing.Color.White;
             this.label9.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label9.ForeColor = System.Drawing.SystemColors.MenuHighlight;
-            this.label9.Location = new System.Drawing.Point(31, 479);
+            this.label9.Location = new System.Drawing.Point(31, 446);
             this.label9.Name = "label9";
             this.label9.Size = new System.Drawing.Size(126, 20);
             this.label9.TabIndex = 32;
@@ -220,7 +221,7 @@ namespace soccerTeamManagementApp
             "Winger",
             "Bench",
             ""});
-            this.PositionCh.Location = new System.Drawing.Point(35, 438);
+            this.PositionCh.Location = new System.Drawing.Point(35, 405);
             this.PositionCh.Name = "PositionCh";
             this.PositionCh.Size = new System.Drawing.Size(265, 28);
             this.PositionCh.TabIndex = 34;
@@ -228,7 +229,7 @@ namespace soccerTeamManagementApp
             // JerseyNumberTb
             // 
             this.JerseyNumberTb.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.JerseyNumberTb.Location = new System.Drawing.Point(35, 502);
+            this.JerseyNumberTb.Location = new System.Drawing.Point(35, 469);
             this.JerseyNumberTb.Name = "JerseyNumberTb";
             this.JerseyNumberTb.Size = new System.Drawing.Size(265, 26);
             this.JerseyNumberTb.TabIndex = 31;
@@ -240,7 +241,7 @@ namespace soccerTeamManagementApp
             this.DOBTb.FillColor = System.Drawing.Color.LightSteelBlue;
             this.DOBTb.Font = new System.Drawing.Font("Segoe UI", 9F);
             this.DOBTb.Format = System.Windows.Forms.DateTimePickerFormat.Short;
-            this.DOBTb.Location = new System.Drawing.Point(35, 312);
+            this.DOBTb.Location = new System.Drawing.Point(35, 281);
             this.DOBTb.MaxDate = new System.DateTime(2133, 12, 31, 0, 0, 0, 0);
             this.DOBTb.MinDate = new System.DateTime(1923, 1, 1, 0, 0, 0, 0);
             this.DOBTb.Name = "DOBTb";
@@ -255,7 +256,7 @@ namespace soccerTeamManagementApp
             this.AddBtn.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.AddBtn.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.AddBtn.ForeColor = System.Drawing.Color.White;
-            this.AddBtn.Location = new System.Drawing.Point(35, 622);
+            this.AddBtn.Location = new System.Drawing.Point(32, 583);
             this.AddBtn.Name = "AddBtn";
             this.AddBtn.Size = new System.Drawing.Size(92, 38);
             this.AddBtn.TabIndex = 39;
@@ -263,19 +264,20 @@ namespace soccerTeamManagementApp
             this.AddBtn.UseVisualStyleBackColor = false;
             this.AddBtn.Click += new System.EventHandler(this.AddBtn_Click);
             // 
-            // UpdateBtn
+            // EditBtn
             // 
-            this.UpdateBtn.BackColor = System.Drawing.Color.SkyBlue;
-            this.UpdateBtn.FlatAppearance.BorderSize = 0;
-            this.UpdateBtn.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.UpdateBtn.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.UpdateBtn.ForeColor = System.Drawing.Color.Black;
-            this.UpdateBtn.Location = new System.Drawing.Point(208, 622);
-            this.UpdateBtn.Name = "UpdateBtn";
-            this.UpdateBtn.Size = new System.Drawing.Size(92, 38);
-            this.UpdateBtn.TabIndex = 40;
-            this.UpdateBtn.Text = "Update";
-            this.UpdateBtn.UseVisualStyleBackColor = false;
+            this.EditBtn.BackColor = System.Drawing.Color.SkyBlue;
+            this.EditBtn.FlatAppearance.BorderSize = 0;
+            this.EditBtn.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.EditBtn.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.EditBtn.ForeColor = System.Drawing.Color.Black;
+            this.EditBtn.Location = new System.Drawing.Point(208, 583);
+            this.EditBtn.Name = "EditBtn";
+            this.EditBtn.Size = new System.Drawing.Size(92, 38);
+            this.EditBtn.TabIndex = 40;
+            this.EditBtn.Text = "Update";
+            this.EditBtn.UseVisualStyleBackColor = false;
+            this.EditBtn.Click += new System.EventHandler(this.EditBtn_Click);
             // 
             // label12
             // 
@@ -343,17 +345,18 @@ namespace soccerTeamManagementApp
             this.pictureBox2.TabIndex = 80;
             this.pictureBox2.TabStop = false;
             // 
-            // label13
+            // TeamsMenu
             // 
-            this.label13.AutoSize = true;
-            this.label13.BackColor = System.Drawing.Color.White;
-            this.label13.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label13.ForeColor = System.Drawing.SystemColors.MenuHighlight;
-            this.label13.Location = new System.Drawing.Point(461, 96);
-            this.label13.Name = "label13";
-            this.label13.Size = new System.Drawing.Size(51, 16);
-            this.label13.TabIndex = 79;
-            this.label13.Text = "Teams";
+            this.TeamsMenu.AutoSize = true;
+            this.TeamsMenu.BackColor = System.Drawing.Color.White;
+            this.TeamsMenu.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.TeamsMenu.ForeColor = System.Drawing.SystemColors.MenuHighlight;
+            this.TeamsMenu.Location = new System.Drawing.Point(461, 96);
+            this.TeamsMenu.Name = "TeamsMenu";
+            this.TeamsMenu.Size = new System.Drawing.Size(51, 16);
+            this.TeamsMenu.TabIndex = 79;
+            this.TeamsMenu.Text = "Teams";
+            this.TeamsMenu.Click += new System.EventHandler(this.TeamsMenu_Click);
             // 
             // pictureBox1
             // 
@@ -367,31 +370,31 @@ namespace soccerTeamManagementApp
             // 
             // PlayerList
             // 
-            dataGridViewCellStyle1.BackColor = System.Drawing.Color.White;
-            this.PlayerList.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle1;
-            dataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle2.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(100)))), ((int)(((byte)(88)))), ((int)(((byte)(255)))));
-            dataGridViewCellStyle2.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            dataGridViewCellStyle2.ForeColor = System.Drawing.Color.White;
-            dataGridViewCellStyle2.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-            dataGridViewCellStyle2.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            dataGridViewCellStyle2.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
-            this.PlayerList.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle2;
+            dataGridViewCellStyle4.BackColor = System.Drawing.Color.White;
+            this.PlayerList.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle4;
+            dataGridViewCellStyle5.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle5.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(100)))), ((int)(((byte)(88)))), ((int)(((byte)(255)))));
+            dataGridViewCellStyle5.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            dataGridViewCellStyle5.ForeColor = System.Drawing.Color.White;
+            dataGridViewCellStyle5.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle5.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle5.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this.PlayerList.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle5;
             this.PlayerList.ColumnHeadersHeight = 25;
             this.PlayerList.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.EnableResizing;
-            dataGridViewCellStyle3.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle3.BackColor = System.Drawing.Color.White;
-            dataGridViewCellStyle3.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            dataGridViewCellStyle3.ForeColor = System.Drawing.Color.Black;
-            dataGridViewCellStyle3.SelectionBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(231)))), ((int)(((byte)(229)))), ((int)(((byte)(255)))));
-            dataGridViewCellStyle3.SelectionForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(71)))), ((int)(((byte)(69)))), ((int)(((byte)(94)))));
-            dataGridViewCellStyle3.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
-            this.PlayerList.DefaultCellStyle = dataGridViewCellStyle3;
+            dataGridViewCellStyle6.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle6.BackColor = System.Drawing.Color.White;
+            dataGridViewCellStyle6.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            dataGridViewCellStyle6.ForeColor = System.Drawing.Color.Black;
+            dataGridViewCellStyle6.SelectionBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(231)))), ((int)(((byte)(229)))), ((int)(((byte)(255)))));
+            dataGridViewCellStyle6.SelectionForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(71)))), ((int)(((byte)(69)))), ((int)(((byte)(94)))));
+            dataGridViewCellStyle6.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
+            this.PlayerList.DefaultCellStyle = dataGridViewCellStyle6;
             this.PlayerList.GridColor = System.Drawing.Color.FromArgb(((int)(((byte)(231)))), ((int)(((byte)(229)))), ((int)(((byte)(255)))));
-            this.PlayerList.Location = new System.Drawing.Point(380, 190);
+            this.PlayerList.Location = new System.Drawing.Point(337, 159);
             this.PlayerList.Name = "PlayerList";
             this.PlayerList.RowHeadersVisible = false;
-            this.PlayerList.Size = new System.Drawing.Size(712, 456);
+            this.PlayerList.Size = new System.Drawing.Size(804, 487);
             this.PlayerList.TabIndex = 86;
             this.PlayerList.ThemeStyle.AlternatingRowsStyle.BackColor = System.Drawing.Color.White;
             this.PlayerList.ThemeStyle.AlternatingRowsStyle.Font = null;
@@ -414,12 +417,13 @@ namespace soccerTeamManagementApp
             this.PlayerList.ThemeStyle.RowsStyle.Height = 22;
             this.PlayerList.ThemeStyle.RowsStyle.SelectionBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(231)))), ((int)(((byte)(229)))), ((int)(((byte)(255)))));
             this.PlayerList.ThemeStyle.RowsStyle.SelectionForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(71)))), ((int)(((byte)(69)))), ((int)(((byte)(94)))));
+            this.PlayerList.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.PlayerList_CellContentClick_1);
             // 
             // selectTeamTb
             // 
             this.selectTeamTb.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.selectTeamTb.FormattingEnabled = true;
-            this.selectTeamTb.Location = new System.Drawing.Point(35, 373);
+            this.selectTeamTb.Location = new System.Drawing.Point(35, 342);
             this.selectTeamTb.Name = "selectTeamTb";
             this.selectTeamTb.Size = new System.Drawing.Size(265, 28);
             this.selectTeamTb.TabIndex = 87;
@@ -430,7 +434,7 @@ namespace soccerTeamManagementApp
             this.label4.BackColor = System.Drawing.Color.White;
             this.label4.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label4.ForeColor = System.Drawing.SystemColors.MenuHighlight;
-            this.label4.Location = new System.Drawing.Point(31, 230);
+            this.label4.Location = new System.Drawing.Point(31, 199);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(93, 20);
             this.label4.TabIndex = 89;
@@ -439,10 +443,25 @@ namespace soccerTeamManagementApp
             // LastNameTb
             // 
             this.LastNameTb.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.LastNameTb.Location = new System.Drawing.Point(35, 253);
+            this.LastNameTb.Location = new System.Drawing.Point(35, 222);
             this.LastNameTb.Name = "LastNameTb";
             this.LastNameTb.Size = new System.Drawing.Size(265, 26);
             this.LastNameTb.TabIndex = 88;
+            // 
+            // DeleteBtn
+            // 
+            this.DeleteBtn.BackColor = System.Drawing.Color.Crimson;
+            this.DeleteBtn.FlatAppearance.BorderSize = 0;
+            this.DeleteBtn.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.DeleteBtn.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.DeleteBtn.ForeColor = System.Drawing.Color.Black;
+            this.DeleteBtn.Location = new System.Drawing.Point(208, 638);
+            this.DeleteBtn.Name = "DeleteBtn";
+            this.DeleteBtn.Size = new System.Drawing.Size(92, 38);
+            this.DeleteBtn.TabIndex = 90;
+            this.DeleteBtn.Text = "Delete";
+            this.DeleteBtn.UseVisualStyleBackColor = false;
+            this.DeleteBtn.Click += new System.EventHandler(this.DeleteBtn_Click);
             // 
             // Player
             // 
@@ -450,6 +469,7 @@ namespace soccerTeamManagementApp
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.White;
             this.ClientSize = new System.Drawing.Size(1153, 700);
+            this.Controls.Add(this.DeleteBtn);
             this.Controls.Add(this.label4);
             this.Controls.Add(this.LastNameTb);
             this.Controls.Add(this.selectTeamTb);
@@ -460,9 +480,9 @@ namespace soccerTeamManagementApp
             this.Controls.Add(this.pictureBox3);
             this.Controls.Add(this.label10);
             this.Controls.Add(this.pictureBox2);
-            this.Controls.Add(this.label13);
+            this.Controls.Add(this.TeamsMenu);
             this.Controls.Add(this.pictureBox1);
-            this.Controls.Add(this.UpdateBtn);
+            this.Controls.Add(this.EditBtn);
             this.Controls.Add(this.AddBtn);
             this.Controls.Add(this.DOBTb);
             this.Controls.Add(this.PositionCh);
@@ -511,18 +531,19 @@ namespace soccerTeamManagementApp
         private System.Windows.Forms.TextBox JerseyNumberTb;
         private Guna.UI2.WinForms.Guna2DateTimePicker DOBTb;
         private System.Windows.Forms.Button AddBtn;
-        private System.Windows.Forms.Button UpdateBtn;
+        private System.Windows.Forms.Button EditBtn;
         private System.Windows.Forms.Label label12;
         private System.Windows.Forms.PictureBox pictureBox4;
         private System.Windows.Forms.Label label11;
         private System.Windows.Forms.PictureBox pictureBox3;
         private System.Windows.Forms.Label label10;
         private System.Windows.Forms.PictureBox pictureBox2;
-        private System.Windows.Forms.Label label13;
+        private System.Windows.Forms.Label TeamsMenu;
         private System.Windows.Forms.PictureBox pictureBox1;
         private Guna.UI2.WinForms.Guna2DataGridView PlayerList;
         private System.Windows.Forms.ComboBox selectTeamTb;
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.TextBox LastNameTb;
+        private System.Windows.Forms.Button DeleteBtn;
     }
 }

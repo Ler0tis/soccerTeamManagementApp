@@ -44,5 +44,20 @@ namespace soccerTeamManagementApp
             cnt = Cmd.ExecuteNonQuery();
             return cnt;
         }
+
+        public string GetTeamNameFromID(int teamID)
+        {
+            string teamName = string.Empty;
+            string query = "SELECT TeamName FROM Team WHERE TeamId = " + teamID;
+            DataTable result = GetData(query);
+
+            if (result != null && result.Rows.Count > 0)
+            {
+                teamName = result.Rows[0]["TeamName"].ToString();
+            }
+
+            return teamName;
+        }
+
     }
 }

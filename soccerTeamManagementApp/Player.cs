@@ -9,13 +9,14 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace soccerTeamManagementApp
+
 {
     public partial class Player : Form
     {
         Functions Con;
         public Player()
         {
-            
+
             InitializeComponent();
             Con = new Functions();
             ShowPlayer();
@@ -24,7 +25,7 @@ namespace soccerTeamManagementApp
 
         private void ShowPlayer()
         {
-            string Query = "select * from Player";
+            string Query = "SELECT * FROM Player";
             PlayerList.DataSource = Con.GetData(Query);
         }
 
@@ -40,7 +41,7 @@ namespace soccerTeamManagementApp
 
         private void GetTeam()
         {
-            string Query = "select * from Team";
+            string Query = "SELECT * FROM Team";
             selectTeamTb.DisplayMember = Con.GetData(Query).Columns["TeamName"].ToString();
             selectTeamTb.ValueMember = Con.GetData(Query).Columns["TeamId"].ToString();
             selectTeamTb.DataSource = Con.GetData(Query);
@@ -50,25 +51,95 @@ namespace soccerTeamManagementApp
         {
             try
             {
-                if (FirstNameTb.Text == "" || LastNameTb.Text == "" || selectTeamTb.SelectedIndex == -1 || SalaryTb.Text == "")
+                if (string.IsNullOrEmpty(FirstNameTb.Text) || string.IsNullOrEmpty(LastNameTb.Text))
                 {
-                    MessageBox.Show("Missing Data");
+                    MessageBox.Show("First name and last name are required fields.");
                 }
                 else
                 {
-                    string FirstName = FirstNameTb.Text;
-                    string LastName = LastNameTb.Text;
+                    string FirstName = FirstNameTb.Text.Trim();
+                    string LastName = LastNameTb.Text.Trim();
                     int Team = Convert.ToInt32(selectTeamTb.SelectedValue.ToString());
                     string DOB = DOBTb.Value.ToString();
-                    string Position = PositionCh.SelectedItem.ToString();
+                    string Position = PositionCh.SelectedItem == null ? null : PositionCh.SelectedItem.ToString();
                     int Salary = Convert.ToInt32(SalaryTb.Text);
                     int JerseyNumber = Convert.ToInt32(JerseyNumberTb.Text);
+
+                    if (Position == null)
+                    {
+                        MessageBox.Show("Position is required.");
+                    }
 
                     string Query = "INSERT INTO Player (FirstName, LastName, Team, BirthDate, Position, Salary, JerseyNumber) VALUES ('{0}', '{1}', {2}, '{3}', '{4}', {5}, {6})";
                     Query = string.Format(Query, FirstName, LastName, Team, DOB, Position, Salary, JerseyNumber);
                     Con.SetData(Query);
                     ShowPlayer();
                     MessageBox.Show("Player added");
+
+                    // Reset inputfields
+                    FirstNameTb.Text = "";
+                    LastNameTb.Text = "";
+                    selectTeamTb.SelectedIndex = -1;
+                    DOBTb.Value = DateTime.Today;
+                    PositionCh.SelectedIndex = -1;
+                    SalaryTb.Text = "";
+                    JerseyNumberTb.Text = "";
+                }
+            }
+            catch (Exception Ex)
+            {
+                MessageBox.Show(Ex.Message);
+            }
+        }
+
+        int Key = 0;
+
+        private void PlayerList_CellContentClick_1(object sender, DataGridViewCellEventArgs e)
+        {
+            if (e.RowIndex >= 0)
+            {
+                DataGridViewRow row = PlayerList.Rows[e.RowIndex];
+
+                // Haal de waarden van de geselecteerde speler op
+                FirstNameTb.Text = row.Cells[1].Value.ToString();
+                LastNameTb.Text = row.Cells[2].Value.ToString();
+                DOBTb.Value = Convert.ToDateTime(row.Cells[3].Value);
+                PositionCh.SelectedItem = row.Cells["Position"].Value.ToString();
+                SalaryTb.Text = row.Cells[4].Value.ToString();
+                JerseyNumberTb.Text = row.Cells[5].Value.ToString();
+
+                // Vul het Key-veld met de ID van de speler (kolom 0)
+                Key = Convert.ToInt32(row.Cells[0].Value);
+            }
+        }
+
+        private void EditBtn_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                if (string.IsNullOrEmpty(FirstNameTb.Text) || string.IsNullOrEmpty(LastNameTb.Text))
+                {
+                    MessageBox.Show("First name and last name are required fields.");
+                }
+                else
+                {
+                    string FirstName = FirstNameTb.Text.Trim();
+                    string LastName = LastNameTb.Text.Trim();
+                    int Team = Convert.ToInt32(selectTeamTb.SelectedValue.ToString());
+                    string DOB = DOBTb.Value.ToString("yyyy-MM-dd");
+                    string Position = PositionCh.SelectedItem.ToString();
+                    int Salary = Convert.ToInt32(SalaryTb.Text);
+                    int JerseyNumber = Convert.ToInt32(JerseyNumberTb.Text);
+
+                    string Query = "UPDATE Player SET FirstName = '{0}', LastName = '{1}'," +
+                        " Team = {2}, BirthDate = '{3}', Position = '{4}', Salary = {5}, JerseyNumber = {6} " +
+                        "WHERE PlayerId = {7}";
+                    Query = string.Format(Query, FirstName, LastName, Team, DOB, Position, Salary, JerseyNumber, Key);
+                    Con.SetData(Query);
+                    ShowPlayer();
+                    MessageBox.Show("Player updated");
+
+                    // Reset input fields
                     FirstNameTb.Text = "";
                     LastNameTb.Text = "";
                     selectTeamTb.SelectedIndex = -1;
@@ -82,7 +153,6 @@ namespace soccerTeamManagementApp
             }
         }
 
-
         private void label9_Click(object sender, EventArgs e)
         {
 
@@ -91,6 +161,37 @@ namespace soccerTeamManagementApp
         private void textBox7_TextChanged(object sender, EventArgs e)
         {
 
+        }
+
+        private void TeamsMenu_Click(object sender, EventArgs e)
+        {
+            Team Obj = new Team();
+            Obj.Show();
+            this.Hide();
+        }
+
+        private void DeleteBtn_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                string firstName = FirstNameTb.Text;
+                string lastName = LastNameTb.Text;
+                int team = Convert.ToInt32(selectTeamTb.SelectedValue.ToString());
+                string DOB = DOBTb.Value.ToString("yyyy-MM-dd");
+                string position = PositionCh.SelectedItem.ToString();
+                int salary = Convert.ToInt32(SalaryTb.Text);
+                int jerseyNumber = Convert.ToInt32(JerseyNumberTb.Text);
+
+                String Query = "DELETE FROM PLayer WHERE PlayerId = {0}";
+
+                Query = string.Format(Query, Key);
+                Con.SetData(Query);
+                ShowPlayer();
+                MessageBox.Show("Team deleted");
+            } catch (Exception Ex)
+            {
+                MessageBox.Show(Ex.Message);
+            }
         }
     }
 }

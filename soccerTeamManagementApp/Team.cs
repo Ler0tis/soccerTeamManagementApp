@@ -23,7 +23,7 @@ namespace soccerTeamManagementApp
 
         private void ShowTeams()
         {
-            String Query = "Select * from Team";
+            String Query = "SELECT * FROM Team";
             TeamList.DataSource = Con.GetData(Query);
         }
 
@@ -37,22 +37,26 @@ namespace soccerTeamManagementApp
 
         }
 
-        private void AddBtn_Click(object sender, EventArgs e)
+    private void AddBtn_Click(object sender, EventArgs e)
         {
             try
             {
-                if(TeamName.Text == "")
+                if (string.IsNullOrEmpty(TeamName.Text) || string.IsNullOrEmpty(TeamAddress.Text))
                 {
-                    MessageBox.Show("Missing Data");
+                    MessageBox.Show("Team name and address are required fields");
                 } else
                 {
-                    string Team = TeamName.Text;
-                    String Query = "insert into Team (TeamName) values ('{0}')";
-                    Query = string.Format(Query,TeamName.Text);
+                    string Team = TeamName.Text.Trim();
+                    string teamAddress = TeamAddress.Text.Trim();
+                    String Query = "INSERT INTO Team (TeamName, TeamAddress) values ('{0}', '{1}')";
+                    Query = string.Format(Query,TeamName.Text, TeamAddress.Text);
                     Con.SetData(Query);
                     ShowTeams();
                     MessageBox.Show("Team added");
+
+                    // Reset input fields
                     TeamName.Text = "";
+                    TeamAddress.Text = "";
                 }
             }
             catch (Exception Ex)
@@ -64,14 +68,16 @@ namespace soccerTeamManagementApp
         int Key = 0;
         private void TeamList_CellContentClick(object sender, DataGridViewCellEventArgs e)
         {
-            TeamName.Text = TeamList.SelectedRows[0].Cells[1].Value.ToString();
-            if(TeamName.Text == "")
+            
+            if(e.RowIndex >= 0)
             {
-                Key = 0;
-            }
-            else
-            {
-                Key = Convert.ToInt32(TeamList.SelectedRows[0].Cells[0].Value.ToString());
+                DataGridViewRow row = TeamList.Rows[e.RowIndex];
+                // Haal de waarden van de geselecteerde speler op
+                TeamName.Text = row.Cells[1].Value.ToString();
+                TeamAddress.Text = row.Cells[2].Value.ToString();
+
+                // Vul het Key-veld met de ID van de speler (kolom 0)
+                Key = Convert.ToInt32(row.Cells[0].Value);
             }
         }
 
@@ -79,29 +85,40 @@ namespace soccerTeamManagementApp
         {
             try
             {
-                if (TeamName.Text == "")
+                if (string.IsNullOrEmpty(TeamName.Text) || string.IsNullOrEmpty(TeamAddress.Text))
                 {
-                    MessageBox.Show("Missing Data");
+                    MessageBox.Show("Team name and address are required fields");
                 }
                 else
                 {
-                    string Team = TeamName.Text;
-                    String Query = "update Team set TeamName = '{0}' where TeamId = {1}";
+                    string teamName = TeamName.Text.Trim();
+                    string teamAddress = TeamAddress.Text.Trim();
 
-                    Query = string.Format(Query, TeamName.Text,Key);
-                    Con.SetData(Query);
-                    ShowTeams();
-                    MessageBox.Show("Team updated");
-                    TeamName.Text = "";
+                    if (Key > 0) // Zorg ervoor dat Key de ID is van het geselecteerde team
+                    {
+                        string query = "UPDATE Team SET TeamName = '{0}', TeamAddress = '{1}' WHERE TeamId = {2}";
+                        query = string.Format(query, teamName, teamAddress, Key);
+                        Con.SetData(query);
+                        ShowTeams();
+                        MessageBox.Show("Team updated");
+
+                        // Reset invoervelden
+                        TeamName.Text = "";
+                        TeamAddress.Text = "";
+                    }
+                    else
+                    {
+                        MessageBox.Show("Selecteer een team om bij te werken.");
+                    }
                 }
             }
-            catch (Exception Ex)
+            catch (Exception ex)
             {
-                MessageBox.Show(Ex.Message);
+                MessageBox.Show(ex.Message);
             }
         }
 
-        private void DeleteBtn_Click(object sender, EventArgs e)
+    private void DeleteBtn_Click(object sender, EventArgs e)
         {
             try
             {
@@ -112,13 +129,17 @@ namespace soccerTeamManagementApp
                 else
                 {
                     string Team = TeamName.Text;
-                    String Query = "delete from Team where TeamId = {0}";
+                    string teamAddress = TeamAddress.Text;
+                    String Query = "DELETE FROM Team WHERE TeamId = {0}";
 
                     Query = string.Format(Query,Key);
                     Con.SetData(Query);
                     ShowTeams();
                     MessageBox.Show("Team deleted");
+
+                    // Reset input fields
                     TeamName.Text = "";
+                    TeamAddress.Text = "";
                 }
             }
             catch (Exception Ex)
