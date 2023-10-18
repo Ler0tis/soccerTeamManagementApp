@@ -25,6 +25,7 @@ namespace soccerTeamManagementApp
         {
             String Query = "SELECT * FROM Team";
             TeamList.DataSource = Con.GetData(Query);
+            //TeamList.Columns["TeamId"].Visible = false;
         }
 
         private void label4_Click(object sender, EventArgs e)
@@ -94,7 +95,7 @@ namespace soccerTeamManagementApp
                     string teamName = TeamName.Text.Trim();
                     string teamAddress = TeamAddress.Text.Trim();
 
-                    if (Key > 0) // Zorg ervoor dat Key de ID is van het geselecteerde team
+                    if (Key > 0)
                     {
                         string query = "UPDATE Team SET TeamName = '{0}', TeamAddress = '{1}' WHERE TeamId = {2}";
                         query = string.Format(query, teamName, teamAddress, Key);
@@ -102,13 +103,13 @@ namespace soccerTeamManagementApp
                         ShowTeams();
                         MessageBox.Show("Team updated");
 
-                        // Reset invoervelden
+                        // Reset input fields
                         TeamName.Text = "";
                         TeamAddress.Text = "";
                     }
                     else
                     {
-                        MessageBox.Show("Selecteer een team om bij te werken.");
+                        MessageBox.Show("Select a team to update");
                     }
                 }
             }
@@ -148,12 +149,12 @@ namespace soccerTeamManagementApp
             }
         }
 
-        private void PlayersMenu_Click(object sender, EventArgs e)
+        private void CancelBtn_Click(object sender, EventArgs e)
         {
-            Player Obj = new Player();
-            Obj.Show();
-            this.Hide();
+            Home homeForm = new Home();
+            homeForm.Show();
 
+            this.Close();
         }
     }
 }

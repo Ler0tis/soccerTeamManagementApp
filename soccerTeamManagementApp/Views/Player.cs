@@ -27,6 +27,7 @@ namespace soccerTeamManagementApp
         {
             string Query = "SELECT * FROM Player";
             PlayerList.DataSource = Con.GetData(Query);
+            //PlayerList.Columns["PlayerId"].Visible = false;
         }
 
         private void label2_Click(object sender, EventArgs e)
@@ -96,11 +97,12 @@ namespace soccerTeamManagementApp
 
         private void PlayerList_CellContentClick_1(object sender, DataGridViewCellEventArgs e)
         {
+
             if (e.RowIndex >= 0)
             {
                 DataGridViewRow row = PlayerList.Rows[e.RowIndex];
 
-                // Haal de waarden van de geselecteerde speler op
+                // Get data for selected player
                 FirstNameTb.Text = row.Cells[1].Value.ToString();
                 LastNameTb.Text = row.Cells[2].Value.ToString();
                 DOBTb.Value = Convert.ToDateTime(row.Cells[3].Value);
@@ -108,7 +110,7 @@ namespace soccerTeamManagementApp
                 SalaryTb.Text = row.Cells[4].Value.ToString();
                 JerseyNumberTb.Text = row.Cells[5].Value.ToString();
 
-                // Vul het Key-veld met de ID van de speler (kolom 0)
+                // Fill Key with ID of Player
                 Key = Convert.ToInt32(row.Cells[0].Value);
             }
         }
@@ -163,13 +165,6 @@ namespace soccerTeamManagementApp
 
         }
 
-        private void TeamsMenu_Click(object sender, EventArgs e)
-        {
-            Team Obj = new Team();
-            Obj.Show();
-            this.Hide();
-        }
-
         private void DeleteBtn_Click(object sender, EventArgs e)
         {
             try
@@ -192,6 +187,19 @@ namespace soccerTeamManagementApp
             {
                 MessageBox.Show(Ex.Message);
             }
+        }
+
+        private void CancelBtn_Click(object sender, EventArgs e)
+        {
+            Home homeForm = new Home();
+            homeForm.Show();
+
+            this.Close();
+        }
+
+        private void Player_Load(object sender, EventArgs e)
+        {
+
         }
     }
 }
