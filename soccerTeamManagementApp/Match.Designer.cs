@@ -29,13 +29,12 @@ namespace soccerTeamManagementApp
         /// </summary>
         private void InitializeComponent()
         {
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle16 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle17 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle18 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle3 = new System.Windows.Forms.DataGridViewCellStyle();
             this.panel1 = new System.Windows.Forms.Panel();
             this.label1 = new System.Windows.Forms.Label();
             this.CancelBtn = new System.Windows.Forms.Button();
-            this.TeamList = new Guna.UI2.WinForms.Guna2DataGridView();
             this.panel2 = new System.Windows.Forms.Panel();
             this.AddBtn = new System.Windows.Forms.Button();
             this.label5 = new System.Windows.Forms.Label();
@@ -45,8 +44,11 @@ namespace soccerTeamManagementApp
             this.label2 = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
             this.selectTeamATb = new System.Windows.Forms.ComboBox();
+            this.MatchList = new Guna.UI2.WinForms.Guna2DataGridView();
+            this.EditBtn = new System.Windows.Forms.Button();
+            this.DeleteBtn = new System.Windows.Forms.Button();
             this.panel1.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.TeamList)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.MatchList)).BeginInit();
             this.SuspendLayout();
             // 
             // panel1
@@ -77,63 +79,13 @@ namespace soccerTeamManagementApp
             this.CancelBtn.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.CancelBtn.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.CancelBtn.ForeColor = System.Drawing.Color.Black;
-            this.CancelBtn.Location = new System.Drawing.Point(1030, 594);
+            this.CancelBtn.Location = new System.Drawing.Point(737, 608);
             this.CancelBtn.Name = "CancelBtn";
             this.CancelBtn.Size = new System.Drawing.Size(92, 38);
             this.CancelBtn.TabIndex = 104;
             this.CancelBtn.Text = "Cancel";
             this.CancelBtn.UseVisualStyleBackColor = false;
             this.CancelBtn.Click += new System.EventHandler(this.CancelBtn_Click);
-            // 
-            // TeamList
-            // 
-            dataGridViewCellStyle16.BackColor = System.Drawing.Color.White;
-            this.TeamList.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle16;
-            dataGridViewCellStyle17.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle17.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(100)))), ((int)(((byte)(88)))), ((int)(((byte)(255)))));
-            dataGridViewCellStyle17.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            dataGridViewCellStyle17.ForeColor = System.Drawing.Color.White;
-            dataGridViewCellStyle17.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-            dataGridViewCellStyle17.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            dataGridViewCellStyle17.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
-            this.TeamList.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle17;
-            this.TeamList.ColumnHeadersHeight = 25;
-            this.TeamList.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.EnableResizing;
-            dataGridViewCellStyle18.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle18.BackColor = System.Drawing.Color.White;
-            dataGridViewCellStyle18.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            dataGridViewCellStyle18.ForeColor = System.Drawing.Color.Black;
-            dataGridViewCellStyle18.SelectionBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(231)))), ((int)(((byte)(229)))), ((int)(((byte)(255)))));
-            dataGridViewCellStyle18.SelectionForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(71)))), ((int)(((byte)(69)))), ((int)(((byte)(94)))));
-            dataGridViewCellStyle18.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
-            this.TeamList.DefaultCellStyle = dataGridViewCellStyle18;
-            this.TeamList.GridColor = System.Drawing.Color.FromArgb(((int)(((byte)(231)))), ((int)(((byte)(229)))), ((int)(((byte)(255)))));
-            this.TeamList.Location = new System.Drawing.Point(295, 89);
-            this.TeamList.Name = "TeamList";
-            this.TeamList.RowHeadersVisible = false;
-            this.TeamList.Size = new System.Drawing.Size(827, 484);
-            this.TeamList.TabIndex = 102;
-            this.TeamList.ThemeStyle.AlternatingRowsStyle.BackColor = System.Drawing.Color.White;
-            this.TeamList.ThemeStyle.AlternatingRowsStyle.Font = null;
-            this.TeamList.ThemeStyle.AlternatingRowsStyle.ForeColor = System.Drawing.Color.Empty;
-            this.TeamList.ThemeStyle.AlternatingRowsStyle.SelectionBackColor = System.Drawing.Color.Empty;
-            this.TeamList.ThemeStyle.AlternatingRowsStyle.SelectionForeColor = System.Drawing.Color.Empty;
-            this.TeamList.ThemeStyle.BackColor = System.Drawing.Color.White;
-            this.TeamList.ThemeStyle.GridColor = System.Drawing.Color.FromArgb(((int)(((byte)(231)))), ((int)(((byte)(229)))), ((int)(((byte)(255)))));
-            this.TeamList.ThemeStyle.HeaderStyle.BackColor = System.Drawing.Color.LightSteelBlue;
-            this.TeamList.ThemeStyle.HeaderStyle.BorderStyle = System.Windows.Forms.DataGridViewHeaderBorderStyle.None;
-            this.TeamList.ThemeStyle.HeaderStyle.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.TeamList.ThemeStyle.HeaderStyle.ForeColor = System.Drawing.Color.White;
-            this.TeamList.ThemeStyle.HeaderStyle.HeaightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.EnableResizing;
-            this.TeamList.ThemeStyle.HeaderStyle.Height = 25;
-            this.TeamList.ThemeStyle.ReadOnly = false;
-            this.TeamList.ThemeStyle.RowsStyle.BackColor = System.Drawing.Color.White;
-            this.TeamList.ThemeStyle.RowsStyle.BorderStyle = System.Windows.Forms.DataGridViewCellBorderStyle.SingleHorizontal;
-            this.TeamList.ThemeStyle.RowsStyle.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.TeamList.ThemeStyle.RowsStyle.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(71)))), ((int)(((byte)(69)))), ((int)(((byte)(94)))));
-            this.TeamList.ThemeStyle.RowsStyle.Height = 22;
-            this.TeamList.ThemeStyle.RowsStyle.SelectionBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(231)))), ((int)(((byte)(229)))), ((int)(((byte)(255)))));
-            this.TeamList.ThemeStyle.RowsStyle.SelectionForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(71)))), ((int)(((byte)(69)))), ((int)(((byte)(94)))));
             // 
             // panel2
             // 
@@ -151,7 +103,7 @@ namespace soccerTeamManagementApp
             this.AddBtn.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.AddBtn.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.AddBtn.ForeColor = System.Drawing.Color.White;
-            this.AddBtn.Location = new System.Drawing.Point(12, 518);
+            this.AddBtn.Location = new System.Drawing.Point(295, 608);
             this.AddBtn.Name = "AddBtn";
             this.AddBtn.Size = new System.Drawing.Size(92, 38);
             this.AddBtn.TabIndex = 40;
@@ -167,18 +119,19 @@ namespace soccerTeamManagementApp
             this.label5.ForeColor = System.Drawing.SystemColors.MenuHighlight;
             this.label5.Location = new System.Drawing.Point(8, 100);
             this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(70, 20);
+            this.label5.Size = new System.Drawing.Size(101, 20);
             this.label5.TabIndex = 105;
-            this.label5.Text = "Team A";
+            this.label5.Text = "Home team";
             // 
             // selectTeamBTb
             // 
             this.selectTeamBTb.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.selectTeamBTb.FormattingEnabled = true;
-            this.selectTeamBTb.Location = new System.Drawing.Point(12, 249);
+            this.selectTeamBTb.Location = new System.Drawing.Point(12, 261);
             this.selectTeamBTb.Name = "selectTeamBTb";
             this.selectTeamBTb.Size = new System.Drawing.Size(265, 28);
             this.selectTeamBTb.TabIndex = 108;
+            this.selectTeamBTb.SelectedIndexChanged += new System.EventHandler(this.selectTeamBTb_SelectedIndexChanged);
             // 
             // matchDayTb
             // 
@@ -212,11 +165,11 @@ namespace soccerTeamManagementApp
             this.label2.BackColor = System.Drawing.Color.White;
             this.label2.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label2.ForeColor = System.Drawing.SystemColors.MenuHighlight;
-            this.label2.Location = new System.Drawing.Point(8, 217);
+            this.label2.Location = new System.Drawing.Point(8, 238);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(70, 20);
+            this.label2.Size = new System.Drawing.Size(96, 20);
             this.label2.TabIndex = 109;
-            this.label2.Text = "Team B";
+            this.label2.Text = "Away team";
             // 
             // label3
             // 
@@ -224,7 +177,7 @@ namespace soccerTeamManagementApp
             this.label3.BackColor = System.Drawing.Color.White;
             this.label3.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label3.ForeColor = System.Drawing.SystemColors.MenuHighlight;
-            this.label3.Location = new System.Drawing.Point(97, 184);
+            this.label3.Location = new System.Drawing.Point(114, 184);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(33, 20);
             this.label3.TabIndex = 112;
@@ -234,17 +187,100 @@ namespace soccerTeamManagementApp
             // 
             this.selectTeamATb.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.selectTeamATb.FormattingEnabled = true;
-            this.selectTeamATb.Location = new System.Drawing.Point(12, 132);
+            this.selectTeamATb.Location = new System.Drawing.Point(12, 123);
             this.selectTeamATb.Name = "selectTeamATb";
             this.selectTeamATb.Size = new System.Drawing.Size(265, 28);
             this.selectTeamATb.TabIndex = 106;
             this.selectTeamATb.SelectedIndexChanged += new System.EventHandler(this.selectTeamATb_SelectedIndexChanged);
+            // 
+            // MatchList
+            // 
+            dataGridViewCellStyle1.BackColor = System.Drawing.Color.White;
+            this.MatchList.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle1;
+            dataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle2.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(100)))), ((int)(((byte)(88)))), ((int)(((byte)(255)))));
+            dataGridViewCellStyle2.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            dataGridViewCellStyle2.ForeColor = System.Drawing.Color.White;
+            dataGridViewCellStyle2.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle2.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle2.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this.MatchList.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle2;
+            this.MatchList.ColumnHeadersHeight = 25;
+            this.MatchList.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.EnableResizing;
+            dataGridViewCellStyle3.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle3.BackColor = System.Drawing.Color.White;
+            dataGridViewCellStyle3.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            dataGridViewCellStyle3.ForeColor = System.Drawing.Color.Black;
+            dataGridViewCellStyle3.SelectionBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(231)))), ((int)(((byte)(229)))), ((int)(((byte)(255)))));
+            dataGridViewCellStyle3.SelectionForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(71)))), ((int)(((byte)(69)))), ((int)(((byte)(94)))));
+            dataGridViewCellStyle3.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
+            this.MatchList.DefaultCellStyle = dataGridViewCellStyle3;
+            this.MatchList.GridColor = System.Drawing.Color.FromArgb(((int)(((byte)(231)))), ((int)(((byte)(229)))), ((int)(((byte)(255)))));
+            this.MatchList.Location = new System.Drawing.Point(295, 100);
+            this.MatchList.Name = "MatchList";
+            this.MatchList.RowHeadersVisible = false;
+            this.MatchList.Size = new System.Drawing.Size(827, 484);
+            this.MatchList.TabIndex = 113;
+            this.MatchList.ThemeStyle.AlternatingRowsStyle.BackColor = System.Drawing.Color.White;
+            this.MatchList.ThemeStyle.AlternatingRowsStyle.Font = null;
+            this.MatchList.ThemeStyle.AlternatingRowsStyle.ForeColor = System.Drawing.Color.Empty;
+            this.MatchList.ThemeStyle.AlternatingRowsStyle.SelectionBackColor = System.Drawing.Color.Empty;
+            this.MatchList.ThemeStyle.AlternatingRowsStyle.SelectionForeColor = System.Drawing.Color.Empty;
+            this.MatchList.ThemeStyle.BackColor = System.Drawing.Color.White;
+            this.MatchList.ThemeStyle.GridColor = System.Drawing.Color.FromArgb(((int)(((byte)(231)))), ((int)(((byte)(229)))), ((int)(((byte)(255)))));
+            this.MatchList.ThemeStyle.HeaderStyle.BackColor = System.Drawing.Color.LightSteelBlue;
+            this.MatchList.ThemeStyle.HeaderStyle.BorderStyle = System.Windows.Forms.DataGridViewHeaderBorderStyle.None;
+            this.MatchList.ThemeStyle.HeaderStyle.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.MatchList.ThemeStyle.HeaderStyle.ForeColor = System.Drawing.Color.White;
+            this.MatchList.ThemeStyle.HeaderStyle.HeaightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.EnableResizing;
+            this.MatchList.ThemeStyle.HeaderStyle.Height = 25;
+            this.MatchList.ThemeStyle.ReadOnly = false;
+            this.MatchList.ThemeStyle.RowsStyle.BackColor = System.Drawing.Color.White;
+            this.MatchList.ThemeStyle.RowsStyle.BorderStyle = System.Windows.Forms.DataGridViewCellBorderStyle.SingleHorizontal;
+            this.MatchList.ThemeStyle.RowsStyle.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.MatchList.ThemeStyle.RowsStyle.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(71)))), ((int)(((byte)(69)))), ((int)(((byte)(94)))));
+            this.MatchList.ThemeStyle.RowsStyle.Height = 22;
+            this.MatchList.ThemeStyle.RowsStyle.SelectionBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(231)))), ((int)(((byte)(229)))), ((int)(((byte)(255)))));
+            this.MatchList.ThemeStyle.RowsStyle.SelectionForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(71)))), ((int)(((byte)(69)))), ((int)(((byte)(94)))));
+            this.MatchList.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.MatchList_CellContentClick);
+            // 
+            // EditBtn
+            // 
+            this.EditBtn.BackColor = System.Drawing.SystemColors.MenuHighlight;
+            this.EditBtn.FlatAppearance.BorderSize = 0;
+            this.EditBtn.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.EditBtn.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.EditBtn.ForeColor = System.Drawing.Color.White;
+            this.EditBtn.Location = new System.Drawing.Point(424, 608);
+            this.EditBtn.Name = "EditBtn";
+            this.EditBtn.Size = new System.Drawing.Size(92, 38);
+            this.EditBtn.TabIndex = 114;
+            this.EditBtn.Text = "Update";
+            this.EditBtn.UseVisualStyleBackColor = false;
+            // 
+            // DeleteBtn
+            // 
+            this.DeleteBtn.BackColor = System.Drawing.Color.Crimson;
+            this.DeleteBtn.FlatAppearance.BorderSize = 0;
+            this.DeleteBtn.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.DeleteBtn.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.DeleteBtn.ForeColor = System.Drawing.Color.White;
+            this.DeleteBtn.Location = new System.Drawing.Point(575, 608);
+            this.DeleteBtn.Name = "DeleteBtn";
+            this.DeleteBtn.Size = new System.Drawing.Size(92, 38);
+            this.DeleteBtn.TabIndex = 115;
+            this.DeleteBtn.Text = "Delete";
+            this.DeleteBtn.UseVisualStyleBackColor = false;
+            this.DeleteBtn.Click += new System.EventHandler(this.DeleteBtn_Click);
             // 
             // Match
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1134, 710);
+            this.Controls.Add(this.DeleteBtn);
+            this.Controls.Add(this.EditBtn);
+            this.Controls.Add(this.MatchList);
             this.Controls.Add(this.label3);
             this.Controls.Add(this.matchDayTb);
             this.Controls.Add(this.label6);
@@ -255,14 +291,13 @@ namespace soccerTeamManagementApp
             this.Controls.Add(this.AddBtn);
             this.Controls.Add(this.panel1);
             this.Controls.Add(this.CancelBtn);
-            this.Controls.Add(this.TeamList);
             this.Controls.Add(this.panel2);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
             this.Name = "Match";
             this.Text = "Match";
             this.panel1.ResumeLayout(false);
             this.panel1.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.TeamList)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.MatchList)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -273,7 +308,6 @@ namespace soccerTeamManagementApp
         private System.Windows.Forms.Panel panel1;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Button CancelBtn;
-        private Guna.UI2.WinForms.Guna2DataGridView TeamList;
         private System.Windows.Forms.Panel panel2;
         private System.Windows.Forms.Button AddBtn;
         private System.Windows.Forms.Label label5;
@@ -283,5 +317,8 @@ namespace soccerTeamManagementApp
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.ComboBox selectTeamATb;
+        private Guna.UI2.WinForms.Guna2DataGridView MatchList;
+        private System.Windows.Forms.Button EditBtn;
+        private System.Windows.Forms.Button DeleteBtn;
     }
 }

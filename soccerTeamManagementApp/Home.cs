@@ -67,31 +67,32 @@ namespace soccerTeamManagementApp
 
         private void manageMatchLink_Click(object sender, EventArgs e)
         {
-
             Match Obj = new Match();
 
-            // Get all teams
+            // Gets all teams
             DataTable teamsTable = Con.GetTeams();
-
             if (teamsTable != null && teamsTable.Rows.Count >= 2)
             {
-                // Make new list to save Teams that can be selected for Match.cs
                 List<string> teamNames = new List<string>();
+                List<int> teamIds = new List<int>();
 
                 foreach (DataRow row in teamsTable.Rows)
                 {
-                    // Add teamnaam to list
+                    // Add teamname to list
                     teamNames.Add(row["TeamName"].ToString());
+
+                    // Add teamID to list
+                    teamIds.Add(Convert.ToInt32(row["TeamId"]));
                 }
 
-                // Set list with teamnames active for dataSource Combobox
-                Obj.SetTeamNames(teamNames);
+                // Set lists with teamnames and id active for selectedTeamA and B.DataSource 
+                Obj.SetTeamNames(teamNames, teamIds);
 
-                // Show match page
                 Obj.Show();
                 this.Hide();
             }
         }
+
 
         private void manageTransferImg_Click(object sender, EventArgs e)
         {

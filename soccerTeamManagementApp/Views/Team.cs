@@ -73,11 +73,10 @@ namespace soccerTeamManagementApp
             if(e.RowIndex >= 0)
             {
                 DataGridViewRow row = TeamList.Rows[e.RowIndex];
-                // Haal de waarden van de geselecteerde speler op
+                // Gets data of selected team
                 TeamName.Text = row.Cells[1].Value.ToString();
                 TeamAddress.Text = row.Cells[2].Value.ToString();
 
-                // Vul het Key-veld met de ID van de speler (kolom 0)
                 Key = Convert.ToInt32(row.Cells[0].Value);
             }
         }
@@ -123,25 +122,18 @@ namespace soccerTeamManagementApp
         {
             try
             {
-                if (TeamName.Text == "")
-                {
-                    MessageBox.Show("Missing Data");
-                }
-                else
-                {
-                    string Team = TeamName.Text;
-                    string teamAddress = TeamAddress.Text;
-                    String Query = "DELETE FROM Team WHERE TeamId = {0}";
+                string Team = TeamName.Text;
+                string teamAddress = TeamAddress.Text;
+                String Query = "DELETE FROM Team WHERE TeamId = {0}";
 
-                    Query = string.Format(Query,Key);
-                    Con.SetData(Query);
-                    ShowTeams();
-                    MessageBox.Show("Team deleted");
+                Query = string.Format(Query,Key);
+                Con.SetData(Query);
+                ShowTeams();
+                MessageBox.Show("Team deleted");
 
-                    // Reset input fields
-                    TeamName.Text = "";
-                    TeamAddress.Text = "";
-                }
+                // Reset input fields
+                TeamName.Text = "";
+                TeamAddress.Text = "";
             }
             catch (Exception Ex)
             {

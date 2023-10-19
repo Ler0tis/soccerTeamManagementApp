@@ -18,7 +18,7 @@ namespace soccerTeamManagementApp
 
         public Functions()
         {
-            // Make the connection with the Server/Database
+            // Makes the connection with the Server/Database
             ConStr = @"Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename=C:\Users\Leroy\Documents\soccerTeamManagement.mdf;Integrated Security=True;Connect Timeout=30";
             Con = new SqlConnection(ConStr);
             Cmd = new SqlCommand();
@@ -47,8 +47,26 @@ namespace soccerTeamManagementApp
 
         public DataTable GetTeams()
         {
-            string query = "SELECT TeamName FROM Team";
+            string query = "SELECT * FROM Team";
             return GetData(query);
         }
+
+        public object GetSingleValue(string query)
+        {
+            object result = null;
+
+            if (Con.State == ConnectionState.Closed)
+            {
+                Con.Open();
+            }
+
+            Cmd.CommandText = query;
+            result = Cmd.ExecuteScalar();
+
+            Con.Close();
+
+            return result;
+        }
+
     }
 }
