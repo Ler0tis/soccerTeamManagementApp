@@ -6,6 +6,7 @@ using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Data.SqlClient;
 using System.Windows.Forms;
 
 namespace soccerTeamManagementApp
@@ -33,7 +34,10 @@ namespace soccerTeamManagementApp
 
         private void ShowMatches()
         {
-            string query = "SELECT * FROM Match";
+            string query = "SELECT M.MatchId, T1.TeamName AS HomeTeam, T2.TeamName AS AwayTeam, M.MatchDate " +
+                           "FROM Match M " +
+                           "INNER JOIN Team T1 ON M.HomeTeamId = T1.TeamId " +
+                           "INNER JOIN Team T2 ON M.AwayTeamId = T2.TeamId";
             MatchList.DataSource = Con.GetData(query);
         }
 
@@ -52,42 +56,37 @@ namespace soccerTeamManagementApp
 
         private void AddBtn_Click(object sender, EventArgs e)
         {
-            // Checks of selected index is within range
-            if (SelectTeamA.SelectedIndex >= 0 && SelectTeamB.SelectedIndex >= 0 &&
-                SelectTeamA.SelectedIndex < teamIdsForTeamA.Count && SelectTeamB.SelectedIndex < teamIdsForTeamB.Count)
+            try
             {
-                int teamAId = teamIdsForTeamA[SelectTeamA.SelectedIndex];
-                int teamBId = teamIdsForTeamB[SelectTeamB.SelectedIndex];
-
-                // Validation
-                if (teamAId == teamBId)
+                // Checks of selected index is within range
+                if (SelectTeamA.SelectedIndex >= 0 && SelectTeamB.SelectedIndex >= 0 &&
+                    SelectTeamA.SelectedIndex < teamIdsForTeamA.Count && SelectTeamB.SelectedIndex < teamIdsForTeamB.Count)
                 {
-                    MessageBox.Show("You selected the same team for a match. Please select two different teams");
-                    return;
-                }
+                    int teamAId = teamIdsForTeamA[SelectTeamA.SelectedIndex];
+                    int teamBId = teamIdsForTeamB[SelectTeamB.SelectedIndex];
 
-                DateTime matchDate = matchDayTb.Value;
+                    // Validation
+                    if (teamAId == teamBId)
+                    {
+                        MessageBox.Show("You selected the same team for a match. Please select two different teams");
+                        return;
+                    }
 
-                // Check if there are matches between the same teams on the same date
-                string checkQuery = "SELECT COUNT(*) FROM Match " +
-                                    "WHERE (HomeTeamId = {0} AND AwayTeamId = {1} AND MatchDate = '{2}') " +
-                                    "OR (HomeTeamId = {1} AND AwayTeamId = {0} AND MatchDate = '{2}')";
-                checkQuery = string.Format(checkQuery, teamAId, teamBId, matchDate.ToString("yyyy-MM-dd"));
+                    DateTime matchDate = matchDayTb.Value;
 
-                int existingMatches = (int)Con.GetSingleValue(checkQuery);
-
-                if (existingMatches > 0)
-                {
-                    MessageBox.Show("There already exist a match between these teams with selected date. Please selected different teams or date");
-                }
-                else
-                {
                     // Query to add new match into DB
-                    string query = "INSERT INTO Match (HomeTeamId, AwayTeamId, MatchDate) VALUES ({0}, {1}, '{2}')";
-                    query = string.Format(query, teamAId, teamBId, matchDate.ToString("yyyy-MM-dd"));
+                    string query = "INSERT INTO Match (HomeTeamId, AwayTeamId, MatchDate) VALUES (@TeamAId, @TeamBId, @MatchDate)";
 
-                    // Execute query with connection from Functions
-                    int result = Con.SetData(query);
+                    // Add parameters to query
+                    SqlParameter[] parameters = new SqlParameter[]
+                    {
+                        new SqlParameter("@TeamAId", teamAId),
+                        new SqlParameter("@TeamBId", teamBId),
+                        new SqlParameter("@MatchDate", matchDate)
+                    };
+
+                    // Exectute query
+                    int result = Con.SetData(query, parameters);
 
                     if (result > 0)
                     {
@@ -99,12 +98,17 @@ namespace soccerTeamManagementApp
                         MessageBox.Show("Failed to add the match");
                     }
                 }
+                else
+                {
+                    MessageBox.Show("Please select valid teams for Team A and Team B.");
+                }
             }
-            else
+            catch (Exception Ex)
             {
-                MessageBox.Show("Please select valid teams for Team A and Team B.");
+                MessageBox.Show(Ex.Message);
             }
         }
+
 
 
         private void CancelBtn_Click(object sender, EventArgs e)

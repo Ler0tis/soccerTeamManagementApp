@@ -32,18 +32,26 @@ namespace soccerTeamManagementApp
             Sda.Fill(Dt);
             return Dt;
         }
-        public int SetData(String Query)
+        public int SetData(string query, params SqlParameter[] parameters)
         {
             int cnt = 0;
-            if(Con.State == ConnectionState.Closed)
+            if (Con.State == ConnectionState.Closed)
             {
-                Con.Open();            
+                Con.Open();
             }
 
-            Cmd.CommandText = Query;
+            Cmd.CommandText = query;
+
+            if (parameters != null && parameters.Length > 0)
+            {
+                Cmd.Parameters.AddRange(parameters);
+            }
+
             cnt = Cmd.ExecuteNonQuery();
             return cnt;
         }
+
+
 
         public DataTable GetTeams()
         {
@@ -51,21 +59,18 @@ namespace soccerTeamManagementApp
             return GetData(query);
         }
 
-        public object GetSingleValue(string query)
+        public object GetSingleValue(string query, params SqlParameter[] parameters)
         {
-            object result = null;
-
-            if (Con.State == ConnectionState.Closed)
+            using (SqlConnection connection = new SqlConnection(ConStr)) // Use Constr as connectionseries
             {
-                Con.Open();
+                using (SqlCommand command = new SqlCommand(query, connection))
+                {
+                    connection.Open();
+                    command.Parameters.AddRange(parameters);
+
+                    return command.ExecuteScalar();
+                }
             }
-
-            Cmd.CommandText = query;
-            result = Cmd.ExecuteScalar();
-
-            Con.Close();
-
-            return result;
         }
 
     }

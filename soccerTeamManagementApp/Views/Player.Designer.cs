@@ -29,9 +29,9 @@ namespace soccerTeamManagementApp
         /// </summary>
         private void InitializeComponent()
         {
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle4 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle5 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle6 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle7 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle8 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle9 = new System.Windows.Forms.DataGridViewCellStyle();
             this.panel1 = new System.Windows.Forms.Panel();
             this.label1 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
@@ -44,7 +44,6 @@ namespace soccerTeamManagementApp
             this.label9 = new System.Windows.Forms.Label();
             this.PositionCh = new System.Windows.Forms.ComboBox();
             this.JerseyNumberTb = new System.Windows.Forms.TextBox();
-            this.DOBTb = new Guna.UI2.WinForms.Guna2DateTimePicker();
             this.AddBtn = new System.Windows.Forms.Button();
             this.EditBtn = new System.Windows.Forms.Button();
             this.label4 = new System.Windows.Forms.Label();
@@ -55,6 +54,7 @@ namespace soccerTeamManagementApp
             this.selectTeamTb = new System.Windows.Forms.ComboBox();
             this.PlayerList = new Guna.UI2.WinForms.Guna2DataGridView();
             this.FirstNameTb = new System.Windows.Forms.TextBox();
+            this.DOBTb = new Guna.UI2.WinForms.Guna2DateTimePicker();
             this.panel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.PlayerList)).BeginInit();
             this.SuspendLayout();
@@ -203,20 +203,6 @@ namespace soccerTeamManagementApp
             this.JerseyNumberTb.TabIndex = 31;
             this.JerseyNumberTb.TextChanged += new System.EventHandler(this.textBox7_TextChanged);
             // 
-            // DOBTb
-            // 
-            this.DOBTb.Checked = true;
-            this.DOBTb.FillColor = System.Drawing.Color.LightSteelBlue;
-            this.DOBTb.Font = new System.Drawing.Font("Segoe UI", 9F);
-            this.DOBTb.Format = System.Windows.Forms.DateTimePickerFormat.Short;
-            this.DOBTb.Location = new System.Drawing.Point(35, 281);
-            this.DOBTb.MaxDate = new System.DateTime(2133, 12, 31, 0, 0, 0, 0);
-            this.DOBTb.MinDate = new System.DateTime(1923, 1, 1, 0, 0, 0, 0);
-            this.DOBTb.Name = "DOBTb";
-            this.DOBTb.Size = new System.Drawing.Size(265, 35);
-            this.DOBTb.TabIndex = 38;
-            this.DOBTb.Value = new System.DateTime(2023, 10, 10, 11, 24, 57, 168);
-            // 
             // AddBtn
             // 
             this.AddBtn.BackColor = System.Drawing.SystemColors.MenuHighlight;
@@ -320,27 +306,27 @@ namespace soccerTeamManagementApp
             // 
             // PlayerList
             // 
-            dataGridViewCellStyle4.BackColor = System.Drawing.Color.White;
-            this.PlayerList.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle4;
+            dataGridViewCellStyle7.BackColor = System.Drawing.Color.White;
+            this.PlayerList.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle7;
             this.PlayerList.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.ColumnHeader;
-            dataGridViewCellStyle5.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle5.BackColor = System.Drawing.Color.LightSteelBlue;
-            dataGridViewCellStyle5.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            dataGridViewCellStyle5.ForeColor = System.Drawing.Color.White;
-            dataGridViewCellStyle5.SelectionBackColor = System.Drawing.Color.LightSteelBlue;
-            dataGridViewCellStyle5.SelectionForeColor = System.Drawing.Color.LightSteelBlue;
-            dataGridViewCellStyle5.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
-            this.PlayerList.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle5;
+            dataGridViewCellStyle8.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle8.BackColor = System.Drawing.Color.LightSteelBlue;
+            dataGridViewCellStyle8.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            dataGridViewCellStyle8.ForeColor = System.Drawing.Color.White;
+            dataGridViewCellStyle8.SelectionBackColor = System.Drawing.Color.LightSteelBlue;
+            dataGridViewCellStyle8.SelectionForeColor = System.Drawing.Color.LightSteelBlue;
+            dataGridViewCellStyle8.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this.PlayerList.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle8;
             this.PlayerList.ColumnHeadersHeight = 25;
             this.PlayerList.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.EnableResizing;
-            dataGridViewCellStyle6.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle6.BackColor = System.Drawing.Color.White;
-            dataGridViewCellStyle6.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            dataGridViewCellStyle6.ForeColor = System.Drawing.Color.Black;
-            dataGridViewCellStyle6.SelectionBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(231)))), ((int)(((byte)(229)))), ((int)(((byte)(255)))));
-            dataGridViewCellStyle6.SelectionForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(71)))), ((int)(((byte)(69)))), ((int)(((byte)(94)))));
-            dataGridViewCellStyle6.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
-            this.PlayerList.DefaultCellStyle = dataGridViewCellStyle6;
+            dataGridViewCellStyle9.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle9.BackColor = System.Drawing.Color.White;
+            dataGridViewCellStyle9.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            dataGridViewCellStyle9.ForeColor = System.Drawing.Color.Black;
+            dataGridViewCellStyle9.SelectionBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(231)))), ((int)(((byte)(229)))), ((int)(((byte)(255)))));
+            dataGridViewCellStyle9.SelectionForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(71)))), ((int)(((byte)(69)))), ((int)(((byte)(94)))));
+            dataGridViewCellStyle9.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
+            this.PlayerList.DefaultCellStyle = dataGridViewCellStyle9;
             this.PlayerList.GridColor = System.Drawing.Color.FromArgb(((int)(((byte)(231)))), ((int)(((byte)(229)))), ((int)(((byte)(255)))));
             this.PlayerList.Location = new System.Drawing.Point(337, 96);
             this.PlayerList.Name = "PlayerList";
@@ -378,6 +364,21 @@ namespace soccerTeamManagementApp
             this.FirstNameTb.Size = new System.Drawing.Size(265, 26);
             this.FirstNameTb.TabIndex = 18;
             this.FirstNameTb.TextChanged += new System.EventHandler(this.FirstNameTb_TextChanged);
+            // 
+            // DOBTb
+            // 
+            this.DOBTb.Checked = true;
+            this.DOBTb.FillColor = System.Drawing.Color.LightSteelBlue;
+            this.DOBTb.Font = new System.Drawing.Font("Segoe UI", 9F);
+            this.DOBTb.Format = System.Windows.Forms.DateTimePickerFormat.Short;
+            this.DOBTb.Location = new System.Drawing.Point(35, 281);
+            this.DOBTb.MaxDate = new System.DateTime(2133, 12, 31, 0, 0, 0, 0);
+            this.DOBTb.MinDate = new System.DateTime(1923, 1, 1, 0, 0, 0, 0);
+            this.DOBTb.Name = "DOBTb";
+            this.DOBTb.Size = new System.Drawing.Size(265, 35);
+            this.DOBTb.TabIndex = 38;
+            this.DOBTb.Value = new System.DateTime(2023, 10, 10, 11, 24, 57, 168);
+            this.DOBTb.ValueChanged += new System.EventHandler(this.DOBTb_ValueChanged);
             // 
             // Player
             // 
@@ -433,7 +434,6 @@ namespace soccerTeamManagementApp
         private System.Windows.Forms.Label label9;
         private System.Windows.Forms.ComboBox PositionCh;
         private System.Windows.Forms.TextBox JerseyNumberTb;
-        private Guna.UI2.WinForms.Guna2DateTimePicker DOBTb;
         private System.Windows.Forms.Button AddBtn;
         private System.Windows.Forms.Button EditBtn;
         private System.Windows.Forms.Label label4;
@@ -444,5 +444,6 @@ namespace soccerTeamManagementApp
         private System.Windows.Forms.ComboBox selectTeamTb;
         private Guna.UI2.WinForms.Guna2DataGridView PlayerList;
         private System.Windows.Forms.TextBox FirstNameTb;
+        private Guna.UI2.WinForms.Guna2DateTimePicker DOBTb;
     }
 }

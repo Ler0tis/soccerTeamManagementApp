@@ -7,6 +7,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.Data.SqlClient;
+
 
 namespace soccerTeamManagementApp
 {
@@ -74,6 +76,7 @@ namespace soccerTeamManagementApp
             if(e.RowIndex >= 0)
             {
                 DataGridViewRow row = TeamList.Rows[e.RowIndex];
+
                 // Gets data of selected team
                 TeamName.Text = row.Cells[1].Value.ToString();
                 TeamAddress.Text = row.Cells[2].Value.ToString();
@@ -120,16 +123,33 @@ namespace soccerTeamManagementApp
             }
         }
 
-    private void DeleteBtn_Click(object sender, EventArgs e)
+        private void DeleteBtn_Click(object sender, EventArgs e)
         {
             try
             {
                 string team = TeamName.Text;
                 string teamAddress = TeamAddress.Text;
-                string query = "DELETE FROM Team WHERE TeamId = {0}";
 
-                query = string.Format(query, key);
-                Con.SetData(query);
+                // Search and remove all Matches with this Team
+                string findMatchesQuery = "SELECT MatchId FROM Match WHERE HomeTeam = @TeamId OR AwayTeam = @TeamId";
+                DataTable matchIds = Con.GetData(findMatchesQuery); // Remove parameter, because its a DELETE
+
+                foreach (DataRow row in matchIds.Rows)
+                {
+                    int matchId = Convert.ToInt32(row["MatchId"]);
+
+                    // Delete Match
+                    string deleteMatchQuery = "DELETE FROM Match WHERE MatchId = @MatchId";
+                    Con.SetData(deleteMatchQuery, new SqlParameter("@MatchId", matchId));
+                }
+
+                // Set players to No Team value 0
+                string updatePlayersQuery = "UPDATE Player SET Team = 0 WHERE Team = @TeamId";
+                Con.SetData(updatePlayersQuery, new SqlParameter("@TeamId", key));
+
+                // Remove Team
+                string query = "DELETE FROM Team WHERE TeamId = @TeamId";
+                Con.SetData(query, new SqlParameter("@TeamId", key));
 
                 ShowTeams();
                 MessageBox.Show("Team deleted");
@@ -143,6 +163,9 @@ namespace soccerTeamManagementApp
                 MessageBox.Show(Ex.Message);
             }
         }
+
+
+
 
         private void CancelBtn_Click(object sender, EventArgs e)
         {
