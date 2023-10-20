@@ -30,79 +30,79 @@ namespace soccerTeamManagementApp
         private void InitializeComponent()
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Home));
-            this.logoutLink = new System.Windows.Forms.Label();
-            this.manageCoachesLink = new System.Windows.Forms.Label();
-            this.managePlayersLink = new System.Windows.Forms.Label();
-            this.manageTeam = new System.Windows.Forms.PictureBox();
+            this.LogoutLink = new System.Windows.Forms.Label();
+            this.ManageCoachesLink = new System.Windows.Forms.Label();
+            this.ManagePlayersLink = new System.Windows.Forms.Label();
+            this.ManagePlayersImg = new System.Windows.Forms.PictureBox();
             this.panel2 = new System.Windows.Forms.Panel();
             this.label1 = new System.Windows.Forms.Label();
             this.panel1 = new System.Windows.Forms.Panel();
-            this.manageTransferLink = new System.Windows.Forms.Label();
-            this.manageCoachImg = new System.Windows.Forms.PictureBox();
-            this.manageMatchImg = new System.Windows.Forms.PictureBox();
-            this.manageTransferImg = new System.Windows.Forms.PictureBox();
-            this.logoutImg = new System.Windows.Forms.PictureBox();
-            this.manageTeamsLink = new System.Windows.Forms.Label();
-            this.manageTeamsImg = new System.Windows.Forms.PictureBox();
-            this.manageMatchLink = new System.Windows.Forms.Label();
-            ((System.ComponentModel.ISupportInitialize)(this.manageTeam)).BeginInit();
+            this.ManageTransfersLink = new System.Windows.Forms.Label();
+            this.ManageCoachesImg = new System.Windows.Forms.PictureBox();
+            this.ManageMatchesImg = new System.Windows.Forms.PictureBox();
+            this.ManageTransfersImg = new System.Windows.Forms.PictureBox();
+            this.ManageTeamsLink = new System.Windows.Forms.Label();
+            this.ManageTeamsImg = new System.Windows.Forms.PictureBox();
+            this.ManageMatchesLink = new System.Windows.Forms.Label();
+            this.LogoutImg = new System.Windows.Forms.PictureBox();
+            ((System.ComponentModel.ISupportInitialize)(this.ManagePlayersImg)).BeginInit();
             this.panel1.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.manageCoachImg)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.manageMatchImg)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.manageTransferImg)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.logoutImg)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.manageTeamsImg)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.ManageCoachesImg)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.ManageMatchesImg)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.ManageTransfersImg)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.ManageTeamsImg)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.LogoutImg)).BeginInit();
             this.SuspendLayout();
             // 
-            // logoutLink
+            // LogoutLink
             // 
-            this.logoutLink.AutoSize = true;
-            this.logoutLink.BackColor = System.Drawing.Color.White;
-            this.logoutLink.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.logoutLink.ForeColor = System.Drawing.SystemColors.MenuHighlight;
-            this.logoutLink.Location = new System.Drawing.Point(795, 433);
-            this.logoutLink.Name = "logoutLink";
-            this.logoutLink.Size = new System.Drawing.Size(49, 16);
-            this.logoutLink.TabIndex = 96;
-            this.logoutLink.Text = "Logout";
-            this.logoutLink.Click += new System.EventHandler(this.logoutLink_Click);
+            this.LogoutLink.AutoSize = true;
+            this.LogoutLink.BackColor = System.Drawing.Color.White;
+            this.LogoutLink.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.LogoutLink.ForeColor = System.Drawing.SystemColors.MenuHighlight;
+            this.LogoutLink.Location = new System.Drawing.Point(795, 433);
+            this.LogoutLink.Name = "LogoutLink";
+            this.LogoutLink.Size = new System.Drawing.Size(49, 16);
+            this.LogoutLink.TabIndex = 96;
+            this.LogoutLink.Text = "Logout";
+            this.LogoutLink.Click += new System.EventHandler(this.LogoutLink_Click);
             // 
-            // manageCoachesLink
+            // ManageCoachesLink
             // 
-            this.manageCoachesLink.AutoSize = true;
-            this.manageCoachesLink.BackColor = System.Drawing.Color.White;
-            this.manageCoachesLink.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.manageCoachesLink.ForeColor = System.Drawing.SystemColors.MenuHighlight;
-            this.manageCoachesLink.Location = new System.Drawing.Point(764, 251);
-            this.manageCoachesLink.Name = "manageCoachesLink";
-            this.manageCoachesLink.Size = new System.Drawing.Size(115, 16);
-            this.manageCoachesLink.TabIndex = 94;
-            this.manageCoachesLink.Text = "Manage Coaches";
-            this.manageCoachesLink.Click += new System.EventHandler(this.manageCoachesLink_Click);
+            this.ManageCoachesLink.AutoSize = true;
+            this.ManageCoachesLink.BackColor = System.Drawing.Color.White;
+            this.ManageCoachesLink.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.ManageCoachesLink.ForeColor = System.Drawing.SystemColors.MenuHighlight;
+            this.ManageCoachesLink.Location = new System.Drawing.Point(764, 251);
+            this.ManageCoachesLink.Name = "ManageCoachesLink";
+            this.ManageCoachesLink.Size = new System.Drawing.Size(115, 16);
+            this.ManageCoachesLink.TabIndex = 94;
+            this.ManageCoachesLink.Text = "Manage Coaches";
+            this.ManageCoachesLink.Click += new System.EventHandler(this.ManageCoachesLink_Click);
             // 
-            // managePlayersLink
+            // ManagePlayersLink
             // 
-            this.managePlayersLink.AutoSize = true;
-            this.managePlayersLink.BackColor = System.Drawing.Color.White;
-            this.managePlayersLink.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.managePlayersLink.ForeColor = System.Drawing.SystemColors.MenuHighlight;
-            this.managePlayersLink.Location = new System.Drawing.Point(514, 251);
-            this.managePlayersLink.Name = "managePlayersLink";
-            this.managePlayersLink.Size = new System.Drawing.Size(107, 16);
-            this.managePlayersLink.TabIndex = 92;
-            this.managePlayersLink.Text = "Manage Players";
-            this.managePlayersLink.Click += new System.EventHandler(this.managePlayersLink_Click);
+            this.ManagePlayersLink.AutoSize = true;
+            this.ManagePlayersLink.BackColor = System.Drawing.Color.White;
+            this.ManagePlayersLink.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.ManagePlayersLink.ForeColor = System.Drawing.SystemColors.MenuHighlight;
+            this.ManagePlayersLink.Location = new System.Drawing.Point(514, 251);
+            this.ManagePlayersLink.Name = "ManagePlayersLink";
+            this.ManagePlayersLink.Size = new System.Drawing.Size(107, 16);
+            this.ManagePlayersLink.TabIndex = 92;
+            this.ManagePlayersLink.Text = "Manage Players";
+            this.ManagePlayersLink.Click += new System.EventHandler(this.ManagePlayersLink_Click);
             // 
-            // manageTeam
+            // ManagePlayersImg
             // 
-            this.manageTeam.Image = ((System.Drawing.Image)(resources.GetObject("manageTeam.Image")));
-            this.manageTeam.Location = new System.Drawing.Point(516, 151);
-            this.manageTeam.Name = "manageTeam";
-            this.manageTeam.Size = new System.Drawing.Size(105, 81);
-            this.manageTeam.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
-            this.manageTeam.TabIndex = 91;
-            this.manageTeam.TabStop = false;
-            this.manageTeam.Click += new System.EventHandler(this.manageTeam_Click);
+            this.ManagePlayersImg.Image = ((System.Drawing.Image)(resources.GetObject("ManagePlayersImg.Image")));
+            this.ManagePlayersImg.Location = new System.Drawing.Point(516, 151);
+            this.ManagePlayersImg.Name = "ManagePlayersImg";
+            this.ManagePlayersImg.Size = new System.Drawing.Size(105, 81);
+            this.ManagePlayersImg.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
+            this.ManagePlayersImg.TabIndex = 91;
+            this.ManagePlayersImg.TabStop = false;
+            this.ManagePlayersImg.Click += new System.EventHandler(this.ManagePlayersImg_Click);
             // 
             // panel2
             // 
@@ -134,150 +134,150 @@ namespace soccerTeamManagementApp
             this.panel1.Size = new System.Drawing.Size(1134, 83);
             this.panel1.TabIndex = 82;
             // 
-            // manageTransferLink
+            // ManageTransfersLink
             // 
-            this.manageTransferLink.AutoSize = true;
-            this.manageTransferLink.BackColor = System.Drawing.Color.White;
-            this.manageTransferLink.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.manageTransferLink.ForeColor = System.Drawing.SystemColors.MenuHighlight;
-            this.manageTransferLink.Location = new System.Drawing.Point(535, 433);
-            this.manageTransferLink.Name = "manageTransferLink";
-            this.manageTransferLink.Size = new System.Drawing.Size(65, 16);
-            this.manageTransferLink.TabIndex = 102;
-            this.manageTransferLink.Text = "Transfers";
-            this.manageTransferLink.Click += new System.EventHandler(this.manageTransferLink_Click);
+            this.ManageTransfersLink.AutoSize = true;
+            this.ManageTransfersLink.BackColor = System.Drawing.Color.White;
+            this.ManageTransfersLink.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.ManageTransfersLink.ForeColor = System.Drawing.SystemColors.MenuHighlight;
+            this.ManageTransfersLink.Location = new System.Drawing.Point(535, 433);
+            this.ManageTransfersLink.Name = "ManageTransfersLink";
+            this.ManageTransfersLink.Size = new System.Drawing.Size(65, 16);
+            this.ManageTransfersLink.TabIndex = 102;
+            this.ManageTransfersLink.Text = "Transfers";
+            this.ManageTransfersLink.Click += new System.EventHandler(this.ManageTransfersLink_Click);
             // 
-            // manageCoachImg
+            // ManageCoachesImg
             // 
-            this.manageCoachImg.Image = ((System.Drawing.Image)(resources.GetObject("manageCoachImg.Image")));
-            this.manageCoachImg.Location = new System.Drawing.Point(767, 151);
-            this.manageCoachImg.Name = "manageCoachImg";
-            this.manageCoachImg.Size = new System.Drawing.Size(105, 81);
-            this.manageCoachImg.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
-            this.manageCoachImg.TabIndex = 106;
-            this.manageCoachImg.TabStop = false;
-            this.manageCoachImg.Click += new System.EventHandler(this.manageCoachImg_Click);
+            this.ManageCoachesImg.Image = ((System.Drawing.Image)(resources.GetObject("ManageCoachesImg.Image")));
+            this.ManageCoachesImg.Location = new System.Drawing.Point(767, 151);
+            this.ManageCoachesImg.Name = "ManageCoachesImg";
+            this.ManageCoachesImg.Size = new System.Drawing.Size(105, 81);
+            this.ManageCoachesImg.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
+            this.ManageCoachesImg.TabIndex = 106;
+            this.ManageCoachesImg.TabStop = false;
+            this.ManageCoachesImg.Click += new System.EventHandler(this.ManageCoachesImg_Click);
             // 
-            // manageMatchImg
+            // ManageMatchesImg
             // 
-            this.manageMatchImg.Image = ((System.Drawing.Image)(resources.GetObject("manageMatchImg.Image")));
-            this.manageMatchImg.Location = new System.Drawing.Point(244, 338);
-            this.manageMatchImg.Name = "manageMatchImg";
-            this.manageMatchImg.Size = new System.Drawing.Size(105, 81);
-            this.manageMatchImg.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
-            this.manageMatchImg.TabIndex = 107;
-            this.manageMatchImg.TabStop = false;
-            this.manageMatchImg.Click += new System.EventHandler(this.manageMatchImg_Click);
+            this.ManageMatchesImg.Image = ((System.Drawing.Image)(resources.GetObject("ManageMatchesImg.Image")));
+            this.ManageMatchesImg.Location = new System.Drawing.Point(244, 338);
+            this.ManageMatchesImg.Name = "ManageMatchesImg";
+            this.ManageMatchesImg.Size = new System.Drawing.Size(105, 81);
+            this.ManageMatchesImg.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
+            this.ManageMatchesImg.TabIndex = 107;
+            this.ManageMatchesImg.TabStop = false;
+            this.ManageMatchesImg.Click += new System.EventHandler(this.ManageMatchesImg_Click);
             // 
-            // manageTransferImg
+            // ManageTransfersImg
             // 
-            this.manageTransferImg.Image = ((System.Drawing.Image)(resources.GetObject("manageTransferImg.Image")));
-            this.manageTransferImg.Location = new System.Drawing.Point(516, 338);
-            this.manageTransferImg.Name = "manageTransferImg";
-            this.manageTransferImg.Size = new System.Drawing.Size(105, 81);
-            this.manageTransferImg.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
-            this.manageTransferImg.TabIndex = 108;
-            this.manageTransferImg.TabStop = false;
-            this.manageTransferImg.Click += new System.EventHandler(this.manageTransferImg_Click);
+            this.ManageTransfersImg.Image = ((System.Drawing.Image)(resources.GetObject("ManageTransfersImg.Image")));
+            this.ManageTransfersImg.Location = new System.Drawing.Point(516, 338);
+            this.ManageTransfersImg.Name = "ManageTransfersImg";
+            this.ManageTransfersImg.Size = new System.Drawing.Size(105, 81);
+            this.ManageTransfersImg.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
+            this.ManageTransfersImg.TabIndex = 108;
+            this.ManageTransfersImg.TabStop = false;
+            this.ManageTransfersImg.Click += new System.EventHandler(this.ManageTransfersImg_Click);
             // 
-            // logoutImg
+            // ManageTeamsLink
             // 
-            this.logoutImg.Image = ((System.Drawing.Image)(resources.GetObject("logoutImg.Image")));
-            this.logoutImg.Location = new System.Drawing.Point(767, 338);
-            this.logoutImg.Name = "logoutImg";
-            this.logoutImg.Size = new System.Drawing.Size(105, 81);
-            this.logoutImg.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
-            this.logoutImg.TabIndex = 109;
-            this.logoutImg.TabStop = false;
-            this.logoutImg.Click += new System.EventHandler(this.logoutImg_Click);
+            this.ManageTeamsLink.AutoSize = true;
+            this.ManageTeamsLink.BackColor = System.Drawing.Color.White;
+            this.ManageTeamsLink.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.ManageTeamsLink.ForeColor = System.Drawing.SystemColors.MenuHighlight;
+            this.ManageTeamsLink.Location = new System.Drawing.Point(244, 251);
+            this.ManageTeamsLink.Name = "ManageTeamsLink";
+            this.ManageTeamsLink.Size = new System.Drawing.Size(104, 16);
+            this.ManageTeamsLink.TabIndex = 110;
+            this.ManageTeamsLink.Text = "Manage Teams";
+            this.ManageTeamsLink.Click += new System.EventHandler(this.ManageTeamsLink_Click);
             // 
-            // manageTeamsLink
+            // ManageTeamsImg
             // 
-            this.manageTeamsLink.AutoSize = true;
-            this.manageTeamsLink.BackColor = System.Drawing.Color.White;
-            this.manageTeamsLink.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.manageTeamsLink.ForeColor = System.Drawing.SystemColors.MenuHighlight;
-            this.manageTeamsLink.Location = new System.Drawing.Point(244, 251);
-            this.manageTeamsLink.Name = "manageTeamsLink";
-            this.manageTeamsLink.Size = new System.Drawing.Size(104, 16);
-            this.manageTeamsLink.TabIndex = 110;
-            this.manageTeamsLink.Text = "Manage Teams";
-            this.manageTeamsLink.Click += new System.EventHandler(this.manageTeamsLink_Click);
+            this.ManageTeamsImg.Image = ((System.Drawing.Image)(resources.GetObject("ManageTeamsImg.Image")));
+            this.ManageTeamsImg.Location = new System.Drawing.Point(243, 151);
+            this.ManageTeamsImg.Name = "ManageTeamsImg";
+            this.ManageTeamsImg.Size = new System.Drawing.Size(105, 81);
+            this.ManageTeamsImg.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
+            this.ManageTeamsImg.TabIndex = 105;
+            this.ManageTeamsImg.TabStop = false;
+            this.ManageTeamsImg.Click += new System.EventHandler(this.ManageTeamImg_Click);
             // 
-            // manageTeamsImg
+            // ManageMatchesLink
             // 
-            this.manageTeamsImg.Image = ((System.Drawing.Image)(resources.GetObject("manageTeamsImg.Image")));
-            this.manageTeamsImg.Location = new System.Drawing.Point(243, 151);
-            this.manageTeamsImg.Name = "manageTeamsImg";
-            this.manageTeamsImg.Size = new System.Drawing.Size(105, 81);
-            this.manageTeamsImg.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
-            this.manageTeamsImg.TabIndex = 105;
-            this.manageTeamsImg.TabStop = false;
-            this.manageTeamsImg.Click += new System.EventHandler(this.pictureBox7_Click);
+            this.ManageMatchesLink.AutoSize = true;
+            this.ManageMatchesLink.BackColor = System.Drawing.Color.White;
+            this.ManageMatchesLink.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.ManageMatchesLink.ForeColor = System.Drawing.SystemColors.MenuHighlight;
+            this.ManageMatchesLink.Location = new System.Drawing.Point(267, 433);
+            this.ManageMatchesLink.Name = "ManageMatchesLink";
+            this.ManageMatchesLink.Size = new System.Drawing.Size(59, 16);
+            this.ManageMatchesLink.TabIndex = 111;
+            this.ManageMatchesLink.Text = "Matches";
+            this.ManageMatchesLink.Click += new System.EventHandler(this.ManageMatchesLink_Click);
             // 
-            // manageMatchLink
+            // LogoutImg
             // 
-            this.manageMatchLink.AutoSize = true;
-            this.manageMatchLink.BackColor = System.Drawing.Color.White;
-            this.manageMatchLink.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.manageMatchLink.ForeColor = System.Drawing.SystemColors.MenuHighlight;
-            this.manageMatchLink.Location = new System.Drawing.Point(267, 433);
-            this.manageMatchLink.Name = "manageMatchLink";
-            this.manageMatchLink.Size = new System.Drawing.Size(59, 16);
-            this.manageMatchLink.TabIndex = 111;
-            this.manageMatchLink.Text = "Matches";
-            this.manageMatchLink.Click += new System.EventHandler(this.manageMatchLink_Click);
+            this.LogoutImg.Image = ((System.Drawing.Image)(resources.GetObject("LogoutImg.Image")));
+            this.LogoutImg.Location = new System.Drawing.Point(767, 338);
+            this.LogoutImg.Name = "LogoutImg";
+            this.LogoutImg.Size = new System.Drawing.Size(105, 81);
+            this.LogoutImg.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
+            this.LogoutImg.TabIndex = 109;
+            this.LogoutImg.TabStop = false;
+            this.LogoutImg.Click += new System.EventHandler(this.LogoutImg_Click);
             // 
             // Home
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1134, 710);
-            this.Controls.Add(this.manageMatchLink);
-            this.Controls.Add(this.manageTeamsLink);
-            this.Controls.Add(this.logoutImg);
-            this.Controls.Add(this.manageTransferImg);
-            this.Controls.Add(this.manageMatchImg);
-            this.Controls.Add(this.manageCoachImg);
-            this.Controls.Add(this.manageTeamsImg);
-            this.Controls.Add(this.manageTransferLink);
-            this.Controls.Add(this.logoutLink);
-            this.Controls.Add(this.manageCoachesLink);
-            this.Controls.Add(this.managePlayersLink);
-            this.Controls.Add(this.manageTeam);
+            this.Controls.Add(this.ManageMatchesLink);
+            this.Controls.Add(this.ManageTeamsLink);
+            this.Controls.Add(this.LogoutImg);
+            this.Controls.Add(this.ManageTransfersImg);
+            this.Controls.Add(this.ManageMatchesImg);
+            this.Controls.Add(this.ManageCoachesImg);
+            this.Controls.Add(this.ManageTeamsImg);
+            this.Controls.Add(this.ManageTransfersLink);
+            this.Controls.Add(this.LogoutLink);
+            this.Controls.Add(this.ManageCoachesLink);
+            this.Controls.Add(this.ManagePlayersLink);
+            this.Controls.Add(this.ManagePlayersImg);
             this.Controls.Add(this.panel2);
             this.Controls.Add(this.panel1);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
             this.Name = "Home";
             this.Text = "Home";
-            ((System.ComponentModel.ISupportInitialize)(this.manageTeam)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.ManagePlayersImg)).EndInit();
             this.panel1.ResumeLayout(false);
             this.panel1.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.manageCoachImg)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.manageMatchImg)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.manageTransferImg)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.logoutImg)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.manageTeamsImg)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.ManageCoachesImg)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.ManageMatchesImg)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.ManageTransfersImg)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.ManageTeamsImg)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.LogoutImg)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
         }
 
         #endregion
-        private System.Windows.Forms.Label logoutLink;
-        private System.Windows.Forms.Label manageCoachesLink;
-        private System.Windows.Forms.Label managePlayersLink;
-        private System.Windows.Forms.PictureBox manageTeam;
+        private System.Windows.Forms.Label LogoutLink;
+        private System.Windows.Forms.Label ManageCoachesLink;
+        private System.Windows.Forms.Label ManagePlayersLink;
+        private System.Windows.Forms.PictureBox ManagePlayersImg;
         private System.Windows.Forms.Panel panel2;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Panel panel1;
-        private System.Windows.Forms.Label manageTransferLink;
-        private System.Windows.Forms.PictureBox manageCoachImg;
-        private System.Windows.Forms.PictureBox manageMatchImg;
-        private System.Windows.Forms.PictureBox manageTransferImg;
-        private System.Windows.Forms.PictureBox logoutImg;
-        private System.Windows.Forms.Label manageTeamsLink;
-        private System.Windows.Forms.PictureBox manageTeamsImg;
-        private System.Windows.Forms.Label manageMatchLink;
+        private System.Windows.Forms.Label ManageTransfersLink;
+        private System.Windows.Forms.PictureBox ManageCoachesImg;
+        private System.Windows.Forms.PictureBox ManageMatchesImg;
+        private System.Windows.Forms.PictureBox ManageTransfersImg;
+        private System.Windows.Forms.Label ManageTeamsLink;
+        private System.Windows.Forms.PictureBox ManageTeamsImg;
+        private System.Windows.Forms.Label ManageMatchesLink;
+        private System.Windows.Forms.PictureBox LogoutImg;
     }
 }

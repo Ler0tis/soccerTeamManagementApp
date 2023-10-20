@@ -23,8 +23,8 @@ namespace soccerTeamManagementApp
 
         private void ShowTeams()
         {
-            String Query = "SELECT * FROM Team";
-            TeamList.DataSource = Con.GetData(Query);
+            string query = "SELECT * FROM Team";
+            TeamList.DataSource = Con.GetData(query);
             //TeamList.Columns["TeamId"].Visible = false;
         }
 
@@ -47,11 +47,12 @@ namespace soccerTeamManagementApp
                     MessageBox.Show("Team name and address are required fields");
                 } else
                 {
-                    string Team = TeamName.Text.Trim();
+                    string team = TeamName.Text.Trim();
                     string teamAddress = TeamAddress.Text.Trim();
-                    String Query = "INSERT INTO Team (TeamName, TeamAddress) values ('{0}', '{1}')";
-                    Query = string.Format(Query,TeamName.Text, TeamAddress.Text);
-                    Con.SetData(Query);
+                    string query = "INSERT INTO Team (TeamName, TeamAddress) values ('{0}', '{1}')";
+                    query = string.Format(query, TeamName.Text, TeamAddress.Text);
+                    Con.SetData(query);
+
                     ShowTeams();
                     MessageBox.Show("Team added");
 
@@ -66,7 +67,7 @@ namespace soccerTeamManagementApp
             }
         }
 
-        int Key = 0;
+        int key = 0;
         private void TeamList_CellContentClick(object sender, DataGridViewCellEventArgs e)
         {
             
@@ -77,7 +78,7 @@ namespace soccerTeamManagementApp
                 TeamName.Text = row.Cells[1].Value.ToString();
                 TeamAddress.Text = row.Cells[2].Value.ToString();
 
-                Key = Convert.ToInt32(row.Cells[0].Value);
+                key = Convert.ToInt32(row.Cells[0].Value);
             }
         }
 
@@ -94,11 +95,12 @@ namespace soccerTeamManagementApp
                     string teamName = TeamName.Text.Trim();
                     string teamAddress = TeamAddress.Text.Trim();
 
-                    if (Key > 0)
+                    if (key > 0)
                     {
                         string query = "UPDATE Team SET TeamName = '{0}', TeamAddress = '{1}' WHERE TeamId = {2}";
-                        query = string.Format(query, teamName, teamAddress, Key);
+                        query = string.Format(query, teamName, teamAddress, key);
                         Con.SetData(query);
+
                         ShowTeams();
                         MessageBox.Show("Team updated");
 
@@ -122,12 +124,13 @@ namespace soccerTeamManagementApp
         {
             try
             {
-                string Team = TeamName.Text;
+                string team = TeamName.Text;
                 string teamAddress = TeamAddress.Text;
-                String Query = "DELETE FROM Team WHERE TeamId = {0}";
+                string query = "DELETE FROM Team WHERE TeamId = {0}";
 
-                Query = string.Format(Query,Key);
-                Con.SetData(Query);
+                query = string.Format(query, key);
+                Con.SetData(query);
+
                 ShowTeams();
                 MessageBox.Show("Team deleted");
 
@@ -145,7 +148,6 @@ namespace soccerTeamManagementApp
         {
             Home homeForm = new Home();
             homeForm.Show();
-
             this.Close();
         }
     }

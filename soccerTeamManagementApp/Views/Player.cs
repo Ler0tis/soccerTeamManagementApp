@@ -25,8 +25,8 @@ namespace soccerTeamManagementApp
 
         private void ShowPlayer()
         {
-            string Query = "SELECT * FROM Player";
-            PlayerList.DataSource = Con.GetData(Query);
+            string query = "SELECT * FROM Player";
+            PlayerList.DataSource = Con.GetData(query);
             //PlayerList.Columns["PlayerId"].Visible = false;
         }
 
@@ -35,17 +35,12 @@ namespace soccerTeamManagementApp
 
         }
 
-        private void comboBox2_SelectedIndexChanged(object sender, EventArgs e)
-        {
-
-        }
-
         private void GetTeam()
         {
-            string Query = "SELECT * FROM Team";
-            selectTeamTb.DisplayMember = Con.GetData(Query).Columns["TeamName"].ToString();
-            selectTeamTb.ValueMember = Con.GetData(Query).Columns["TeamId"].ToString();
-            selectTeamTb.DataSource = Con.GetData(Query);
+            string query = "SELECT * FROM Team";
+            selectTeamTb.DisplayMember = Con.GetData(query).Columns["TeamName"].ToString();
+            selectTeamTb.ValueMember = Con.GetData(query).Columns["TeamId"].ToString();
+            selectTeamTb.DataSource = Con.GetData(query);
         }
 
         private void AddBtn_Click(object sender, EventArgs e)
@@ -58,26 +53,27 @@ namespace soccerTeamManagementApp
                 }
                 else
                 {
-                    string FirstName = FirstNameTb.Text.Trim();
-                    string LastName = LastNameTb.Text.Trim();
-                    int Team = Convert.ToInt32(selectTeamTb.SelectedValue.ToString());
-                    string DOB = DOBTb.Value.ToString();
-                    string Position = PositionCh.SelectedItem == null ? null : PositionCh.SelectedItem.ToString();
-                    int Salary = Convert.ToInt32(SalaryTb.Text);
-                    int JerseyNumber = Convert.ToInt32(JerseyNumberTb.Text);
+                    string firstName = FirstNameTb.Text.Trim();
+                    string lastName = LastNameTb.Text.Trim();
+                    int team = Convert.ToInt32(selectTeamTb.SelectedValue.ToString());
+                    string dateOfBirth = DOBTb.Value.ToString();
+                    string position = PositionCh.SelectedItem == null ? null : PositionCh.SelectedItem.ToString();
+                    int salary = Convert.ToInt32(SalaryTb.Text);
+                    int jerseyNumber = Convert.ToInt32(JerseyNumberTb.Text);
 
-                    if (Position == null)
+                    if (position == null)
                     {
                         MessageBox.Show("Position is required.");
                     }
 
-                    string Query = "INSERT INTO Player (FirstName, LastName, Team, BirthDate, Position, Salary, JerseyNumber) VALUES ('{0}', '{1}', {2}, '{3}', '{4}', {5}, {6})";
-                    Query = string.Format(Query, FirstName, LastName, Team, DOB, Position, Salary, JerseyNumber);
-                    Con.SetData(Query);
+                    string query = "INSERT INTO Player (FirstName, LastName, Team, BirthDate, Position, Salary, JerseyNumber) VALUES ('{0}', '{1}', {2}, '{3}', '{4}', {5}, {6})";
+                    query = string.Format(query, firstName, lastName, team, dateOfBirth, position, salary, jerseyNumber);
+                    Con.SetData(query);
+
                     ShowPlayer();
                     MessageBox.Show("Player added");
 
-                    // Reset inputfields
+                    // Reset input fields
                     FirstNameTb.Text = "";
                     LastNameTb.Text = "";
                     selectTeamTb.SelectedIndex = -1;
@@ -93,7 +89,7 @@ namespace soccerTeamManagementApp
             }
         }
 
-        int Key = 0;
+        int key = 0;
 
         private void PlayerList_CellContentClick_1(object sender, DataGridViewCellEventArgs e)
         {
@@ -111,7 +107,7 @@ namespace soccerTeamManagementApp
                 JerseyNumberTb.Text = row.Cells[5].Value.ToString();
 
                 // Fill Key with ID of Player
-                Key = Convert.ToInt32(row.Cells[0].Value);
+                key = Convert.ToInt32(row.Cells[0].Value);
             }
         }
 
@@ -125,19 +121,20 @@ namespace soccerTeamManagementApp
                 }
                 else
                 {
-                    string FirstName = FirstNameTb.Text.Trim();
-                    string LastName = LastNameTb.Text.Trim();
-                    int Team = Convert.ToInt32(selectTeamTb.SelectedValue.ToString());
-                    string DOB = DOBTb.Value.ToString("yyyy-MM-dd");
-                    string Position = PositionCh.SelectedItem.ToString();
-                    int Salary = Convert.ToInt32(SalaryTb.Text);
-                    int JerseyNumber = Convert.ToInt32(JerseyNumberTb.Text);
+                    string firstName = FirstNameTb.Text.Trim();
+                    string lastName = LastNameTb.Text.Trim();
+                    int team = Convert.ToInt32(selectTeamTb.SelectedValue.ToString());
+                    string dateOfBirth = DOBTb.Value.ToString();
+                    string position = PositionCh.SelectedItem == null ? null : PositionCh.SelectedItem.ToString();
+                    int salary = Convert.ToInt32(SalaryTb.Text);
+                    int jerseyNumber = Convert.ToInt32(JerseyNumberTb.Text);
 
-                    string Query = "UPDATE Player SET FirstName = '{0}', LastName = '{1}'," +
+                    string query = "UPDATE Player SET FirstName = '{0}', LastName = '{1}'," +
                         " Team = {2}, BirthDate = '{3}', Position = '{4}', Salary = {5}, JerseyNumber = {6} " +
                         "WHERE PlayerId = {7}";
-                    Query = string.Format(Query, FirstName, LastName, Team, DOB, Position, Salary, JerseyNumber, Key);
-                    Con.SetData(Query);
+                    query = string.Format(query, firstName, lastName, team, dateOfBirth, position, salary, jerseyNumber, key);
+                    Con.SetData(query);
+
                     ShowPlayer();
                     MessageBox.Show("Player updated");
 
@@ -172,17 +169,19 @@ namespace soccerTeamManagementApp
                 string firstName = FirstNameTb.Text;
                 string lastName = LastNameTb.Text;
                 int team = Convert.ToInt32(selectTeamTb.SelectedValue.ToString());
-                string DOB = DOBTb.Value.ToString("yyyy-MM-dd");
+                string dateOfBirth = DOBTb.Value.ToString("yyyy-MM-dd");
                 string position = PositionCh.SelectedItem.ToString();
                 int salary = Convert.ToInt32(SalaryTb.Text);
                 int jerseyNumber = Convert.ToInt32(JerseyNumberTb.Text);
 
-                String Query = "DELETE FROM PLayer WHERE PlayerId = {0}";
+                string query = "DELETE FROM PLayer WHERE PlayerId = {0}";
 
-                Query = string.Format(Query, Key);
-                Con.SetData(Query);
+                query = string.Format(query, key);
+                Con.SetData(query);
+
                 ShowPlayer();
                 MessageBox.Show("Team deleted");
+
             } catch (Exception Ex)
             {
                 MessageBox.Show(Ex.Message);
@@ -198,6 +197,11 @@ namespace soccerTeamManagementApp
         }
 
         private void Player_Load(object sender, EventArgs e)
+        {
+
+        }
+
+        private void FirstNameTb_TextChanged(object sender, EventArgs e)
         {
 
         }

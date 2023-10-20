@@ -38,15 +38,15 @@ namespace soccerTeamManagementApp
             this.panel2 = new System.Windows.Forms.Panel();
             this.AddBtn = new System.Windows.Forms.Button();
             this.label5 = new System.Windows.Forms.Label();
-            this.selectTeamBTb = new System.Windows.Forms.ComboBox();
             this.matchDayTb = new Guna.UI2.WinForms.Guna2DateTimePicker();
             this.label6 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
-            this.selectTeamATb = new System.Windows.Forms.ComboBox();
             this.MatchList = new Guna.UI2.WinForms.Guna2DataGridView();
             this.EditBtn = new System.Windows.Forms.Button();
             this.DeleteBtn = new System.Windows.Forms.Button();
+            this.SelectTeamA = new System.Windows.Forms.ComboBox();
+            this.SelectTeamB = new System.Windows.Forms.ComboBox();
             this.panel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.MatchList)).BeginInit();
             this.SuspendLayout();
@@ -123,16 +123,6 @@ namespace soccerTeamManagementApp
             this.label5.TabIndex = 105;
             this.label5.Text = "Home team";
             // 
-            // selectTeamBTb
-            // 
-            this.selectTeamBTb.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.selectTeamBTb.FormattingEnabled = true;
-            this.selectTeamBTb.Location = new System.Drawing.Point(12, 261);
-            this.selectTeamBTb.Name = "selectTeamBTb";
-            this.selectTeamBTb.Size = new System.Drawing.Size(265, 28);
-            this.selectTeamBTb.TabIndex = 108;
-            this.selectTeamBTb.SelectedIndexChanged += new System.EventHandler(this.selectTeamBTb_SelectedIndexChanged);
-            // 
             // matchDayTb
             // 
             this.matchDayTb.Checked = true;
@@ -182,16 +172,6 @@ namespace soccerTeamManagementApp
             this.label3.Size = new System.Drawing.Size(33, 20);
             this.label3.TabIndex = 112;
             this.label3.Text = "VS";
-            // 
-            // selectTeamATb
-            // 
-            this.selectTeamATb.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.selectTeamATb.FormattingEnabled = true;
-            this.selectTeamATb.Location = new System.Drawing.Point(12, 123);
-            this.selectTeamATb.Name = "selectTeamATb";
-            this.selectTeamATb.Size = new System.Drawing.Size(265, 28);
-            this.selectTeamATb.TabIndex = 106;
-            this.selectTeamATb.SelectedIndexChanged += new System.EventHandler(this.selectTeamATb_SelectedIndexChanged);
             // 
             // MatchList
             // 
@@ -273,6 +253,26 @@ namespace soccerTeamManagementApp
             this.DeleteBtn.UseVisualStyleBackColor = false;
             this.DeleteBtn.Click += new System.EventHandler(this.DeleteBtn_Click);
             // 
+            // SelectTeamA
+            // 
+            this.SelectTeamA.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.SelectTeamA.FormattingEnabled = true;
+            this.SelectTeamA.Location = new System.Drawing.Point(12, 123);
+            this.SelectTeamA.Name = "SelectTeamA";
+            this.SelectTeamA.Size = new System.Drawing.Size(265, 28);
+            this.SelectTeamA.TabIndex = 106;
+            this.SelectTeamA.SelectedIndexChanged += new System.EventHandler(this.SelectTeamA_SelectedIndexChanged);
+            // 
+            // SelectTeamB
+            // 
+            this.SelectTeamB.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.SelectTeamB.FormattingEnabled = true;
+            this.SelectTeamB.Location = new System.Drawing.Point(12, 261);
+            this.SelectTeamB.Name = "SelectTeamB";
+            this.SelectTeamB.Size = new System.Drawing.Size(265, 28);
+            this.SelectTeamB.TabIndex = 108;
+            this.SelectTeamB.SelectedIndexChanged += new System.EventHandler(this.SelectTeamB_SelectedIndexChanged);
+            // 
             // Match
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -285,8 +285,8 @@ namespace soccerTeamManagementApp
             this.Controls.Add(this.matchDayTb);
             this.Controls.Add(this.label6);
             this.Controls.Add(this.label2);
-            this.Controls.Add(this.selectTeamBTb);
-            this.Controls.Add(this.selectTeamATb);
+            this.Controls.Add(this.SelectTeamB);
+            this.Controls.Add(this.SelectTeamA);
             this.Controls.Add(this.label5);
             this.Controls.Add(this.AddBtn);
             this.Controls.Add(this.panel1);
@@ -311,14 +311,14 @@ namespace soccerTeamManagementApp
         private System.Windows.Forms.Panel panel2;
         private System.Windows.Forms.Button AddBtn;
         private System.Windows.Forms.Label label5;
-        private System.Windows.Forms.ComboBox selectTeamBTb;
         private Guna.UI2.WinForms.Guna2DateTimePicker matchDayTb;
         private System.Windows.Forms.Label label6;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Label label3;
-        private System.Windows.Forms.ComboBox selectTeamATb;
         private Guna.UI2.WinForms.Guna2DataGridView MatchList;
         private System.Windows.Forms.Button EditBtn;
         private System.Windows.Forms.Button DeleteBtn;
+        private System.Windows.Forms.ComboBox SelectTeamA;
+        private System.Windows.Forms.ComboBox SelectTeamB;
     }
 }

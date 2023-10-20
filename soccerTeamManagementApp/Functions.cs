@@ -25,10 +25,10 @@ namespace soccerTeamManagementApp
             Cmd.Connection = Con;
         }
 
-        public DataTable GetData(String Query)
+        public DataTable GetData(String query)
         {
             Dt = new DataTable();
-            Sda = new SqlDataAdapter(Query, ConStr);
+            Sda = new SqlDataAdapter(query, ConStr);
             Sda.Fill(Dt);
             return Dt;
         }

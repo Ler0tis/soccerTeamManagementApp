@@ -33,8 +33,8 @@ namespace soccerTeamManagementApp
 
         private void ShowMatches()
         {
-            String Query = "SELECT * FROM Match";
-            MatchList.DataSource = Con.GetData(Query);
+            string query = "SELECT * FROM Match";
+            MatchList.DataSource = Con.GetData(query);
         }
 
         public void SetTeamNames(List<string> teamNames, List<int> teamIds)
@@ -45,19 +45,19 @@ namespace soccerTeamManagementApp
             teamIdsForTeamB = new List<int>(teamIds);
 
             // Selectionfields for Team A and B from DB
-            selectTeamATb.DataSource = teamNamesForTeamA;
-            selectTeamBTb.DataSource = teamNamesForTeamB;
+            SelectTeamA.DataSource = teamNamesForTeamA;
+            SelectTeamB.DataSource = teamNamesForTeamB;
         }
 
 
         private void AddBtn_Click(object sender, EventArgs e)
         {
             // Checks of selected index is within range
-            if (selectTeamATb.SelectedIndex >= 0 && selectTeamBTb.SelectedIndex >= 0 &&
-                selectTeamATb.SelectedIndex < teamIdsForTeamA.Count && selectTeamBTb.SelectedIndex < teamIdsForTeamB.Count)
+            if (SelectTeamA.SelectedIndex >= 0 && SelectTeamB.SelectedIndex >= 0 &&
+                SelectTeamA.SelectedIndex < teamIdsForTeamA.Count && SelectTeamB.SelectedIndex < teamIdsForTeamB.Count)
             {
-                int teamAId = teamIdsForTeamA[selectTeamATb.SelectedIndex];
-                int teamBId = teamIdsForTeamB[selectTeamBTb.SelectedIndex];
+                int teamAId = teamIdsForTeamA[SelectTeamA.SelectedIndex];
+                int teamBId = teamIdsForTeamB[SelectTeamB.SelectedIndex];
 
                 // Validation
                 if (teamAId == teamBId)
@@ -115,20 +115,19 @@ namespace soccerTeamManagementApp
             this.Close();
         }
 
-        private void selectTeamATb_SelectedIndexChanged(object sender, EventArgs e)
+        private void SelectTeamA_SelectedIndexChanged(object sender, EventArgs e)
         {
             // Team A selected and set according TeamID
-            int selectedIndex = selectTeamATb.SelectedIndex;
+            int selectedIndex = SelectTeamA.SelectedIndex;
             if (selectedIndex >= 0 && selectedIndex < teamIdsForTeamA.Count)
             {
                 int selectedTeamId = teamIdsForTeamA[selectedIndex];
             }
         }
-
-        private void selectTeamBTb_SelectedIndexChanged(object sender, EventArgs e)
+        private void SelectTeamB_SelectedIndexChanged(object sender, EventArgs e)
         {
             // Team B selected and set according TeamID
-            int selectedIndex = selectTeamBTb.SelectedIndex;
+            int selectedIndex = SelectTeamB.SelectedIndex;
             if (selectedIndex >= 0 && selectedIndex < teamIdsForTeamB.Count)
             {
                 int selectedTeamId = teamIdsForTeamB[selectedIndex];
@@ -136,18 +135,18 @@ namespace soccerTeamManagementApp
         }
 
 
-        int Key = 0;
+        int key = 0;
         private void MatchList_CellContentClick(object sender, DataGridViewCellEventArgs e)
         {
             if (e.RowIndex >= 0)
             {
                 DataGridViewRow row = MatchList.Rows[e.RowIndex];
                 // Gets values for selected match
-                selectTeamATb.Text = row.Cells[1].Value.ToString();
-                selectTeamBTb.Text = row.Cells[2].Value.ToString();
+                SelectTeamA.Text = row.Cells[1].Value.ToString();
+                SelectTeamB.Text = row.Cells[2].Value.ToString();
 
                 // Sets Key with ID of Match
-                Key = Convert.ToInt32(row.Cells[0].Value);
+                key = Convert.ToInt32(row.Cells[0].Value);
             }
         }
 
@@ -156,11 +155,11 @@ namespace soccerTeamManagementApp
             try
             {
                 // Checks if there is data selected in both comboboxes
-                if (selectTeamATb.SelectedIndex >= 0 && selectTeamBTb.SelectedIndex >= 0)
+                if (SelectTeamA.SelectedIndex >= 0 && SelectTeamB.SelectedIndex >= 0)
                 {
                     // Get selected teams
-                    string teamAName = selectTeamATb.Text;
-                    string teamBName = selectTeamBTb.Text;
+                    string teamAName = SelectTeamA.Text;
+                    string teamBName = SelectTeamB.Text;
 
                     // Find MatchId in DB of selected Teams
                     string query = "SELECT MatchId FROM Match WHERE HomeTeamId = '{0}' AND AwayTeamId = '{1}'";
@@ -174,8 +173,8 @@ namespace soccerTeamManagementApp
                         int matchId = Convert.ToInt32(result.Rows[0]["MatchId"]);
                         string deleteQuery = "DELETE FROM Match WHERE MatchId = {0}";
                         deleteQuery = string.Format(deleteQuery, matchId);
-
                         Con.SetData(deleteQuery);
+
                         ShowMatches();
                         MessageBox.Show("Match deleted");
                     }
@@ -185,8 +184,8 @@ namespace soccerTeamManagementApp
                     }
 
                     // Reset input fieldss
-                    selectTeamATb.SelectedIndex = -1;
-                    selectTeamBTb.SelectedIndex = -1;
+                    SelectTeamA.SelectedIndex = -1;
+                    SelectTeamB.SelectedIndex = -1;
                 }
                 else
                 {
@@ -199,5 +198,6 @@ namespace soccerTeamManagementApp
             }
         }
 
+        
     }
 }

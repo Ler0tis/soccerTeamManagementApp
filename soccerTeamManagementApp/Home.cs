@@ -19,53 +19,52 @@ namespace soccerTeamManagementApp
             Con = new Functions();
         }
 
-
-        private void manageTeamsLink_Click(object sender, EventArgs e)
+        private void ManageTeamImg_Click(object sender, EventArgs e)
         {
             Team Obj = new Team();
             Obj.Show();
             this.Hide();
         }
 
-        private void pictureBox7_Click(object sender, EventArgs e)
+        private void ManageTeamsLink_Click(object sender, EventArgs e)
         {
             Team Obj = new Team();
             Obj.Show();
             this.Hide();
         }
 
-        private void manageTeam_Click(object sender, EventArgs e)
+        private void ManagePlayersImg_Click(object sender, EventArgs e)
         {
             Player Obj = new Player();
             Obj.Show();
             this.Hide();
         }
 
-        private void managePlayersLink_Click(object sender, EventArgs e)
+        private void ManagePlayersLink_Click(object sender, EventArgs e)
         {
             Player Obj = new Player();
             Obj.Show();
             this.Hide();
         }
 
-        private void manageCoachImg_Click(object sender, EventArgs e)
+        private void ManageCoachesImg_Click(object sender, EventArgs e)
         {
 
         }
 
-        private void manageCoachesLink_Click(object sender, EventArgs e)
+        private void ManageCoachesLink_Click(object sender, EventArgs e)
         {
 
         }
 
-        private void manageMatchImg_Click(object sender, EventArgs e)
+        private void ManageMatchesImg_Click(object sender, EventArgs e)
         {
             Match Obj = new Match();
             Obj.Show();
             this.Hide();
         }
 
-        private void manageMatchLink_Click(object sender, EventArgs e)
+        private void ManageMatchesLink_Click(object sender, EventArgs e)
         {
             Match Obj = new Match();
 
@@ -94,24 +93,23 @@ namespace soccerTeamManagementApp
         }
 
 
-        private void manageTransferImg_Click(object sender, EventArgs e)
+        private void ManageTransfersImg_Click(object sender, EventArgs e)
         {
 
         }
 
-        private void manageTransferLink_Click(object sender, EventArgs e)
+        private void ManageTransfersLink_Click(object sender, EventArgs e)
         {
 
         }
-
-        private void logoutImg_Click(object sender, EventArgs e)
+        private void LogoutImg_Click(object sender, EventArgs e)
         {
 
         }
-
-        private void logoutLink_Click(object sender, EventArgs e)
+        private void LogoutLink_Click(object sender, EventArgs e)
         {
 
         }
+      
     }
 }
