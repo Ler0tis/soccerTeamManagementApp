@@ -38,8 +38,8 @@ namespace soccerTeamManagementApp
         private void GetTeam()
         {
             string query = "SELECT * FROM Team";
-            selectTeamTb.DisplayMember = Con.GetData(query).Columns["TeamName"].ToString();
-            selectTeamTb.ValueMember = Con.GetData(query).Columns["TeamId"].ToString();
+            selectTeamTb.DisplayMember = "TeamName";
+            selectTeamTb.ValueMember = "TeamId";
             selectTeamTb.DataSource = Con.GetData(query);
         }
 
@@ -55,7 +55,12 @@ namespace soccerTeamManagementApp
                 {
                     string firstName = FirstNameTb.Text.Trim();
                     string lastName = LastNameTb.Text.Trim();
-                    int team = Convert.ToInt32(selectTeamTb.SelectedValue.ToString());
+
+                    int? team = null; // Declare as nullable integer
+                    if (selectTeamTb.SelectedValue != null)
+                    {
+                        team = Convert.ToInt32(selectTeamTb.SelectedValue.ToString());
+                    }
                     string dateOfBirth = DOBTb.Value.ToString();
                     string position = PositionCh.SelectedItem == null ? null : PositionCh.SelectedItem.ToString();
                     int salary = Convert.ToInt32(SalaryTb.Text);
@@ -90,7 +95,6 @@ namespace soccerTeamManagementApp
         }
 
         int key = 0;
-
         private void PlayerList_CellContentClick_1(object sender, DataGridViewCellEventArgs e)
         {
 
@@ -108,7 +112,27 @@ namespace soccerTeamManagementApp
 
                 // Fill Key with ID of Player
                 key = Convert.ToInt32(row.Cells[0].Value);
+
+                int teamId = GetTeamIdForKey(key);
+                selectTeamTb.SelectedValue = teamId;
             }
+        }
+
+        private int GetTeamIdForKey(int playerKey)
+        {
+            // Your SQL query to get the team ID for the player based on the player's key
+            string query = "SELECT Team FROM Player WHERE PlayerId = {0}";
+            query = string.Format(query, playerKey);
+
+            DataTable result = Con.GetData(query);
+
+            if (result != null && result.Rows.Count > 0)
+            {
+                return Convert.ToInt32(result.Rows[0]["Team"]);
+            }
+
+            // Return a default value if no team ID is found
+            return 0; // You can adjust the default value as needed
         }
 
         private void EditBtn_Click(object sender, EventArgs e)
@@ -123,7 +147,11 @@ namespace soccerTeamManagementApp
                 {
                     string firstName = FirstNameTb.Text.Trim();
                     string lastName = LastNameTb.Text.Trim();
-                    int team = Convert.ToInt32(selectTeamTb.SelectedValue.ToString());
+                    int? team = null; // Declareer als nullable integer
+                    if (selectTeamTb.SelectedValue != null)
+                    {
+                        team = Convert.ToInt32(selectTeamTb.SelectedValue.ToString());
+                    }
                     string dateOfBirth = DOBTb.Value.ToString();
                     string position = PositionCh.SelectedItem == null ? null : PositionCh.SelectedItem.ToString();
                     int salary = Convert.ToInt32(SalaryTb.Text);
@@ -144,22 +172,13 @@ namespace soccerTeamManagementApp
                     selectTeamTb.SelectedIndex = -1;
                     PositionCh.SelectedIndex = -1;
                     SalaryTb.Text = "";
+                    JerseyNumberTb.Text = "";
                 }
             }
             catch (Exception Ex)
             {
                 MessageBox.Show(Ex.Message);
             }
-        }
-
-        private void label9_Click(object sender, EventArgs e)
-        {
-
-        }
-
-        private void textBox7_TextChanged(object sender, EventArgs e)
-        {
-
         }
 
         private void DeleteBtn_Click(object sender, EventArgs e)
@@ -174,15 +193,25 @@ namespace soccerTeamManagementApp
                 int salary = Convert.ToInt32(SalaryTb.Text);
                 int jerseyNumber = Convert.ToInt32(JerseyNumberTb.Text);
 
-                string query = "DELETE FROM PLayer WHERE PlayerId = {0}";
+                string query = "DELETE FROM Player WHERE PlayerId = {0}";
 
                 query = string.Format(query, key);
                 Con.SetData(query);
 
                 ShowPlayer();
-                MessageBox.Show("Team deleted");
+                MessageBox.Show("Player deleted");
 
-            } catch (Exception Ex)
+                // Reset input fields
+                FirstNameTb.Text = "";
+                LastNameTb.Text = "";
+                selectTeamTb.SelectedIndex = -1;
+                PositionCh.SelectedIndex = -1;
+                JerseyNumberTb.Text = "";
+                SalaryTb.Text = "";
+
+
+            }
+            catch (Exception Ex)
             {
                 MessageBox.Show(Ex.Message);
             }
@@ -195,6 +224,19 @@ namespace soccerTeamManagementApp
 
             this.Close();
         }
+
+
+        private void label9_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void textBox7_TextChanged(object sender, EventArgs e)
+        {
+
+        }
+
+
 
         private void Player_Load(object sender, EventArgs e)
         {
