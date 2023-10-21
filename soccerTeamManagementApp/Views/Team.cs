@@ -46,7 +46,7 @@ namespace soccerTeamManagementApp
             {
                 if (string.IsNullOrEmpty(TeamName.Text) || string.IsNullOrEmpty(TeamAddress.Text))
                 {
-                    MessageBox.Show("Team name and address are required fields");
+                    MessageBox.Show("Please fill in a team name and an address");
                 } else
                 {
                     string team = TeamName.Text.Trim();
@@ -78,8 +78,8 @@ namespace soccerTeamManagementApp
                 DataGridViewRow row = TeamList.Rows[e.RowIndex];
 
                 // Gets data of selected team
-                TeamName.Text = row.Cells[1].Value.ToString();
-                TeamAddress.Text = row.Cells[2].Value.ToString();
+                TeamName.Text = row.Cells["TeamName"].Value.ToString();
+                TeamAddress.Text = row.Cells["TeamAddress"].Value.ToString();
 
                 key = Convert.ToInt32(row.Cells[0].Value);
             }
@@ -91,7 +91,7 @@ namespace soccerTeamManagementApp
             {
                 if (string.IsNullOrEmpty(TeamName.Text) || string.IsNullOrEmpty(TeamAddress.Text))
                 {
-                    MessageBox.Show("Team name and address are required fields");
+                    MessageBox.Show("Please fill in a team name and an address");
                 }
                 else
                 {
@@ -127,34 +127,39 @@ namespace soccerTeamManagementApp
         {
             try
             {
-                string team = TeamName.Text;
-                string teamAddress = TeamAddress.Text;
-
-                // Search and remove all Matches with this Team
-                string findMatchesQuery = "SELECT MatchId FROM Match WHERE HomeTeam = @TeamId OR AwayTeam = @TeamId";
-                DataTable matchIds = Con.GetData(findMatchesQuery); // Remove parameter, because its a DELETE
-
-                foreach (DataRow row in matchIds.Rows)
+                using (SqlConnection connection = new SqlConnection(Con.ConStr))
                 {
-                    int matchId = Convert.ToInt32(row["MatchId"]);
+                    connection.Open();
 
-                    // Delete Match
-                    string deleteMatchQuery = "DELETE FROM Match WHERE MatchId = @MatchId";
-                    Con.SetData(deleteMatchQuery, new SqlParameter("@MatchId", matchId));
+                    // Eerst de wedstrijden verwijderen
+                    string deleteMatchesQuery = "DELETE FROM Match WHERE HomeTeamId = @TeamId OR AwayTeamId = @TeamId";
+                    using (SqlCommand cmd = new SqlCommand(deleteMatchesQuery, connection))
+                    {
+                        cmd.Parameters.Add(new SqlParameter("@TeamId", key));
+                        cmd.ExecuteNonQuery();
+                    }
+
+                    // Spelers bijwerken om ze aan "No team" te koppelen (waarbij 0 het TeamId is voor "No team")
+                    string updatePlayersQuery = "UPDATE Player SET Team = 18 WHERE Team = @TeamId";
+                    using (SqlCommand cmd = new SqlCommand(updatePlayersQuery, connection))
+                    {
+                        cmd.Parameters.Add(new SqlParameter("@TeamId", key));
+                        cmd.ExecuteNonQuery();
+                    }
+
+                    // Team zelf verwijderen
+                    string deleteTeamQuery = "DELETE FROM Team WHERE TeamId = @TeamId";
+                    using (SqlCommand cmd = new SqlCommand(deleteTeamQuery, connection))
+                    {
+                        cmd.Parameters.Add(new SqlParameter("@TeamId", key));
+                        cmd.ExecuteNonQuery();
+                    }
                 }
-
-                // Set players to No Team value 0
-                string updatePlayersQuery = "UPDATE Player SET Team = 0 WHERE Team = @TeamId";
-                Con.SetData(updatePlayersQuery, new SqlParameter("@TeamId", key));
-
-                // Remove Team
-                string query = "DELETE FROM Team WHERE TeamId = @TeamId";
-                Con.SetData(query, new SqlParameter("@TeamId", key));
 
                 ShowTeams();
                 MessageBox.Show("Team deleted");
 
-                // Reset input fields
+                // Reset invoervelden
                 TeamName.Text = "";
                 TeamAddress.Text = "";
             }
@@ -163,8 +168,6 @@ namespace soccerTeamManagementApp
                 MessageBox.Show(Ex.Message);
             }
         }
-
-
 
 
         private void CancelBtn_Click(object sender, EventArgs e)

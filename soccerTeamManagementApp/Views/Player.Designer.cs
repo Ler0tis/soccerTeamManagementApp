@@ -29,14 +29,14 @@ namespace soccerTeamManagementApp
         /// </summary>
         private void InitializeComponent()
         {
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle7 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle8 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle9 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle3 = new System.Windows.Forms.DataGridViewCellStyle();
             this.panel1 = new System.Windows.Forms.Panel();
             this.label1 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
             this.label7 = new System.Windows.Forms.Label();
-            this.label8 = new System.Windows.Forms.Label();
+            this.LabelSalary = new System.Windows.Forms.Label();
             this.SalaryTb = new System.Windows.Forms.TextBox();
             this.label6 = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
@@ -55,6 +55,7 @@ namespace soccerTeamManagementApp
             this.PlayerList = new Guna.UI2.WinForms.Guna2DataGridView();
             this.FirstNameTb = new System.Windows.Forms.TextBox();
             this.DOBTb = new Guna.UI2.WinForms.Guna2DateTimePicker();
+            this.label10 = new System.Windows.Forms.Label();
             this.panel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.PlayerList)).BeginInit();
             this.SuspendLayout();
@@ -104,17 +105,18 @@ namespace soccerTeamManagementApp
             this.label7.TabIndex = 29;
             this.label7.Text = "Position";
             // 
-            // label8
+            // LabelSalary
             // 
-            this.label8.AutoSize = true;
-            this.label8.BackColor = System.Drawing.Color.White;
-            this.label8.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label8.ForeColor = System.Drawing.SystemColors.MenuHighlight;
-            this.label8.Location = new System.Drawing.Point(31, 511);
-            this.label8.Name = "label8";
-            this.label8.Size = new System.Drawing.Size(111, 20);
-            this.label8.TabIndex = 27;
-            this.label8.Text = "Yearly salary";
+            this.LabelSalary.AutoSize = true;
+            this.LabelSalary.BackColor = System.Drawing.Color.White;
+            this.LabelSalary.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.LabelSalary.ForeColor = System.Drawing.SystemColors.MenuHighlight;
+            this.LabelSalary.Location = new System.Drawing.Point(31, 511);
+            this.LabelSalary.Name = "LabelSalary";
+            this.LabelSalary.Size = new System.Drawing.Size(111, 20);
+            this.LabelSalary.TabIndex = 27;
+            this.LabelSalary.Text = "Yearly salary";
+            this.LabelSalary.Click += new System.EventHandler(this.LabelSalary_Click);
             // 
             // SalaryTb
             // 
@@ -123,6 +125,7 @@ namespace soccerTeamManagementApp
             this.SalaryTb.Name = "SalaryTb";
             this.SalaryTb.Size = new System.Drawing.Size(265, 26);
             this.SalaryTb.TabIndex = 26;
+            this.SalaryTb.Validating += new System.ComponentModel.CancelEventHandler(this.SalaryTb_LostFocus);
             // 
             // label6
             // 
@@ -306,27 +309,27 @@ namespace soccerTeamManagementApp
             // 
             // PlayerList
             // 
-            dataGridViewCellStyle7.BackColor = System.Drawing.Color.White;
-            this.PlayerList.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle7;
+            dataGridViewCellStyle1.BackColor = System.Drawing.Color.White;
+            this.PlayerList.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle1;
             this.PlayerList.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.ColumnHeader;
-            dataGridViewCellStyle8.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle8.BackColor = System.Drawing.Color.LightSteelBlue;
-            dataGridViewCellStyle8.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            dataGridViewCellStyle8.ForeColor = System.Drawing.Color.White;
-            dataGridViewCellStyle8.SelectionBackColor = System.Drawing.Color.LightSteelBlue;
-            dataGridViewCellStyle8.SelectionForeColor = System.Drawing.Color.LightSteelBlue;
-            dataGridViewCellStyle8.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
-            this.PlayerList.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle8;
+            dataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle2.BackColor = System.Drawing.Color.LightSteelBlue;
+            dataGridViewCellStyle2.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            dataGridViewCellStyle2.ForeColor = System.Drawing.Color.White;
+            dataGridViewCellStyle2.SelectionBackColor = System.Drawing.Color.LightSteelBlue;
+            dataGridViewCellStyle2.SelectionForeColor = System.Drawing.Color.LightSteelBlue;
+            dataGridViewCellStyle2.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this.PlayerList.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle2;
             this.PlayerList.ColumnHeadersHeight = 25;
             this.PlayerList.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.EnableResizing;
-            dataGridViewCellStyle9.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle9.BackColor = System.Drawing.Color.White;
-            dataGridViewCellStyle9.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            dataGridViewCellStyle9.ForeColor = System.Drawing.Color.Black;
-            dataGridViewCellStyle9.SelectionBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(231)))), ((int)(((byte)(229)))), ((int)(((byte)(255)))));
-            dataGridViewCellStyle9.SelectionForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(71)))), ((int)(((byte)(69)))), ((int)(((byte)(94)))));
-            dataGridViewCellStyle9.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
-            this.PlayerList.DefaultCellStyle = dataGridViewCellStyle9;
+            dataGridViewCellStyle3.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle3.BackColor = System.Drawing.Color.White;
+            dataGridViewCellStyle3.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            dataGridViewCellStyle3.ForeColor = System.Drawing.Color.Black;
+            dataGridViewCellStyle3.SelectionBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(231)))), ((int)(((byte)(229)))), ((int)(((byte)(255)))));
+            dataGridViewCellStyle3.SelectionForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(71)))), ((int)(((byte)(69)))), ((int)(((byte)(94)))));
+            dataGridViewCellStyle3.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
+            this.PlayerList.DefaultCellStyle = dataGridViewCellStyle3;
             this.PlayerList.GridColor = System.Drawing.Color.FromArgb(((int)(((byte)(231)))), ((int)(((byte)(229)))), ((int)(((byte)(255)))));
             this.PlayerList.Location = new System.Drawing.Point(337, 96);
             this.PlayerList.Name = "PlayerList";
@@ -380,12 +383,21 @@ namespace soccerTeamManagementApp
             this.DOBTb.Value = new System.DateTime(2023, 10, 10, 11, 24, 57, 168);
             this.DOBTb.ValueChanged += new System.EventHandler(this.DOBTb_ValueChanged);
             // 
+            // label10
+            // 
+            this.label10.AutoSize = true;
+            this.label10.Location = new System.Drawing.Point(163, 451);
+            this.label10.Name = "label10";
+            this.label10.Size = new System.Drawing.Size(0, 13);
+            this.label10.TabIndex = 92;
+            // 
             // Player
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.White;
             this.ClientSize = new System.Drawing.Size(1153, 700);
+            this.Controls.Add(this.label10);
             this.Controls.Add(this.CancelBtn);
             this.Controls.Add(this.DeleteBtn);
             this.Controls.Add(this.label4);
@@ -400,7 +412,7 @@ namespace soccerTeamManagementApp
             this.Controls.Add(this.JerseyNumberTb);
             this.Controls.Add(this.panel2);
             this.Controls.Add(this.label7);
-            this.Controls.Add(this.label8);
+            this.Controls.Add(this.LabelSalary);
             this.Controls.Add(this.SalaryTb);
             this.Controls.Add(this.label5);
             this.Controls.Add(this.label6);
@@ -426,7 +438,7 @@ namespace soccerTeamManagementApp
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Label label7;
-        private System.Windows.Forms.Label label8;
+        private System.Windows.Forms.Label LabelSalary;
         private System.Windows.Forms.TextBox SalaryTb;
         private System.Windows.Forms.Label label6;
         private System.Windows.Forms.Label label3;
@@ -445,5 +457,6 @@ namespace soccerTeamManagementApp
         private Guna.UI2.WinForms.Guna2DataGridView PlayerList;
         private System.Windows.Forms.TextBox FirstNameTb;
         private Guna.UI2.WinForms.Guna2DateTimePicker DOBTb;
+        private System.Windows.Forms.Label label10;
     }
 }

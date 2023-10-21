@@ -14,12 +14,14 @@ namespace soccerTeamManagementApp
         private SqlCommand Cmd;
         private DataTable Dt;
         private SqlDataAdapter Sda;
-        private string ConStr;
+        public readonly string ConStr;
+
+        // Plaats de verbindingssnaren hier
+        private const string ConnectionString = @"Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename=C:\Users\Leroy\Documents\soccerTeamManagement.mdf;Integrated Security=True;Connect Timeout=30";
 
         public Functions()
         {
-            // Makes the connection with the Server/Database
-            ConStr = @"Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename=C:\Users\Leroy\Documents\soccerTeamManagement.mdf;Integrated Security=True;Connect Timeout=30";
+            ConStr = ConnectionString;
             Con = new SqlConnection(ConStr);
             Cmd = new SqlCommand();
             Cmd.Connection = Con;
@@ -72,6 +74,25 @@ namespace soccerTeamManagementApp
                 }
             }
         }
+
+        public object ExecuteScalar(string query, params SqlParameter[] parameters)
+        {
+            using (SqlConnection connection = new SqlConnection(ConStr))
+            {
+                connection.Open();
+
+                using (SqlCommand command = new SqlCommand(query, connection))
+                {
+                    if (parameters != null)
+                    {
+                        command.Parameters.AddRange(parameters);
+                    }
+
+                    return command.ExecuteScalar();
+                }
+            }
+        }
+
 
     }
 }

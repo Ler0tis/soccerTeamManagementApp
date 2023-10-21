@@ -1,6 +1,9 @@
 ﻿using System;
 using System.Data;
 using System.Windows.Forms;
+using System.Data.SqlClient;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace soccerTeamManagementApp
 
@@ -22,14 +25,26 @@ namespace soccerTeamManagementApp
             string query = "SELECT P.PlayerId, P.FirstName, P.LastName, T.TeamName AS Team, P.BirthDate, P.JerseyNumber, P.Position, P.Salary " +
                     "FROM Player P " +
                     "LEFT JOIN Team T ON P.Team = T.TeamId"; // Use of left JOIN get all players, even without team
-            PlayerList.DataSource = Con.GetData(query);
+            DataTable playerData = Con.GetData(query);
+
+            // Create a new column in the DataTable to store the formatted Salary
+            playerData.Columns.Add("FormattedSalary");
+
+            // Format the Salary column to include the Euro symbol
+            foreach (DataRow row in playerData.Rows)
+            {
+                if (row["Salary"] != DBNull.Value)
+                {
+                    decimal salaryFromDatabase = Convert.ToDecimal(row["Salary"]);
+                    string formattedSalary = $"€ {salaryFromDatabase:F2}";
+                    row["FormattedSalary"] = formattedSalary;
+                }
+            }
+
+            // Set the DataGridView's data source to the DataTable with the formatted Salary
+            PlayerList.DataSource = playerData;
 
             //PlayerList.Columns["PlayerId"].Visible = false;
-        }
-
-        private void label2_Click(object sender, EventArgs e)
-        {
-
         }
 
         private void GetTeam()
@@ -46,52 +61,84 @@ namespace soccerTeamManagementApp
             {
                 if (string.IsNullOrEmpty(FirstNameTb.Text) || string.IsNullOrEmpty(LastNameTb.Text))
                 {
-                    MessageBox.Show("First name and last name are required fields.");
+                    MessageBox.Show("Please fill in a first and last name");
+                }
+                else if (DOBTb.Value.Date == DateTime.Today)
+                {
+                    MessageBox.Show("Date of birth must be different from today.");
+                }
+                else if (PositionCh.SelectedItem == null)
+                {
+                    MessageBox.Show("Please select a position");
                 }
                 else
                 {
                     string firstName = FirstNameTb.Text.Trim();
                     string lastName = LastNameTb.Text.Trim();
 
-                    int? team = null; // Declare as nullable integer
-                    if (selectTeamTb.SelectedValue != null)
-                    {
-                        team = Convert.ToInt32(selectTeamTb.SelectedValue.ToString());
-                    }
-
+                    int? team = selectTeamTb.SelectedValue != null ? (int?)Convert.ToInt32(selectTeamTb.SelectedValue) : null;
                     DateTime dateOfBirth = DOBTb.Value;
-                    string formattedDateOfBirth = dateOfBirth.ToString("yyy-MM-dd");
                     string position = PositionCh.SelectedItem == null ? null : PositionCh.SelectedItem.ToString();
-                    int salary = Convert.ToInt32(SalaryTb.Text);
-                    int jerseyNumber = Convert.ToInt32(JerseyNumberTb.Text);
 
-                    if (position == null)
+                    // Verwijder het €-symbool uit het salarisveld
+                    string salaryText = SalaryTb.Text.Replace("€", "").Trim();
+
+                    if (!string.IsNullOrEmpty(salaryText) && decimal.TryParse(salaryText, out decimal salaryValue) && salaryValue >= 0)
                     {
-                        MessageBox.Show("Position is required.");
+                        List<SqlParameter> parameters = new List<SqlParameter>
+                        {
+                            new SqlParameter("@FirstName", firstName),
+                            new SqlParameter("@LastName", lastName),
+                            new SqlParameter("@Team", team),
+                            new SqlParameter("@BirthDate", dateOfBirth),
+                            new SqlParameter("@Position", position),
+                            new SqlParameter("@Salary", salaryValue) // Voeg de juiste salariswaarde zonder €-symbool toe
+                        };
+
+                        if (!string.IsNullOrEmpty(JerseyNumberTb.Text) && int.TryParse(JerseyNumberTb.Text, out int jerseyNumberValue))
+                        {
+                            parameters.Add(new SqlParameter("@JerseyNumber", jerseyNumberValue));
+                        }
+
+                        string columns = "FirstName, LastName, Team, BirthDate, Position, Salary";
+                        string values = "@FirstName, @LastName, @Team, @BirthDate, @Position, @Salary";
+
+                        if (parameters.Any(p => p.ParameterName == "@JerseyNumber"))
+                        {
+                            columns += ", JerseyNumber";
+                            values += ", @JerseyNumber";
+                        }
+
+                        string query = $"INSERT INTO Player ({columns}) VALUES ({values})";
+
+                        Con.SetData(query, parameters.ToArray());
+
+                        ShowPlayer();
+                        MessageBox.Show("Player added");
+
+                        // Reset input fields
+                        FirstNameTb.Text = "";
+                        LastNameTb.Text = "";
+                        selectTeamTb.SelectedIndex = -1;
+                        DOBTb.Value = DateTime.Today;
+                        PositionCh.SelectedIndex = -1;
+                        SalaryTb.Text = "";
+                        JerseyNumberTb.Text = "";
                     }
-
-                    string query = "INSERT INTO Player (FirstName, LastName, Team, BirthDate, Position, Salary, JerseyNumber) VALUES ('{0}', '{1}', {2}, '{3}', '{4}', {5}, {6})";
-                    query = string.Format(query, firstName, lastName, team, formattedDateOfBirth, position, salary, jerseyNumber);
-                    Con.SetData(query);
-
-                    ShowPlayer();
-                    MessageBox.Show("Player added");
-
-                    // Reset input fields
-                    FirstNameTb.Text = "";
-                    LastNameTb.Text = "";
-                    selectTeamTb.SelectedIndex = -1;
-                    DOBTb.Value = DateTime.Today;
-                    PositionCh.SelectedIndex = -1;
-                    SalaryTb.Text = "";
-                    JerseyNumberTb.Text = "";
+                    else
+                    {
+                        // Toon een foutmelding als de salariswaarde ongeldig is
+                        MessageBox.Show("Invalid salary. Please enter a valid numeric value.");
+                    }
                 }
             }
             catch (Exception Ex)
             {
-                MessageBox.Show(Ex.Message);
+                MessageBox.Show("An error occurred while adding the player: " + Ex.Message);
             }
         }
+
+
 
         int key = 0;
         private void PlayerList_CellContentClick_1(object sender, DataGridViewCellEventArgs e)
@@ -105,7 +152,18 @@ namespace soccerTeamManagementApp
                 LastNameTb.Text = row.Cells["LastName"].Value.ToString();
                 DOBTb.Value = Convert.ToDateTime(row.Cells["BirthDate"].Value);
                 PositionCh.SelectedItem = row.Cells["Position"].Value.ToString();
-                SalaryTb.Text = row.Cells["Salary"].Value.ToString();
+
+                // Format and display the salary with the euro symbol
+                if (row.Cells["Salary"].Value != DBNull.Value)
+                {
+                    decimal salaryFromDatabase = Convert.ToDecimal(row.Cells["Salary"].Value);
+                    SalaryTb.Text = $"€ {salaryFromDatabase:F2}";
+                }
+                else
+                {
+                    SalaryTb.Text = string.Empty; // Clear the SalaryTb if the value is DBNull
+                }
+
                 JerseyNumberTb.Text = row.Cells["JerseyNumber"].Value.ToString();
 
                 // Fill Key with ID of Player
@@ -117,9 +175,10 @@ namespace soccerTeamManagementApp
             }
         }
 
+
         private int GetTeamIdForKey(int playerKey)
         {
-            // Your SQL query to get the team ID for the player based on the player's key
+            // get the team ID for the player based on the player's key
             string query = "SELECT Team FROM Player WHERE PlayerId = {0}";
             query = string.Format(query, playerKey);
 
@@ -138,35 +197,79 @@ namespace soccerTeamManagementApp
         {
             try
             {
-                if (string.IsNullOrEmpty(FirstNameTb.Text) || string.IsNullOrEmpty(LastNameTb.Text))
+                if (key == 0)
+                {
+                    MessageBox.Show("Select a player to update.");
+                }
+                else if (string.IsNullOrEmpty(FirstNameTb.Text) || string.IsNullOrEmpty(LastNameTb.Text))
                 {
                     MessageBox.Show("First name and last name are required fields.");
+                }
+                else if (DOBTb.Value.Date == DateTime.Today)
+                {
+                    MessageBox.Show("Date of birth must be different from today.");
+                }
+                else if (PositionCh.SelectedItem == null)
+                {
+                    MessageBox.Show("Position is required.");
                 }
                 else
                 {
                     string firstName = FirstNameTb.Text.Trim();
                     string lastName = LastNameTb.Text.Trim();
-                    int? team = null;
-                    if (selectTeamTb.SelectedValue != null)
-                    {
-                        team = Convert.ToInt32(selectTeamTb.SelectedValue.ToString());
-                    }
+                    int? team = selectTeamTb.SelectedValue != null ? (int?)Convert.ToInt32(selectTeamTb.SelectedValue) : null;
                     DateTime dateOfBirth = DOBTb.Value;
-                    string formattedDateOfBirth = dateOfBirth.ToString("yyy-MM-dd");
                     string position = PositionCh.SelectedItem == null ? null : PositionCh.SelectedItem.ToString();
-                    int salary = Convert.ToInt32(SalaryTb.Text);
-                    int jerseyNumber = Convert.ToInt32(JerseyNumberTb.Text);
 
-                    string query = "UPDATE Player SET FirstName = '{0}', LastName = '{1}'," +
-                        " Team = {2}, BirthDate = '{3}', Position = '{4}', Salary = {5}, JerseyNumber = {6} " +
-                        "WHERE PlayerId = {7}";
-                    query = string.Format(query, firstName, lastName, team, formattedDateOfBirth, position, salary, jerseyNumber, key);
-                    Con.SetData(query);
+                    // Verwijder het €-symbool uit het salarisveld
+                    string salaryText = SalaryTb.Text.Replace("€", "").Trim();
+
+                    int salaryValue, jerseyNumberValue;
+
+                    SqlParameter[] parameters = new SqlParameter[]
+                    {
+                        new SqlParameter("@PlayerId", key),
+                        new SqlParameter("@FirstName", firstName),
+                        new SqlParameter("@LastName", lastName),
+                        new SqlParameter("@Team", team),
+                        new SqlParameter("@BirthDate", dateOfBirth),
+                        new SqlParameter("@Position", position)
+                    };
+
+                    if (!string.IsNullOrEmpty(salaryText) && int.TryParse(salaryText, out salaryValue))
+                    {
+                        // Voeg het €-symbool toe aan het salarisveld
+                        SalaryTb.Text = $"€ {salaryText}"; // Toon het symbool in het tekstvak
+                        parameters = parameters.Concat(new SqlParameter[] { new SqlParameter("@Salary", salaryValue) }).ToArray();
+                    }
+
+                    if (!string.IsNullOrEmpty(JerseyNumberTb.Text) && int.TryParse(JerseyNumberTb.Text, out jerseyNumberValue))
+                    {
+                        parameters = parameters.Concat(new SqlParameter[] { new SqlParameter("@JerseyNumber", jerseyNumberValue) }).ToArray();
+                    }
+
+                    string updateColumns = "FirstName = @FirstName, LastName = @LastName, Team = @Team, BirthDate = @BirthDate, Position = @Position";
+
+                    if (parameters.Any(p => p.ParameterName == "@Salary"))
+                    {
+                        updateColumns += ", Salary = @Salary";
+                    }
+
+                    if (parameters.Any(p => p.ParameterName == "@JerseyNumber"))
+                    {
+                        updateColumns += ", JerseyNumber = @JerseyNumber";
+                    }
+
+                    // Gebruik een andere parameter naam voor de tweede keer dat @PlayerId nodig is
+                    string query = $"UPDATE Player SET {updateColumns} WHERE PlayerId = @PlayerId";
+
+                    Con.SetData(query, parameters);
 
                     ShowPlayer();
                     MessageBox.Show("Player updated");
 
                     // Reset input fields
+                    key = 0;
                     FirstNameTb.Text = "";
                     LastNameTb.Text = "";
                     selectTeamTb.SelectedIndex = -1;
@@ -181,6 +284,7 @@ namespace soccerTeamManagementApp
                 MessageBox.Show(Ex.Message);
             }
         }
+
 
         private void DeleteBtn_Click(object sender, EventArgs e)
         {
@@ -216,6 +320,31 @@ namespace soccerTeamManagementApp
             this.Close();
         }
 
+        private void LabelSalary_Click(object sender, EventArgs e)
+        {
+            Label euroLabel = new Label();
+            euroLabel.Text = "€";
+            euroLabel.Location = new System.Drawing.Point(SalaryTb.Left - 20, SalaryTb.Top);
+            this.Controls.Add(euroLabel);
+        }
+
+        private void SalaryTb_LostFocus(object sender, System.ComponentModel.CancelEventArgs e)
+        {
+            if (!decimal.TryParse(SalaryTb.Text, out decimal salary) || salary < 0)
+            {
+                // De ingevoerde tekst kan niet worden geconverteerd naar een geldige numerieke waarde
+                // of is negatief. Genereer een foutmelding.
+                MessageBox.Show("Invalid salary. Please enter a valid numeric value.");
+                SalaryTb.Text = ""; // Verwijder de ongeldige tekst
+            }
+            else
+            {
+                // De ingevoerde tekst is een geldige positieve numerieke waarde.
+                // Pas de opmaak toe zoals "€ X,XX".
+                SalaryTb.Text = $"€ {salary:F2}"; // Toon twee decimalen
+            }
+        }
+
 
         private void label9_Click(object sender, EventArgs e)
         {
@@ -227,7 +356,10 @@ namespace soccerTeamManagementApp
 
         }
 
+        private void label2_Click(object sender, EventArgs e)
+        {
 
+        }
 
         private void Player_Load(object sender, EventArgs e)
         {
@@ -243,5 +375,7 @@ namespace soccerTeamManagementApp
         {
 
         }
+   
+        
     }
 }
