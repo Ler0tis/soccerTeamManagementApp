@@ -57,7 +57,7 @@ namespace soccerTeamManagementApp
 
         public DataTable GetTeams()
         {
-            string query = "SELECT * FROM Team";
+            string query = "SELECT * FROM Teams";
             return GetData(query);
         }
 

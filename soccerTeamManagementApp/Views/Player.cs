@@ -24,7 +24,7 @@ namespace soccerTeamManagementApp
         {
             string query = "SELECT P.PlayerID, P.FirstName, P.LastName, T.TeamName AS Team, P.BirthDate, P.JerseyNumber, P.Position, P.Salary " +
                     "FROM Players P " +
-                    "LEFT JOIN Team T ON P.TeamID = T.TeamId"; // Use of left JOIN get all players, even without team
+                    "LEFT JOIN Teams T ON P.TeamID = T.TeamId"; // Use of left JOIN get all players, even without team
             DataTable playerData = Con.GetData(query);
 
             // Create a new column in the DataTable to store the formatted Salary
@@ -49,7 +49,7 @@ namespace soccerTeamManagementApp
 
         private void GetTeam()
         {
-            string query = "SELECT * FROM Team";
+            string query = "SELECT * FROM Teams";
             selectTeamTb.DisplayMember = "TeamName";
             selectTeamTb.ValueMember = "TeamId";
             selectTeamTb.DataSource = Con.GetData(query);
@@ -252,7 +252,7 @@ namespace soccerTeamManagementApp
                 }
                 else
                 {
-                    MessageBox.Show("Select a coach to delete.");
+                    MessageBox.Show("Select a player to delete");
                 }
             }
             catch (Exception Ex)

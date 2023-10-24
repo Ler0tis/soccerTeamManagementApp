@@ -25,7 +25,7 @@ namespace soccerTeamManagementApp
 
         private void ShowTeams()
         {
-            string query = "SELECT * FROM Team";
+            string query = "SELECT * FROM Teams";
             TeamList.DataSource = Con.GetData(query);
             //TeamList.Columns["TeamId"].Visible = false;
         }
@@ -52,7 +52,7 @@ namespace soccerTeamManagementApp
                 {
                     string team = TeamName.Text.Trim();
                     string teamAddress = TeamAddress.Text.Trim();
-                    string query = "INSERT INTO Team (TeamName, TeamAddress) values ('{0}', '{1}')";
+                    string query = "INSERT INTO Teams (TeamName, TeamAddress) values ('{0}', '{1}')";
                     query = string.Format(query, TeamName.Text, TeamAddress.Text);
                     Con.SetData(query);
 
@@ -103,7 +103,7 @@ namespace soccerTeamManagementApp
 
                     if (key > 0)
                     {
-                        string query = "UPDATE Team SET TeamName = '{0}', TeamAddress = '{1}' WHERE TeamId = {2}";
+                        string query = "UPDATE Teams SET TeamName = '{0}', TeamAddress = '{1}' WHERE TeamID = {2}";
                         query = string.Format(query, teamName, teamAddress, key);
                         Con.SetData(query);
 
@@ -139,31 +139,30 @@ namespace soccerTeamManagementApp
                         connection.Open();
 
                         // Delete matches
-                        string deleteMatchesQuery = "DELETE FROM Match WHERE HomeTeamId = @TeamId OR AwayTeamId = @TeamId";
+                        string deleteMatchesQuery = "DELETE FROM Matches WHERE HomeTeamID = @TeamID OR AwayTeamID = @TeamID";
                         using (SqlCommand cmd = new SqlCommand(deleteMatchesQuery, connection))
                         {
-                            cmd.Parameters.Add(new SqlParameter("@TeamId", key));
+                            cmd.Parameters.Add(new SqlParameter("@TeamID", key));
                             cmd.ExecuteNonQuery();
                         }
 
                         // Update players with No Team ( TeamId 18 )
-                        string updatePlayersQuery = "UPDATE Player SET Team = 18 WHERE Team = @TeamId";
+                        string updatePlayersQuery = "UPDATE Players SET TeamID = 18 WHERE TeamID = @TeamID";
                         using (SqlCommand cmd = new SqlCommand(updatePlayersQuery, connection))
                         {
-                            cmd.Parameters.Add(new SqlParameter("@TeamId", key));
+                            cmd.Parameters.Add(new SqlParameter("@TeamID", key));
                             cmd.ExecuteNonQuery();
                         }
 
                         // Delete Team
-                        string deleteTeamQuery = "DELETE FROM Team WHERE TeamId = @TeamId";
+                        string deleteTeamQuery = "DELETE FROM Teams WHERE TeamID = @TeamID";
                         using (SqlCommand cmd = new SqlCommand(deleteTeamQuery, connection))
                         {
-                            cmd.Parameters.Add(new SqlParameter("@TeamId", key));
+                            cmd.Parameters.Add(new SqlParameter("@TeamID", key));
                             cmd.ExecuteNonQuery();
                         }
                     }
 
-                    
                     MessageBox.Show("Team deleted");
 
                     ResetInputFieldsTeam();

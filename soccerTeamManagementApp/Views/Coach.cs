@@ -28,7 +28,7 @@ namespace soccerTeamManagementApp
         {
             string query = "SELECT C.CoachID, C.FirstName, C.LastName, T.TeamName AS Team, C.BirthDate, C.Salary " +
                     "FROM Coaches C " +
-                    "LEFT JOIN Team T ON C.TeamID = T.TeamId"; // Use of left JOIN get all coaches, even without team
+                    "LEFT JOIN Teams T ON C.TeamID = T.TeamID"; // Use of left JOIN get all coaches, even without team
             DataTable coachesData = Con.GetData(query);
 
             // Create a new column in the DataTable to store the formatted Salary
@@ -325,9 +325,9 @@ namespace soccerTeamManagementApp
 
         private void GetTeam()
         {
-            string query = "SELECT * FROM Team";
+            string query = "SELECT * FROM Teams";
             selectTeamTb.DisplayMember = "TeamName";
-            selectTeamTb.ValueMember = "TeamId";
+            selectTeamTb.ValueMember = "TeamID";
             selectTeamTb.DataSource = Con.GetData(query);
         }
 

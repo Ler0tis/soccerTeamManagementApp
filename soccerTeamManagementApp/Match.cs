@@ -34,10 +34,10 @@ namespace soccerTeamManagementApp
 
         private void ShowMatches()
         {
-            string query = "SELECT M.MatchId, T1.TeamName AS HomeTeam, T2.TeamName AS AwayTeam, M.MatchDate " +
-                           "FROM Match M " +
-                           "INNER JOIN Team T1 ON M.HomeTeamId = T1.TeamId " +
-                           "INNER JOIN Team T2 ON M.AwayTeamId = T2.TeamId";
+            string query = "SELECT M.MatchID, T1.TeamName AS HomeTeam, T2.TeamName AS AwayTeam, M.MatchDate " +
+                           "FROM Matches M " +
+                           "INNER JOIN Teams T1 ON M.HomeTeamID = T1.TeamID " +
+                           "INNER JOIN Teams T2 ON M.AwayTeamID = T2.TeamID";
             MatchList.DataSource = Con.GetData(query);
         }
 
@@ -73,14 +73,14 @@ namespace soccerTeamManagementApp
                     {
 
                     // Checks if there is already a match between the teams on the same date ( only date, no time specified )
-                    string checkQuery = "SELECT COUNT(*) FROM Match " +
-                                        "WHERE ((HomeTeamId = @TeamAId AND AwayTeamId = @TeamBId) OR (HomeTeamId = @TeamBId AND AwayTeamId = @TeamAId)) " +
+                    string checkQuery = "SELECT COUNT(*) FROM Matches " +
+                                        "WHERE ((HomeTeamID = @TeamAID AND AwayTeamID = @TeamBID) OR (HomeTeamID = @TeamBID AND AwayTeamID = @TeamAID)) " +
                                         "AND CONVERT(DATE, MatchDate) = CONVERT(DATE, @MatchDate)";
 
 
                         int existingMatches = (int)Con.GetSingleValue(checkQuery,
-                            new SqlParameter("@TeamAId", teamAId),
-                            new SqlParameter("@TeamBId", teamBId),
+                            new SqlParameter("@TeamAID", teamAId),
+                            new SqlParameter("@TeamBID", teamBId),
                             new SqlParameter("@MatchDate", matchDate));
 
                         // Error check how many matches there for these teams and this date
@@ -92,11 +92,11 @@ namespace soccerTeamManagementApp
                         }
                         else
                         {
-                            string query = "INSERT INTO Match (HomeTeamId, AwayTeamId, MatchDate) VALUES (@TeamAId, @TeamBId, @MatchDate)";
+                            string query = "INSERT INTO Matches (HomeTeamID, AwayTeamID, MatchDate) VALUES (@TeamAID, @TeamBID, @MatchDate)";
 
                             int result = Con.SetData(query,
-                                new SqlParameter("@TeamAId", teamAId),
-                                new SqlParameter("@TeamBId", teamBId),
+                                new SqlParameter("@TeamAID", teamAId),
+                                new SqlParameter("@TeamBID", teamBId),
                                 new SqlParameter("@MatchDate", matchDate));
 
                             if (result > 0)
@@ -182,14 +182,14 @@ namespace soccerTeamManagementApp
                     string teamBName = SelectTeamB.Text;
 
                     // Zoek naar de overeenkomende match op basis van TeamId's
-                    int teamAId = teamIdsForTeamA[SelectTeamA.SelectedIndex];
-                    int teamBId = teamIdsForTeamB[SelectTeamB.SelectedIndex];
+                    int teamAID = teamIdsForTeamA[SelectTeamA.SelectedIndex];
+                    int teamBID = teamIdsForTeamB[SelectTeamB.SelectedIndex];
 
-                    string query = "DELETE FROM Match WHERE (HomeTeamId = @TeamAId AND AwayTeamId = @TeamBId) OR (HomeTeamId = @TeamBId AND AwayTeamId = @TeamAId)";
+                    string query = "DELETE FROM Matches WHERE (HomeTeamID = @TeamAID AND AwayTeamID = @TeamBID) OR (HomeTeamID = @TeamBID AND AwayTeamID = @TeamAID)";
 
                     int result = Con.SetData(query,
-                        new SqlParameter("@TeamAId", teamAId),
-                        new SqlParameter("@TeamBId", teamBId));
+                        new SqlParameter("@TeamAID", teamAID),
+                        new SqlParameter("@TeamBID", teamBID));
 
                     if (result > 0)
                     {
