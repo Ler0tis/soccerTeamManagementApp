@@ -58,12 +58,7 @@ namespace soccerTeamManagementApp
         {
             try
             {
-                if (key == 0)
-                {
-                    MessageBox.Show("Please fill in data to add a match");
-                }
-
-                else if (SelectTeamA.SelectedIndex >= 0 && SelectTeamB.SelectedIndex >= 0 &&
+                if (SelectTeamA.SelectedIndex >= 0 && SelectTeamB.SelectedIndex >= 0 &&
                     SelectTeamA.SelectedIndex < teamIdsForTeamA.Count && SelectTeamB.SelectedIndex < teamIdsForTeamB.Count)
                 {
                     int teamAId = teamIdsForTeamA[SelectTeamA.SelectedIndex];

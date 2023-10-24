@@ -44,11 +44,7 @@ namespace soccerTeamManagementApp
         {
             try
             {
-                if (key == 0)
-                {
-                    MessageBox.Show("Please fill in data to add a team");
-                }
-                else if (string.IsNullOrEmpty(TeamName.Text) || string.IsNullOrEmpty(TeamAddress.Text))
+                if (string.IsNullOrEmpty(TeamName.Text) || string.IsNullOrEmpty(TeamAddress.Text))
                 {
                     MessageBox.Show("Please fill in a team name and an address");
                 } 

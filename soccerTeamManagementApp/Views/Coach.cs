@@ -58,12 +58,7 @@ namespace soccerTeamManagementApp
         {
             try
             {
-                if (key == 0)
-                {
-                    MessageBox.Show("Please fill in data to add a coach");
-                }
-
-                else if (string.IsNullOrEmpty(FirstNameTb.Text) || string.IsNullOrEmpty(LastNameTb.Text))
+                if (string.IsNullOrEmpty(FirstNameTb.Text) || string.IsNullOrEmpty(LastNameTb.Text))
                 {
                     MessageBox.Show("Please fill in a first and last name");
                 }
