@@ -75,6 +75,37 @@ namespace soccerTeamManagementApp
             }
         }
 
+        public DataTable GetCoaches()
+        {
+            DataTable dt = new DataTable();
+
+            try
+            {
+                using (SqlConnection connection = new SqlConnection(ConStr))
+                {
+                    connection.Open();
+
+                    string query = "SELECT * FROM Coaches";
+
+
+                    using (SqlCommand cmd = new SqlCommand(query, connection))
+                    {
+                        using (SqlDataAdapter da = new SqlDataAdapter(cmd))
+                        {
+                            da.Fill(dt);
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                // Trow exception to triggered code
+                throw ex;
+            }
+
+            return dt;
+        }
+
         public object ExecuteScalar(string query, params SqlParameter[] parameters)
         {
             using (SqlConnection connection = new SqlConnection(ConStr))

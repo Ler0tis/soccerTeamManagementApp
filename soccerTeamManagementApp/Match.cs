@@ -58,7 +58,12 @@ namespace soccerTeamManagementApp
         {
             try
             {
-                if (SelectTeamA.SelectedIndex >= 0 && SelectTeamB.SelectedIndex >= 0 &&
+                if (key == 0)
+                {
+                    MessageBox.Show("Please fill in data to add a match");
+                }
+
+                else if (SelectTeamA.SelectedIndex >= 0 && SelectTeamB.SelectedIndex >= 0 &&
                     SelectTeamA.SelectedIndex < teamIdsForTeamA.Count && SelectTeamB.SelectedIndex < teamIdsForTeamB.Count)
                 {
                     int teamAId = teamIdsForTeamA[SelectTeamA.SelectedIndex];
@@ -96,8 +101,8 @@ namespace soccerTeamManagementApp
 
                             if (result > 0)
                             {
-                                ShowMatches();
                                 MessageBox.Show("Match added");
+                                ShowMatches();
                             }
                             else
                             {
@@ -116,8 +121,6 @@ namespace soccerTeamManagementApp
                 MessageBox.Show("An error occurred: " + ex.Message);
             }
         }
-
-
 
 
         private void CancelBtn_Click(object sender, EventArgs e)
@@ -168,7 +171,12 @@ namespace soccerTeamManagementApp
         {
             try
             {
-                if (SelectTeamA.SelectedIndex >= 0 && SelectTeamB.SelectedIndex >= 0)
+                if (key == 0)
+                {
+                    MessageBox.Show("Please select a match to delete");
+                }
+
+                else if (SelectTeamA.SelectedIndex >= 0 && SelectTeamB.SelectedIndex >= 0)
                 {
                     string teamAName = SelectTeamA.Text;
                     string teamBName = SelectTeamB.Text;

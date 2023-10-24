@@ -306,6 +306,7 @@ namespace soccerTeamManagementApp
             this.selectTeamTb.Name = "selectTeamTb";
             this.selectTeamTb.Size = new System.Drawing.Size(265, 28);
             this.selectTeamTb.TabIndex = 87;
+            this.selectTeamTb.SelectedIndexChanged += new System.EventHandler(this.selectTeamTb_SelectedIndexChanged);
             // 
             // PlayerList
             // 

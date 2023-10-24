@@ -49,12 +49,16 @@ namespace soccerTeamManagementApp
 
         private void ManageCoachesImg_Click(object sender, EventArgs e)
         {
-
+            Coach Obj = new Coach();
+            Obj.Show();
+            this.Hide();
         }
 
         private void ManageCoachesLink_Click(object sender, EventArgs e)
         {
-
+            Coach Obj = new Coach();
+            Obj.Show();
+            this.Hide();
         }
 
         private void ManageMatchesImg_Click(object sender, EventArgs e)
@@ -110,6 +114,7 @@ namespace soccerTeamManagementApp
         {
 
         }
-      
+
+
     }
 }

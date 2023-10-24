@@ -249,6 +249,7 @@ namespace soccerTeamManagementApp
             this.Controls.Add(this.panel1);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
             this.Name = "Home";
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Home";
             ((System.ComponentModel.ISupportInitialize)(this.ManagePlayersImg)).EndInit();
             this.panel1.ResumeLayout(false);

@@ -16,11 +16,11 @@ namespace soccerTeamManagementApp
 
             InitializeComponent();
             Con = new Functions();
-            ShowPlayer();
+            ShowPlayers();
             GetTeam();
         }
 
-        private void ShowPlayer()
+        private void ShowPlayers()
         {
             string query = "SELECT P.PlayerId, P.FirstName, P.LastName, T.TeamName AS Team, P.BirthDate, P.JerseyNumber, P.Position, P.Salary " +
                     "FROM Player P " +
@@ -59,7 +59,11 @@ namespace soccerTeamManagementApp
         {
             try
             {
-                if (string.IsNullOrEmpty(FirstNameTb.Text) || string.IsNullOrEmpty(LastNameTb.Text))
+                if (key == 0)
+                {
+                    MessageBox.Show("Please fill in data to add a player");
+                }
+                else if (string.IsNullOrEmpty(FirstNameTb.Text) || string.IsNullOrEmpty(LastNameTb.Text))
                 {
                     MessageBox.Show("Please fill in a first and last name");
                 }
@@ -80,7 +84,7 @@ namespace soccerTeamManagementApp
                     DateTime dateOfBirth = DOBTb.Value;
                     string position = PositionCh.SelectedItem == null ? null : PositionCh.SelectedItem.ToString();
 
-                    // Verwijder het €-symbool uit het salarisveld
+                    // Remove symbol from salary inputfield
                     string salaryText = SalaryTb.Text.Replace("€", "").Trim();
 
                     if (!string.IsNullOrEmpty(salaryText) && decimal.TryParse(salaryText, out decimal salaryValue) && salaryValue >= 0)
@@ -92,7 +96,7 @@ namespace soccerTeamManagementApp
                             new SqlParameter("@Team", team),
                             new SqlParameter("@BirthDate", dateOfBirth),
                             new SqlParameter("@Position", position),
-                            new SqlParameter("@Salary", salaryValue) // Voeg de juiste salariswaarde zonder €-symbool toe
+                            new SqlParameter("@Salary", salaryValue)
                         };
 
                         if (!string.IsNullOrEmpty(JerseyNumberTb.Text) && int.TryParse(JerseyNumberTb.Text, out int jerseyNumberValue))
@@ -113,21 +117,14 @@ namespace soccerTeamManagementApp
 
                         Con.SetData(query, parameters.ToArray());
 
-                        ShowPlayer();
                         MessageBox.Show("Player added");
 
-                        // Reset input fields
-                        FirstNameTb.Text = "";
-                        LastNameTb.Text = "";
-                        selectTeamTb.SelectedIndex = -1;
-                        DOBTb.Value = DateTime.Today;
-                        PositionCh.SelectedIndex = -1;
-                        SalaryTb.Text = "";
-                        JerseyNumberTb.Text = "";
+                        ResetInputFieldsPlayer();
+                        ShowPlayers();
+
                     }
                     else
                     {
-                        // Toon een foutmelding als de salariswaarde ongeldig is
                         MessageBox.Show("Invalid salary. Please enter a valid numeric value.");
                     }
                 }
@@ -136,6 +133,18 @@ namespace soccerTeamManagementApp
             {
                 MessageBox.Show("An error occurred while adding the player: " + Ex.Message);
             }
+        }
+
+        private void ResetInputFieldsPlayer()
+        {
+            // Reset input fields
+            FirstNameTb.Text = "";
+            LastNameTb.Text = "";
+            selectTeamTb.SelectedIndex = -1;
+            DOBTb.Value = DateTime.Today;
+            PositionCh.SelectedIndex = -1;
+            SalaryTb.Text = "";
+            JerseyNumberTb.Text = "";
         }
 
 
@@ -161,7 +170,7 @@ namespace soccerTeamManagementApp
                 }
                 else
                 {
-                    SalaryTb.Text = string.Empty; // Clear the SalaryTb if the value is DBNull
+                    SalaryTb.Text = string.Empty; // Clear the SalaryTb if the value in DB Null
                 }
 
                 JerseyNumberTb.Text = row.Cells["JerseyNumber"].Value.ToString();
@@ -193,25 +202,26 @@ namespace soccerTeamManagementApp
             return 0;
         }
 
+
         private void EditBtn_Click(object sender, EventArgs e)
         {
             try
             {
                 if (key == 0)
                 {
-                    MessageBox.Show("Select a player to update.");
+                    MessageBox.Show("Select a player to update");
                 }
                 else if (string.IsNullOrEmpty(FirstNameTb.Text) || string.IsNullOrEmpty(LastNameTb.Text))
                 {
-                    MessageBox.Show("First name and last name are required fields.");
+                    MessageBox.Show("First name and last name are required fields");
                 }
                 else if (DOBTb.Value.Date == DateTime.Today)
                 {
-                    MessageBox.Show("Date of birth must be different from today.");
+                    MessageBox.Show("Date of birth must be different from today");
                 }
                 else if (PositionCh.SelectedItem == null)
                 {
-                    MessageBox.Show("Position is required.");
+                    MessageBox.Show("Position is required");
                 }
                 else
                 {
@@ -221,7 +231,7 @@ namespace soccerTeamManagementApp
                     DateTime dateOfBirth = DOBTb.Value;
                     string position = PositionCh.SelectedItem == null ? null : PositionCh.SelectedItem.ToString();
 
-                    // Verwijder het €-symbool uit het salarisveld
+                    // Delete symbol from salary input field before update
                     string salaryText = SalaryTb.Text.Replace("€", "").Trim();
 
                     int salaryValue, jerseyNumberValue;
@@ -238,8 +248,8 @@ namespace soccerTeamManagementApp
 
                     if (!string.IsNullOrEmpty(salaryText) && int.TryParse(salaryText, out salaryValue))
                     {
-                        // Voeg het €-symbool toe aan het salarisveld
-                        SalaryTb.Text = $"€ {salaryText}"; // Toon het symbool in het tekstvak
+                        // Add symbol to salary input field
+                        SalaryTb.Text = $"€ {salaryText}"; // Show symbol in input field
                         parameters = parameters.Concat(new SqlParameter[] { new SqlParameter("@Salary", salaryValue) }).ToArray();
                     }
 
@@ -260,23 +270,16 @@ namespace soccerTeamManagementApp
                         updateColumns += ", JerseyNumber = @JerseyNumber";
                     }
 
-                    // Gebruik een andere parameter naam voor de tweede keer dat @PlayerId nodig is
+                    // Use different parameter name for second time @playerId is needed
                     string query = $"UPDATE Player SET {updateColumns} WHERE PlayerId = @PlayerId";
 
                     Con.SetData(query, parameters);
 
-                    ShowPlayer();
                     MessageBox.Show("Player updated");
 
-                    // Reset input fields
-                    key = 0;
-                    FirstNameTb.Text = "";
-                    LastNameTb.Text = "";
-                    selectTeamTb.SelectedIndex = -1;
-                    DOBTb.Value = DateTime.Today;
-                    PositionCh.SelectedIndex = -1;
-                    SalaryTb.Text = "";
-                    JerseyNumberTb.Text = "";
+                    ResetInputFieldsPlayer();
+                    ShowPlayers();
+
                 }
             }
             catch (Exception Ex)
@@ -290,21 +293,22 @@ namespace soccerTeamManagementApp
         {
             try
             {
-                string query = "DELETE FROM Player WHERE PlayerId = {0}";
+                if (key == 0)
+                {
+                    MessageBox.Show("Select a player to delete");
+                }
+                else
+                {
+                    string query = "DELETE FROM Player WHERE PlayerId = {0}";
 
-                query = string.Format(query, key);
-                Con.SetData(query);
+                    query = string.Format(query, key);
+                    Con.SetData(query);
 
-                ShowPlayer();
-                MessageBox.Show("Player deleted");
+                    MessageBox.Show("Player deleted");
 
-                // Reset input fields
-                FirstNameTb.Text = "";
-                LastNameTb.Text = "";
-                selectTeamTb.SelectedIndex = -1;
-                PositionCh.SelectedIndex = -1;
-                JerseyNumberTb.Text = "";
-                SalaryTb.Text = "";
+                    ResetInputFieldsPlayer();
+                    ShowPlayers();
+                }
             }
             catch (Exception Ex)
             {
@@ -332,16 +336,12 @@ namespace soccerTeamManagementApp
         {
             if (!decimal.TryParse(SalaryTb.Text, out decimal salary) || salary < 0)
             {
-                // De ingevoerde tekst kan niet worden geconverteerd naar een geldige numerieke waarde
-                // of is negatief. Genereer een foutmelding.
                 MessageBox.Show("Invalid salary. Please enter a valid numeric value.");
-                SalaryTb.Text = ""; // Verwijder de ongeldige tekst
+                SalaryTb.Text = ""; // remove unnecessary text
             }
             else
             {
-                // De ingevoerde tekst is een geldige positieve numerieke waarde.
-                // Pas de opmaak toe zoals "€ X,XX".
-                SalaryTb.Text = $"€ {salary:F2}"; // Toon twee decimalen
+                SalaryTb.Text = $"€ {salary:F2}"; // show two decimals
             }
         }
 
@@ -375,7 +375,10 @@ namespace soccerTeamManagementApp
         {
 
         }
-   
-        
+
+        private void selectTeamTb_SelectedIndexChanged(object sender, EventArgs e)
+        {
+
+        }
     }
 }

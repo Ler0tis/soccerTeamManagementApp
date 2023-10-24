@@ -44,10 +44,15 @@ namespace soccerTeamManagementApp
         {
             try
             {
-                if (string.IsNullOrEmpty(TeamName.Text) || string.IsNullOrEmpty(TeamAddress.Text))
+                if (key == 0)
+                {
+                    MessageBox.Show("Please fill in data to add a team");
+                }
+                else if (string.IsNullOrEmpty(TeamName.Text) || string.IsNullOrEmpty(TeamAddress.Text))
                 {
                     MessageBox.Show("Please fill in a team name and an address");
-                } else
+                } 
+                else
                 {
                     string team = TeamName.Text.Trim();
                     string teamAddress = TeamAddress.Text.Trim();
@@ -55,12 +60,10 @@ namespace soccerTeamManagementApp
                     query = string.Format(query, TeamName.Text, TeamAddress.Text);
                     Con.SetData(query);
 
-                    ShowTeams();
                     MessageBox.Show("Team added");
 
-                    // Reset input fields
-                    TeamName.Text = "";
-                    TeamAddress.Text = "";
+                    ResetInputFieldsTeam();
+                    ShowTeams();
                 }
             }
             catch (Exception Ex)
@@ -89,7 +92,11 @@ namespace soccerTeamManagementApp
         {
             try
             {
-                if (string.IsNullOrEmpty(TeamName.Text) || string.IsNullOrEmpty(TeamAddress.Text))
+                if (key == 0)
+                {
+                    MessageBox.Show("Select a team to update");
+                }
+                else if (string.IsNullOrEmpty(TeamName.Text) || string.IsNullOrEmpty(TeamAddress.Text))
                 {
                     MessageBox.Show("Please fill in a team name and an address");
                 }
@@ -104,12 +111,10 @@ namespace soccerTeamManagementApp
                         query = string.Format(query, teamName, teamAddress, key);
                         Con.SetData(query);
 
-                        ShowTeams();
                         MessageBox.Show("Team updated");
 
-                        // Reset input fields
-                        TeamName.Text = "";
-                        TeamAddress.Text = "";
+                        ResetInputFieldsTeam();
+                        ShowTeams();
                     }
                     else
                     {
@@ -127,46 +132,62 @@ namespace soccerTeamManagementApp
         {
             try
             {
-                using (SqlConnection connection = new SqlConnection(Con.ConStr))
+                if (key == 0)
                 {
-                    connection.Open();
-
-                    // Eerst de wedstrijden verwijderen
-                    string deleteMatchesQuery = "DELETE FROM Match WHERE HomeTeamId = @TeamId OR AwayTeamId = @TeamId";
-                    using (SqlCommand cmd = new SqlCommand(deleteMatchesQuery, connection))
-                    {
-                        cmd.Parameters.Add(new SqlParameter("@TeamId", key));
-                        cmd.ExecuteNonQuery();
-                    }
-
-                    // Spelers bijwerken om ze aan "No team" te koppelen (waarbij 0 het TeamId is voor "No team")
-                    string updatePlayersQuery = "UPDATE Player SET Team = 18 WHERE Team = @TeamId";
-                    using (SqlCommand cmd = new SqlCommand(updatePlayersQuery, connection))
-                    {
-                        cmd.Parameters.Add(new SqlParameter("@TeamId", key));
-                        cmd.ExecuteNonQuery();
-                    }
-
-                    // Team zelf verwijderen
-                    string deleteTeamQuery = "DELETE FROM Team WHERE TeamId = @TeamId";
-                    using (SqlCommand cmd = new SqlCommand(deleteTeamQuery, connection))
-                    {
-                        cmd.Parameters.Add(new SqlParameter("@TeamId", key));
-                        cmd.ExecuteNonQuery();
-                    }
+                    MessageBox.Show("Select a team to delete");
                 }
+                else
+                {
+                    using (SqlConnection connection = new SqlConnection(Con.ConStr))
+                    {
+                        connection.Open();
 
-                ShowTeams();
-                MessageBox.Show("Team deleted");
+                        // Delete matches
+                        string deleteMatchesQuery = "DELETE FROM Match WHERE HomeTeamId = @TeamId OR AwayTeamId = @TeamId";
+                        using (SqlCommand cmd = new SqlCommand(deleteMatchesQuery, connection))
+                        {
+                            cmd.Parameters.Add(new SqlParameter("@TeamId", key));
+                            cmd.ExecuteNonQuery();
+                        }
 
-                // Reset invoervelden
-                TeamName.Text = "";
-                TeamAddress.Text = "";
+                        // Update players with No Team ( TeamId 18 )
+                        string updatePlayersQuery = "UPDATE Player SET Team = 18 WHERE Team = @TeamId";
+                        using (SqlCommand cmd = new SqlCommand(updatePlayersQuery, connection))
+                        {
+                            cmd.Parameters.Add(new SqlParameter("@TeamId", key));
+                            cmd.ExecuteNonQuery();
+                        }
+
+                        // Delete Team
+                        string deleteTeamQuery = "DELETE FROM Team WHERE TeamId = @TeamId";
+                        using (SqlCommand cmd = new SqlCommand(deleteTeamQuery, connection))
+                        {
+                            cmd.Parameters.Add(new SqlParameter("@TeamId", key));
+                            cmd.ExecuteNonQuery();
+                        }
+                    }
+
+                    
+                    MessageBox.Show("Team deleted");
+
+                    ResetInputFieldsTeam();
+                    ShowTeams();
+
+
+                }
+                
             }
             catch (Exception Ex)
             {
                 MessageBox.Show(Ex.Message);
             }
+        }
+
+        private void ResetInputFieldsTeam()
+        {
+            // Reset input fields
+            TeamName.Text = "";
+            TeamAddress.Text = "";
         }
 
 
