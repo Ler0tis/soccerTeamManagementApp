@@ -71,15 +71,20 @@ namespace soccerTeamManagementApp
                     }
                     else
                     {
-                        // Controleer of er al een match is tussen deze teams op dezelfde datum
-                        string checkQuery = "SELECT COUNT(*) FROM Match " +
-                                            "WHERE ((HomeTeamId = @TeamAId AND AwayTeamId = @TeamBId) OR (HomeTeamId = @TeamBId AND AwayTeamId = @TeamAId)) " +
-                                            "AND MatchDate = @MatchDate";
+
+                    // Checks if there is already a match between the teams on the same date ( only date, no time specified )
+                    string checkQuery = "SELECT COUNT(*) FROM Match " +
+                                        "WHERE ((HomeTeamId = @TeamAId AND AwayTeamId = @TeamBId) OR (HomeTeamId = @TeamBId AND AwayTeamId = @TeamAId)) " +
+                                        "AND CONVERT(DATE, MatchDate) = CONVERT(DATE, @MatchDate)";
+
 
                         int existingMatches = (int)Con.GetSingleValue(checkQuery,
                             new SqlParameter("@TeamAId", teamAId),
                             new SqlParameter("@TeamBId", teamBId),
                             new SqlParameter("@MatchDate", matchDate));
+
+                        // Error check how many matches there for these teams and this date
+                        //MessageBox.Show($"Existing Matches: {existingMatches}");
 
                         if (existingMatches > 0)
                         {
@@ -118,11 +123,11 @@ namespace soccerTeamManagementApp
         }
 
 
+
         private void CancelBtn_Click(object sender, EventArgs e)
         {
             Home homeForm = new Home();
             homeForm.Show();
-
             this.Close();
         }
 
