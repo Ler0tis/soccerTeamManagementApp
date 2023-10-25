@@ -156,16 +156,25 @@ namespace soccerTeamManagementApp
         {
             if (e.RowIndex >= 0)
             {
-                DataGridViewRow row = MatchList.Rows[e.RowIndex];
-                // Gets values for selected match
-                SelectTeamA.Text = row.Cells[1].Value.ToString();
-                SelectTeamB.Text = row.Cells[2].Value.ToString();
-                matchDayTb.Text = row.Cells["MatchDate"].Value.ToString();
+                //DataGridViewRow row = MatchList.Rows[e.RowIndex];
+                // Gets values for the selected match
+                int matchID = Convert.ToInt32(MatchList.Rows[e.RowIndex].Cells["MatchID"].Value);
+                SelectTeamA.Text = MatchList.Rows[e.RowIndex].Cells["HomeTeam"].Value.ToString();
+                SelectTeamB.Text = MatchList.Rows[e.RowIndex].Cells["AwayTeam"].Value.ToString();
+                matchDayTb.Text = MatchList.Rows[e.RowIndex].Cells["MatchDate"].Value.ToString();
+                
 
-                // Sets Key with ID of Match
-                key = Convert.ToInt32(row.Cells[0].Value);
+                // DetailsBtn visible
+                MatchDetailsBtn.Visible = true;
             }
         }
+
+        private void MatchDetailsBtn_Click(object sender, EventArgs e)
+        {
+            MatchDetails matchDetailsForm = new MatchDetails(key);
+            matchDetailsForm.ShowDialog();
+        }
+
 
         private void DeleteBtn_Click(object sender, EventArgs e)
         {
@@ -215,5 +224,7 @@ namespace soccerTeamManagementApp
                 MessageBox.Show("An error occurred: " + ex.Message);
             }
         }
+
+        
     }
 }

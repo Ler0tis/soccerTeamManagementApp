@@ -335,6 +335,7 @@ namespace soccerTeamManagementApp
             this.PlayerList.Location = new System.Drawing.Point(337, 96);
             this.PlayerList.Name = "PlayerList";
             this.PlayerList.RowHeadersVisible = false;
+            this.PlayerList.RowTemplate.Height = 40;
             this.PlayerList.Size = new System.Drawing.Size(804, 464);
             this.PlayerList.TabIndex = 86;
             this.PlayerList.ThemeStyle.AlternatingRowsStyle.BackColor = System.Drawing.Color.White;
@@ -355,7 +356,7 @@ namespace soccerTeamManagementApp
             this.PlayerList.ThemeStyle.RowsStyle.BorderStyle = System.Windows.Forms.DataGridViewCellBorderStyle.SingleHorizontal;
             this.PlayerList.ThemeStyle.RowsStyle.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.PlayerList.ThemeStyle.RowsStyle.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(71)))), ((int)(((byte)(69)))), ((int)(((byte)(94)))));
-            this.PlayerList.ThemeStyle.RowsStyle.Height = 22;
+            this.PlayerList.ThemeStyle.RowsStyle.Height = 40;
             this.PlayerList.ThemeStyle.RowsStyle.SelectionBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(231)))), ((int)(((byte)(229)))), ((int)(((byte)(255)))));
             this.PlayerList.ThemeStyle.RowsStyle.SelectionForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(71)))), ((int)(((byte)(69)))), ((int)(((byte)(94)))));
             this.PlayerList.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.PlayerList_CellContentClick_1);

@@ -47,6 +47,7 @@ namespace soccerTeamManagementApp
             this.DeleteBtn = new System.Windows.Forms.Button();
             this.SelectTeamA = new System.Windows.Forms.ComboBox();
             this.SelectTeamB = new System.Windows.Forms.ComboBox();
+            this.MatchDetailsBtn = new System.Windows.Forms.Button();
             this.panel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.MatchList)).BeginInit();
             this.SuspendLayout();
@@ -199,6 +200,8 @@ namespace soccerTeamManagementApp
             this.MatchList.Location = new System.Drawing.Point(295, 100);
             this.MatchList.Name = "MatchList";
             this.MatchList.RowHeadersVisible = false;
+            this.MatchList.RowHeadersWidth = 30;
+            this.MatchList.RowTemplate.Height = 40;
             this.MatchList.Size = new System.Drawing.Size(827, 484);
             this.MatchList.TabIndex = 113;
             this.MatchList.ThemeStyle.AlternatingRowsStyle.BackColor = System.Drawing.Color.White;
@@ -219,7 +222,7 @@ namespace soccerTeamManagementApp
             this.MatchList.ThemeStyle.RowsStyle.BorderStyle = System.Windows.Forms.DataGridViewCellBorderStyle.SingleHorizontal;
             this.MatchList.ThemeStyle.RowsStyle.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.MatchList.ThemeStyle.RowsStyle.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(71)))), ((int)(((byte)(69)))), ((int)(((byte)(94)))));
-            this.MatchList.ThemeStyle.RowsStyle.Height = 22;
+            this.MatchList.ThemeStyle.RowsStyle.Height = 40;
             this.MatchList.ThemeStyle.RowsStyle.SelectionBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(231)))), ((int)(((byte)(229)))), ((int)(((byte)(255)))));
             this.MatchList.ThemeStyle.RowsStyle.SelectionForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(71)))), ((int)(((byte)(69)))), ((int)(((byte)(94)))));
             this.MatchList.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.MatchList_CellContentClick);
@@ -273,11 +276,27 @@ namespace soccerTeamManagementApp
             this.SelectTeamB.TabIndex = 108;
             this.SelectTeamB.SelectedIndexChanged += new System.EventHandler(this.SelectTeamB_SelectedIndexChanged);
             // 
+            // MatchDetailsBtn
+            // 
+            this.MatchDetailsBtn.BackColor = System.Drawing.SystemColors.MenuHighlight;
+            this.MatchDetailsBtn.FlatAppearance.BorderSize = 0;
+            this.MatchDetailsBtn.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.MatchDetailsBtn.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.MatchDetailsBtn.ForeColor = System.Drawing.Color.White;
+            this.MatchDetailsBtn.Location = new System.Drawing.Point(72, 482);
+            this.MatchDetailsBtn.Name = "MatchDetailsBtn";
+            this.MatchDetailsBtn.Size = new System.Drawing.Size(122, 38);
+            this.MatchDetailsBtn.TabIndex = 116;
+            this.MatchDetailsBtn.Text = "Match details";
+            this.MatchDetailsBtn.UseVisualStyleBackColor = false;
+            this.MatchDetailsBtn.Click += new System.EventHandler(this.MatchDetailsBtn_Click);
+            // 
             // Match
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1134, 710);
+            this.Controls.Add(this.MatchDetailsBtn);
             this.Controls.Add(this.DeleteBtn);
             this.Controls.Add(this.EditBtn);
             this.Controls.Add(this.MatchList);
@@ -294,6 +313,7 @@ namespace soccerTeamManagementApp
             this.Controls.Add(this.panel2);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
             this.Name = "Match";
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Match";
             this.panel1.ResumeLayout(false);
             this.panel1.PerformLayout();
@@ -320,5 +340,6 @@ namespace soccerTeamManagementApp
         private System.Windows.Forms.Button DeleteBtn;
         private System.Windows.Forms.ComboBox SelectTeamA;
         private System.Windows.Forms.ComboBox SelectTeamB;
+        private System.Windows.Forms.Button MatchDetailsBtn;
     }
 }
