@@ -16,16 +16,17 @@ namespace soccerTeamManagementApp
 
         private int matchID;
         Functions Con;
-        public MatchDetails(int matchId)
+        public MatchDetails(int matchID)
         {
             InitializeComponent();
             Con = new Functions();
 
             this.matchID = matchID;
+            Show_MatchDetails();
 
         }
 
-        private void Show_MatchDetails(object sender, EventArgs e)
+        private void Show_MatchDetails()
         {
             string query = "SELECT T1.TeamName AS HomeTeam, T2.TeamName AS AwayTeam " +
                            "FROM Matches M " +
@@ -52,9 +53,9 @@ namespace soccerTeamManagementApp
                         }
                         else
                         {
-                            // Geen wedstrijdgegevens gevonden voor het opgegeven matchID
+                            // No match found for provided MatchID
                             MessageBox.Show("No match data found for the selected match.");
-                            this.Close(); // Sluit het formulier als er geen gegevens zijn
+                            this.Close();
                         }
                     }
                 }
@@ -74,6 +75,11 @@ namespace soccerTeamManagementApp
             Home homeForm = new Home();
             homeForm.Show();
             this.Close();
+        }
+
+        private void AddBtn_Click(object sender, EventArgs e)
+        {
+
         }
     }
 }

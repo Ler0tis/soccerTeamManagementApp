@@ -151,28 +151,34 @@ namespace soccerTeamManagementApp
         }
 
 
-        int key = 0;
+        private int key = 0;
         private void MatchList_CellContentClick(object sender, DataGridViewCellEventArgs e)
         {
             if (e.RowIndex >= 0)
             {
-                //DataGridViewRow row = MatchList.Rows[e.RowIndex];
-                // Gets values for the selected match
-                int matchID = Convert.ToInt32(MatchList.Rows[e.RowIndex].Cells["MatchID"].Value);
-                SelectTeamA.Text = MatchList.Rows[e.RowIndex].Cells["HomeTeam"].Value.ToString();
-                SelectTeamB.Text = MatchList.Rows[e.RowIndex].Cells["AwayTeam"].Value.ToString();
-                matchDayTb.Text = MatchList.Rows[e.RowIndex].Cells["MatchDate"].Value.ToString();
-                
+                DataGridViewRow row = MatchList.Rows[e.RowIndex];
+                // Gets values for selected match
+                SelectTeamA.Text = row.Cells[1].Value.ToString();
+                SelectTeamB.Text = row.Cells[2].Value.ToString();
+                matchDayTb.Text = row.Cells["MatchDate"].Value.ToString();
 
-                // DetailsBtn visible
-                MatchDetailsBtn.Visible = true;
+                // Sets Key with ID of Match
+                key = Convert.ToInt32(row.Cells[0].Value);
             }
         }
 
         private void MatchDetailsBtn_Click(object sender, EventArgs e)
         {
-            MatchDetails matchDetailsForm = new MatchDetails(key);
-            matchDetailsForm.ShowDialog();
+            if (key != 0)
+            {
+                MatchDetails matchDetailsForm = new MatchDetails(key);
+
+                matchDetailsForm.ShowDialog();
+            }
+            else
+            {
+                MessageBox.Show("Select a match to view the details");
+            }
         }
 
 
