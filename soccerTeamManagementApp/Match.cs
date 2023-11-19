@@ -196,7 +196,7 @@ namespace soccerTeamManagementApp
                     string teamAName = SelectTeamA.Text;
                     string teamBName = SelectTeamB.Text;
 
-                    // Zoek naar de overeenkomende match op basis van TeamId's
+                    // Search for other matches based on TeamID
                     int teamAID = teamIdsForTeamA[SelectTeamA.SelectedIndex];
                     int teamBID = teamIdsForTeamB[SelectTeamB.SelectedIndex];
 
