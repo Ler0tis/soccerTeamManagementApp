@@ -53,7 +53,6 @@ namespace soccerTeamManagementApp
                         }
                         else
                         {
-                            // No match found for provided MatchID
                             MessageBox.Show("No match data found for the selected match.");
                             this.Close();
                         }
@@ -92,42 +91,44 @@ namespace soccerTeamManagementApp
             }
         }
 
-        private void FillPlayerComboBoxes()
+        private void FillPlayerComboBoxes(ComboBox comboBox, string teamType)
         {
-            // Vul ComboBox voor Home Team
-            List<string> homeTeamPlayers = GetPlayersForTeam("HomeTeam");
-            selectHomePlayerTb.DataSource = homeTeamPlayers;
+            List<KeyValuePair<int, string>> teamPlayers = GetPlayersForTeam(teamType);
 
-            // Vul ComboBox voor Away Team
-            List<string> awayTeamPlayers = GetPlayersForTeam("AwayTeam");
-            selectAwayPlayerTb.DataSource = awayTeamPlayers;
+            comboBox.DataSource = new BindingSource(teamPlayers, null);
+            comboBox.DisplayMember = "Value";
+            comboBox.ValueMember = "Key";
         }
 
-        private List<string> GetPlayersForTeam(string teamType)
-        {
-            List<string> players = new List<string>();
 
-            string query = $"SELECT CONCAT(FirstName, ' ', LastName) AS PlayerName " +
+        private List<KeyValuePair<int, string>> GetPlayersForTeam(string teamType)
+        {
+            List<KeyValuePair<int, string>> players = new List<KeyValuePair<int, string>>();
+
+            string query = $"SELECT P.PlayerID, CONCAT(P.FirstName, ' ', P.LastName) AS PlayerName " +
                            $"FROM Players P " +
-                           $"WHERE P.TeamID = @TeamID";
+                           $"JOIN Matches M ON (M.HomeTeamID = P.TeamID OR M.AwayTeamID = P.TeamID) " +
+                           $"WHERE M.MatchID = @MatchID AND P.TeamID = @TeamID";
 
             using (SqlConnection connection = new SqlConnection(Con.ConStr))
             {
                 connection.Open();
 
-                // Determine the teamID based on Home or Away
+                // Determine team based on type Home or Away
                 int teamID = (teamType == "HomeTeam") ? GetHomeTeamID(matchID) : GetAwayTeamID(matchID);
 
                 using (SqlCommand cmd = new SqlCommand(query, connection))
                 {
+                    cmd.Parameters.AddWithValue("@MatchID", matchID);
                     cmd.Parameters.AddWithValue("@TeamID", teamID);
 
                     using (SqlDataReader reader = cmd.ExecuteReader())
                     {
                         while (reader.Read())
                         {
+                            int playerID = Convert.ToInt32(reader["PlayerID"]);
                             string playerName = reader["PlayerName"].ToString();
-                            players.Add(playerName);
+                            players.Add(new KeyValuePair<int, string>(playerID, playerName));
                         }
                     }
                 }
@@ -137,11 +138,49 @@ namespace soccerTeamManagementApp
         }
 
 
+
         private void MatchDetails_Load(object sender, EventArgs e)
         {
-            FillPlayerComboBoxes();
+
+            Show_MatchDetails();
+
+            FillPlayerComboBoxes(selectHomePlayerTb, "HomeTeam");
+            FillPlayerComboBoxes(selectAwayPlayerTb, "AwayTeam");
+
+            ShowGoals(GetHomeTeamID(matchID), GoalsTeamA);
+            ShowGoals(GetAwayTeamID(matchID), GoalsTeamB);
+
+            GoalsTeamA.CellContentClick += GoalsTeamA_CellContentClick;
+            GoalsTeamB.CellContentClick += GoalsTeamB_CellContentClick;
+
         }
 
+        
+        private void ShowGoals(int teamID, DataGridView dataGridView)
+        {
+            string query = "SELECT G.GoalID, P.FirstName + ' ' + P.LastName AS PlayerName, G.GoalMinute " +
+                           "FROM Goals G " +
+                           "INNER JOIN Players P ON G.PlayerID = P.PlayerID " +
+                           "WHERE G.MatchID = @MatchID AND P.TeamID = @TeamID";
+
+            using (SqlConnection connection = new SqlConnection(Con.ConStr))
+            {
+                connection.Open();
+                using (SqlCommand cmd = new SqlCommand(query, connection))
+                {
+                    cmd.Parameters.AddWithValue("@MatchID", matchID);
+                    cmd.Parameters.AddWithValue("TeamID", teamID);
+
+                    using (SqlDataAdapter adapter = new SqlDataAdapter(cmd))
+                    {
+                        // Fill datagrid with Goals
+                        DataTable goalData = new DataTable();
+                        adapter.Fill(goalData);
+                        dataGridView.DataSource = goalData;
+                    }
+                }
+            }
+        }
 
 
         private void SelectTeamA_SelectedIndexChanged(object sender, EventArgs e)
@@ -156,9 +195,95 @@ namespace soccerTeamManagementApp
             this.Close();
         }
 
-        private void AddBtn_Click(object sender, EventArgs e)
+
+        private void AddHomeTeamBtn_Click(object sender, EventArgs e)
+        {
+            AddGoal(GetHomeTeamID(matchID), selectHomePlayerTb, goalMinuteTeamA, GoalsTeamA);
+        }
+
+        private void AddAwayTeamBtn_Click(object sender, EventArgs e)
+        {
+            AddGoal(GetAwayTeamID(matchID), selectAwayPlayerTb, goalMinuteTeamB, GoalsTeamB);
+        }
+
+        private void AddGoal(int teamID, ComboBox playerComboBox, TextBox minuteTextBox, DataGridView dataGridView)
+        {
+            try
+            {
+                string insertQuery = "INSERT INTO Goals (MatchID, PlayerID, GoalMinute) VALUES (@MatchID, @PlayerID, @GoalMinute)";
+
+                int playerID = (int)playerComboBox.SelectedValue;
+                int goalMinute;
+
+                if (int.TryParse(minuteTextBox.Text, out goalMinute))
+                {
+                    int result = Con.SetData(insertQuery,
+                        new SqlParameter("@MatchID", matchID),
+                        new SqlParameter("@PlayerID", playerID),
+                        new SqlParameter("@GoalMinute", goalMinute));
+
+                    if (result > 0)
+                    {
+                        MessageBox.Show("Goal added");
+                        ShowGoals(teamID, dataGridView); // Refresh datagridview
+
+                        // Reset tekst en combobox
+                        playerComboBox.SelectedIndex = 0;
+                        minuteTextBox.Text = string.Empty;
+                    }
+                    else
+                    {
+                        MessageBox.Show("Failed to add the goal");
+                    }
+                }
+                else
+                {
+                    MessageBox.Show("Please enter a valid minute for the goal");
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("An error occurred: " + ex.Message);
+            }
+        }
+
+
+        private void DeleteBtn_Click(object sender, EventArgs e)
         {
 
         }
+
+        private void GoalsTeamA_CellContentClick(object sender, DataGridViewCellEventArgs e)
+        {
+            if (e.RowIndex >= 0)
+            {
+                DataGridViewRow row = GoalsTeamA.Rows[e.RowIndex];
+
+                string playerName = row.Cells["PlayerName"].Value.ToString();
+                string goalMinute = row.Cells["GoalMinute"].Value.ToString();
+
+                // Set data in inputfields
+                selectHomePlayerTb.Text = playerName;
+                goalMinuteTeamA.Text = goalMinute;
+            }
+        }
+
+        private void GoalsTeamB_CellContentClick(object sender, DataGridViewCellEventArgs e)
+        {
+            if (e.RowIndex >= 0)
+            {
+                DataGridViewRow row = GoalsTeamB.Rows[e.RowIndex];
+
+                string playerName = row.Cells["PlayerName"].Value.ToString();
+                string goalMinute = row.Cells["GoalMinute"].Value.ToString();
+
+                // Set data in inputfields
+                selectAwayPlayerTb.Text = playerName;
+                goalMinuteTeamB.Text = goalMinute;
+            }
+        }
     }
 }
+
+
+
