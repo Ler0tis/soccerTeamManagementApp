@@ -43,7 +43,7 @@ namespace soccerTeamManagementApp
             this.label2 = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
             this.MatchList = new Guna.UI2.WinForms.Guna2DataGridView();
-            this.EditBtn = new System.Windows.Forms.Button();
+            this.EditMatch_Btn = new System.Windows.Forms.Button();
             this.DeleteBtn = new System.Windows.Forms.Button();
             this.SelectTeamA = new System.Windows.Forms.ComboBox();
             this.SelectTeamB = new System.Windows.Forms.ComboBox();
@@ -227,19 +227,20 @@ namespace soccerTeamManagementApp
             this.MatchList.ThemeStyle.RowsStyle.SelectionForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(71)))), ((int)(((byte)(69)))), ((int)(((byte)(94)))));
             this.MatchList.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.MatchList_CellContentClick);
             // 
-            // EditBtn
+            // EditMatch_Btn
             // 
-            this.EditBtn.BackColor = System.Drawing.SystemColors.MenuHighlight;
-            this.EditBtn.FlatAppearance.BorderSize = 0;
-            this.EditBtn.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.EditBtn.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.EditBtn.ForeColor = System.Drawing.Color.White;
-            this.EditBtn.Location = new System.Drawing.Point(424, 608);
-            this.EditBtn.Name = "EditBtn";
-            this.EditBtn.Size = new System.Drawing.Size(92, 38);
-            this.EditBtn.TabIndex = 114;
-            this.EditBtn.Text = "Update";
-            this.EditBtn.UseVisualStyleBackColor = false;
+            this.EditMatch_Btn.BackColor = System.Drawing.SystemColors.MenuHighlight;
+            this.EditMatch_Btn.FlatAppearance.BorderSize = 0;
+            this.EditMatch_Btn.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.EditMatch_Btn.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.EditMatch_Btn.ForeColor = System.Drawing.Color.White;
+            this.EditMatch_Btn.Location = new System.Drawing.Point(424, 608);
+            this.EditMatch_Btn.Name = "EditMatch_Btn";
+            this.EditMatch_Btn.Size = new System.Drawing.Size(92, 38);
+            this.EditMatch_Btn.TabIndex = 114;
+            this.EditMatch_Btn.Text = "Update";
+            this.EditMatch_Btn.UseVisualStyleBackColor = false;
+            this.EditMatch_Btn.Click += new System.EventHandler(this.EditMatch_Btn_Click);
             // 
             // DeleteBtn
             // 
@@ -298,7 +299,7 @@ namespace soccerTeamManagementApp
             this.ClientSize = new System.Drawing.Size(1134, 710);
             this.Controls.Add(this.MatchDetailsBtn);
             this.Controls.Add(this.DeleteBtn);
-            this.Controls.Add(this.EditBtn);
+            this.Controls.Add(this.EditMatch_Btn);
             this.Controls.Add(this.MatchList);
             this.Controls.Add(this.label3);
             this.Controls.Add(this.matchDayTb);
@@ -336,7 +337,7 @@ namespace soccerTeamManagementApp
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Label label3;
         private Guna.UI2.WinForms.Guna2DataGridView MatchList;
-        private System.Windows.Forms.Button EditBtn;
+        private System.Windows.Forms.Button EditMatch_Btn;
         private System.Windows.Forms.Button DeleteBtn;
         private System.Windows.Forms.ComboBox SelectTeamA;
         private System.Windows.Forms.ComboBox SelectTeamB;

@@ -123,6 +123,75 @@ namespace soccerTeamManagementApp
         }
 
 
+        private void EditMatch_Btn_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                if (SelectTeamA.SelectedIndex >= 0 && SelectTeamB.SelectedIndex >= 0 &&
+                    SelectTeamA.SelectedIndex < teamIdsForTeamA.Count && SelectTeamB.SelectedIndex < teamIdsForTeamB.Count)
+                {
+                    int teamAId = teamIdsForTeamA[SelectTeamA.SelectedIndex];
+                    int teamBId = teamIdsForTeamB[SelectTeamB.SelectedIndex];
+                    DateTime matchDate = matchDayTb.Value;
+
+                    if (teamAId == teamBId)
+                    {
+                        MessageBox.Show("You selected the same team for a match. Please select two different teams.");
+                    }
+                    else
+                    {
+
+                        // Checks if there is already a match between the teams on the same date ( only date, no time specified )
+                        string checkQuery = "SELECT COUNT(*) FROM Matches " +
+                                            "WHERE ((HomeTeamID = @TeamAID AND AwayTeamID = @TeamBID) OR (HomeTeamID = @TeamBID AND AwayTeamID = @TeamAID)) " +
+                                            "AND CONVERT(DATE, MatchDate) = CONVERT(DATE, @MatchDate)";
+
+
+                        int existingMatches = (int)Con.GetSingleValue(checkQuery,
+                            new SqlParameter("@TeamAID", teamAId),
+                            new SqlParameter("@TeamBID", teamBId),
+                            new SqlParameter("@MatchDate", matchDate));
+
+                        // Error check how many matches there for these teams and this date
+                        //MessageBox.Show($"Existing Matches: {existingMatches}");
+
+                        if (existingMatches > 0)
+                        {
+                            MessageBox.Show("There already exists a match between these teams on the selected date. Please select different teams or a different date.");
+                        }
+                        else
+                        {
+                            string query = "UPDATE Matches SET HomeTeamID = @TeamAID, AwayTeamID = @TeamBID, MatchDate = @MatchDate";
+
+                            int result = Con.SetData(query,
+                                new SqlParameter("@TeamAID", teamAId),
+                                new SqlParameter("@TeamBID", teamBId),
+                                new SqlParameter("@MatchDate", matchDate));
+
+                            if (result > 0)
+                            {
+                                MessageBox.Show("Match updated");
+                                ShowMatches();
+                            }
+                            else
+                            {
+                                MessageBox.Show("Failed to update the match");
+                            }
+                        }
+                    }
+                }
+                else
+                {
+                    MessageBox.Show("Please select valid teams for Team A and Team B.");
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("An error occurred: " + ex.Message);
+            }
+        }
+
+
 
         private void CancelBtn_Click(object sender, EventArgs e)
         {

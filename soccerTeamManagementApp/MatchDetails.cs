@@ -238,7 +238,7 @@ namespace soccerTeamManagementApp
                 }
                 else
                 {
-                    MessageBox.Show("Please enter a valid minute for the goal");
+                    MessageBox.Show("Please select a player and enter the minute to add the goal");
                 }
             }
             catch (Exception ex)
@@ -248,10 +248,7 @@ namespace soccerTeamManagementApp
         }
 
 
-        private void DeleteBtn_Click(object sender, EventArgs e)
-        {
-
-        }
+       
 
         private void GoalsTeamA_CellContentClick(object sender, DataGridViewCellEventArgs e)
         {
@@ -282,6 +279,143 @@ namespace soccerTeamManagementApp
                 goalMinuteTeamB.Text = goalMinute;
             }
         }
+
+        private void DeleteGoalA_Btn_Click(object sender, EventArgs e)
+        {
+
+            if (GoalsTeamA.SelectedRows.Count > 0)
+            {
+                int goalID = Convert.ToInt32(GoalsTeamA.SelectedRows[0].Cells["GoalID"].Value);
+
+                GoalsTeamA.Rows.RemoveAt(GoalsTeamA.SelectedRows[0].Index);
+
+                RemoveGoal(goalID);
+            }
+            else
+            {
+                MessageBox.Show("Select a goal to remove.");
+            }
+        }
+
+        private void DeleteGoalB_Btn_Click(object sender, EventArgs e)
+        {
+            if (GoalsTeamB.SelectedRows.Count > 0)
+            {
+                int goalID = Convert.ToInt32(GoalsTeamB.SelectedRows[0].Cells["GoalID"].Value);
+
+                GoalsTeamB.Rows.RemoveAt(GoalsTeamB.SelectedRows[0].Index);
+
+                RemoveGoal(goalID);
+            }
+            else
+            {
+                MessageBox.Show("Select a goal to remove.");
+            }
+        }
+
+
+        private void RemoveGoal(int goalID)
+        {
+            try
+            {
+                string deleteQuery = "DELETE FROM Goals WHERE GoalID = @GoalID";
+
+                int result = Con.SetData(deleteQuery, new SqlParameter("@GoalID", goalID));
+
+                if (result > 0)
+                {
+                    MessageBox.Show("Goal removed");
+                }
+                else
+                {
+                    MessageBox.Show("Failed to remove the goal");
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("An error occurred: " + ex.Message);
+            }
+        }
+
+        private void EditGoalA_Btn_Click(object sender, EventArgs e)
+        {
+            int teamID = GetHomeTeamID(matchID);
+            ComboBox playerComboBox = selectHomePlayerTb;
+            TextBox minuteTextBox = goalMinuteTeamA;
+            DataGridView dataGridView = GoalsTeamA;
+
+            HandleEditGoal(teamID, playerComboBox, minuteTextBox, dataGridView);
+        }
+
+
+        private void EditGoalB_Btn_Click(object sender, EventArgs e)
+        {
+            int teamID = GetAwayTeamID(matchID);
+            ComboBox playerComboBox = selectAwayPlayerTb;
+            TextBox minuteTextBox = goalMinuteTeamB;
+            DataGridView dataGridView = GoalsTeamB;
+
+            HandleEditGoal(teamID, playerComboBox, minuteTextBox, dataGridView);
+        }
+
+
+        private void HandleEditGoal(int teamID, ComboBox playerComboBox, TextBox minuteTextBox, DataGridView dataGridView)
+        {
+
+            try
+            {
+
+                if (dataGridView.SelectedRows.Count > 0)
+                {
+                    // Get ID Goal from selected row
+                    int goalID = Convert.ToInt32(dataGridView.SelectedRows[0].Cells["GoalID"].Value);
+
+                    string updateQuery = "UPDATE Goals SET PlayerID = @PlayerID, GoalMinute = @GoalMinute WHERE GoalID = @GoalID";
+
+                    int playerID = (int)playerComboBox.SelectedValue;
+                    int goalMinute;
+
+                    if (int.TryParse(minuteTextBox.Text, out goalMinute))
+                    {
+                        int result = Con.SetData(updateQuery,
+                            new SqlParameter("@PlayerID", playerID),
+                            new SqlParameter("@GoalMinute", goalMinute),
+                            new SqlParameter("@GoalID", goalID));
+
+                        if (result > 0)
+                        {
+                            MessageBox.Show("Goal updated");
+                            ShowGoals(teamID, dataGridView); // Refresh datagridview
+
+                            // Reset tekst en combobox
+                            playerComboBox.SelectedIndex = 0;
+                            minuteTextBox.Text = string.Empty;
+                        }
+                        else
+                        {
+                            MessageBox.Show("Failed to update the goal");
+                        }
+                    }
+                    else
+                    {
+                        MessageBox.Show("Please select a player and enter the minute to add the goal");
+                    }
+                }
+                else
+                {
+                    MessageBox.Show("Please select a goal to edit");
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("An error occurred: " + ex.Message);
+            }
+        }
+
+
+
+
+
     }
 }
 
