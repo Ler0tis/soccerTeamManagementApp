@@ -36,22 +36,46 @@ namespace soccerTeamManagementApp
         }
         public int SetData(string query, params SqlParameter[] parameters)
         {
-            int cnt = 0;
+            return SetData(query, null, parameters);
+        }
+
+        public int SetData(string query, SqlTransaction transaction, params SqlParameter[] parameters)
+        {
+            if (string.IsNullOrWhiteSpace(query))
+            {
+                throw new ArgumentException("Query is null or empty.", nameof(query));
+            }
+
+            int affectedRows = 0;
+
             if (Con.State == ConnectionState.Closed)
             {
                 Con.Open();
             }
 
-            Cmd.CommandText = query;
-
-            if (parameters != null && parameters.Length > 0)
+            using (SqlCommand cmd = new SqlCommand(query, Con, transaction))
             {
-                Cmd.Parameters.AddRange(parameters);
+                try
+                {
+                    if (parameters != null && parameters.Length > 0)
+                    {
+                        cmd.Parameters.AddRange(parameters);
+                    }
+
+                    affectedRows = cmd.ExecuteNonQuery();
+                }
+                catch (Exception ex)
+                {
+                    // Voeg hier logging toe voor foutafhandeling.
+                    Console.WriteLine($"An error occurred while executing the query: {ex.Message}");
+                    throw; // Gooi de uitzondering opnieuw zodat deze wordt doorgegeven aan de aanroeper.
+                }
             }
 
-            cnt = Cmd.ExecuteNonQuery();
-            return cnt;
+            return affectedRows;
         }
+
+
 
 
 
@@ -63,17 +87,41 @@ namespace soccerTeamManagementApp
 
         public object GetSingleValue(string query, params SqlParameter[] parameters)
         {
-            using (SqlConnection connection = new SqlConnection(ConStr)) // Use Constr as connectionseries
+            if (string.IsNullOrWhiteSpace(query))
             {
-                using (SqlCommand command = new SqlCommand(query, connection))
-                {
-                    connection.Open();
-                    command.Parameters.AddRange(parameters);
+                throw new ArgumentException("Query is null or empty.", nameof(query));
+            }
 
-                    return command.ExecuteScalar();
+            object result = null;
+
+            if (Con.State == ConnectionState.Closed)
+            {
+                Con.Open();
+            }
+
+            using (SqlCommand cmd = new SqlCommand(query, Con))
+            {
+                try
+                {
+                    if (parameters != null && parameters.Length > 0)
+                    {
+                        cmd.Parameters.AddRange(parameters);
+                    }
+
+                    result = cmd.ExecuteScalar();
+                }
+                catch (Exception ex)
+                {
+                    // Voeg hier logging toe voor foutafhandeling.
+                    Console.WriteLine($"An error occurred while executing the query: {ex.Message}");
+                    throw; // Gooi de uitzondering opnieuw zodat deze wordt doorgegeven aan de aanroeper.
                 }
             }
+
+            return result;
         }
+
+
 
         public DataTable GetCoaches()
         {
