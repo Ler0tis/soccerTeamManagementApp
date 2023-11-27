@@ -140,6 +140,7 @@ namespace soccerTeamManagementApp
                     int teamAID = teamIdsForTeamA[SelectTeamA.SelectedIndex];
                     int teamBID = teamIdsForTeamB[SelectTeamB.SelectedIndex];
                     DateTime matchDate = matchDayTb.Value;
+                
 
                     if (teamAID == teamBID)
                     {
@@ -199,7 +200,14 @@ namespace soccerTeamManagementApp
         }
 
 
+        // NEW
+        public void RefreshData()
+        {
+            ShowMatches();
+        }
 
+
+        // NEW /////
         private void CancelBtn_Click(object sender, EventArgs e)
         {
             Home homeForm = new Home();
@@ -256,6 +264,7 @@ namespace soccerTeamManagementApp
                 MessageBox.Show("Select a match to view the details");
             }
         }
+
 
 
         private void DeleteBtn_Click(object sender, EventArgs e)

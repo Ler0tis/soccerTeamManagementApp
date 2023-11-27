@@ -16,8 +16,9 @@ namespace soccerTeamManagementApp
 
         private Functions Con;
         private int matchID;
-        private int homeTeamScore = 0;
-        private int awayTeamScore = 0;
+        private int homeTeamScore;
+        private int awayTeamScore;
+       
 
         public MatchDetails(int matchID)
         {
@@ -28,10 +29,46 @@ namespace soccerTeamManagementApp
             Show_MatchDetails();
             MatchDetails_Load(this, EventArgs.Empty);
 
-            homeTeamScore = 0;
-            awayTeamScore = 0;
-
+            if (homeTeamScore == 0 && awayTeamScore == 0)
+            {
+                InitializeScores();
+            }
         }
+
+        private void InitializeScores()
+        {
+            homeTeamScore = GetTeamScore(matchID, GetHomeTeamScore(matchID));
+            awayTeamScore = GetTeamScore(matchID, GetAwayTeamScore(matchID));
+
+            homeTeamScoreField.Text = homeTeamScore.ToString();
+            awayTeamScoreField.Text = awayTeamScore.ToString();
+        }
+
+        private int GetTeamScore(int matchID, int teamID)
+        {
+            try
+            {
+                string query = (teamID == GetHomeTeamID(matchID))
+                    ? "SELECT HomeTeamScore FROM Matches WHERE MatchID = @MatchID"
+                    : "SELECT AwayTeamScore FROM Matches WHERE MatchID = @MatchID";
+
+                using (SqlConnection connection = new SqlConnection(Con.ConStr))
+                {
+                    connection.Open();
+                    using (SqlCommand cmd = new SqlCommand(query, connection))
+                    {
+                        cmd.Parameters.AddWithValue("@MatchID", matchID);
+                        return Convert.ToInt32(cmd.ExecuteScalar());
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Er is een fout opgetreden bij het ophalen van het teamscore: " + ex.Message);
+                return 0;
+            }
+        }
+
 
         private void Show_MatchDetails()
         {
@@ -158,11 +195,9 @@ namespace soccerTeamManagementApp
             GoalsTeamA.CellContentClick += GoalsTeamA_CellContentClick;
             GoalsTeamB.CellContentClick += GoalsTeamB_CellContentClick;
 
-            //UpdateScoreTextBox(GetHomeTeamID(matchID));
-            //UpdateScoreTextBox(GetAwayTeamID(matchID));
-
             homeTeamScoreField.Text = homeTeamScore.ToString();
             awayTeamScoreField.Text = awayTeamScore.ToString();
+            // Is dit echt nodig, omdat ik dit ook al gebruik in InitializeScores
         }
 
 
@@ -200,10 +235,11 @@ namespace soccerTeamManagementApp
 
         private void CancelBtn_Click(object sender, EventArgs e)
         {
-            Home homeForm = new Home();
-            homeForm.Show();
+            Match matchForm = (Match)Application.OpenForms["Match"];
+            matchForm?.RefreshData(); // To refresh data from Match
             this.Close();
         }
+
 
 
         private void AddHomeTeamBtn_Click(object sender, EventArgs e)
@@ -211,7 +247,7 @@ namespace soccerTeamManagementApp
             int homeTeamID = GetHomeTeamID(matchID);
             AddGoal(homeTeamID, selectHomePlayerTb, goalMinuteTeamA, GoalsTeamA);
 
-            UpdateScoresAfterGoal(homeTeamID, GoalsTeamA);
+        
         }
 
         private void AddAwayTeamBtn_Click(object sender, EventArgs e)
@@ -219,53 +255,57 @@ namespace soccerTeamManagementApp
             int awayTeamID = GetAwayTeamID(matchID);
             AddGoal(awayTeamID, selectAwayPlayerTb, goalMinuteTeamB, GoalsTeamB);
 
-            UpdateScoresAfterGoal(awayTeamID, GoalsTeamB);
+       
         }
 
         private void AddGoal(int teamID, ComboBox playerComboBox, TextBox minuteTextBox, DataGridView dataGridView)
         {
             try
             {
-                string insertQuery = "INSERT INTO Goals (MatchID, PlayerID, GoalMinute) VALUES (@MatchID, @PlayerID, @GoalMinute)";
-
-                int playerID = (int)playerComboBox.SelectedValue;
-                int goalMinute;
-
-                if (int.TryParse(minuteTextBox.Text, out goalMinute))
+                using (SqlConnection connection = new SqlConnection(Con.ConStr))
                 {
-                    int result = Con.SetData(insertQuery,
+                    connection.Open();
+
+                    string insertQuery = "INSERT INTO Goals (MatchID, PlayerID, GoalMinute) VALUES (@MatchID, @PlayerID, @GoalMinute)";
+
+                    List<SqlParameter> parameters = new List<SqlParameter>
+                    {
                         new SqlParameter("@MatchID", matchID),
-                        new SqlParameter("@PlayerID", playerID),
-                        new SqlParameter("@GoalMinute", goalMinute));
+                        new SqlParameter("@PlayerID", (int)playerComboBox.SelectedValue),
+                        new SqlParameter("@GoalMinute", Convert.ToInt32(minuteTextBox.Text))
+                    };
+
+                    int result = Con.SetData(insertQuery, parameters.ToArray());
 
                     if (result > 0)
                     {
                         MessageBox.Show("Goal added");
-                        ShowGoals(teamID, dataGridView); // Refresh datagridview
 
+                        UpdateScores(matchID, teamID, 1);
 
-                        // Reset tekst en combobox
+                        ShowGoals(teamID, dataGridView);
+
+                        UpdateScoreTextBox(teamID);
+
                         playerComboBox.SelectedIndex = 0;
                         minuteTextBox.Text = string.Empty;
+
+                        
                     }
                     else
                     {
                         MessageBox.Show("Failed to add the goal");
                     }
                 }
-                else
-                {
-                    MessageBox.Show("Please select a player and enter the minute to add the goal");
-                }
             }
             catch (Exception ex)
             {
-                MessageBox.Show("An error occurred: " + ex.Message);
+                MessageBox.Show("An error occurred while establishing database connection: " + ex.Message);
             }
         }
 
 
-       
+
 
         private void GoalsTeamA_CellContentClick(object sender, DataGridViewCellEventArgs e)
         {
@@ -306,7 +346,7 @@ namespace soccerTeamManagementApp
 
                 GoalsTeamA.Rows.RemoveAt(GoalsTeamA.SelectedRows[0].Index);
 
-                RemoveGoal(goalID);
+                RemoveGoal(GetHomeTeamID(matchID), goalID, GoalsTeamA);
             }
             else
             {
@@ -322,7 +362,7 @@ namespace soccerTeamManagementApp
 
                 GoalsTeamB.Rows.RemoveAt(GoalsTeamB.SelectedRows[0].Index);
 
-                RemoveGoal(goalID);
+                RemoveGoal(GetAwayTeamID(matchID), goalID, GoalsTeamB);
             }
             else
             {
@@ -331,7 +371,7 @@ namespace soccerTeamManagementApp
         }
 
 
-        private void RemoveGoal(int goalID)
+        private void RemoveGoal(int teamID, int goalID, DataGridView dataGridView)
         {
             try
             {
@@ -342,6 +382,15 @@ namespace soccerTeamManagementApp
                 if (result > 0)
                 {
                     MessageBox.Show("Goal removed");
+
+                    // Refresh Matches, datagrid, textbox
+                    UpdateScores(matchID, teamID, -1);
+
+                    ShowGoals(teamID, dataGridView);
+
+                    UpdateScoreTextBox(teamID);
+
+                   
                 }
                 else
                 {
@@ -353,6 +402,8 @@ namespace soccerTeamManagementApp
                 MessageBox.Show("An error occurred: " + ex.Message);
             }
         }
+
+
 
         private void EditGoalA_Btn_Click(object sender, EventArgs e)
         {
@@ -374,7 +425,7 @@ namespace soccerTeamManagementApp
             DataGridView dataGridView = GoalsTeamB;
 
             HandleEditGoal(teamID, playerComboBox, minuteTextBox, dataGridView);
-            //UpdateScoresAfterGoal(teamID, GoalsTeamB);
+
         }
 
 
@@ -403,12 +454,12 @@ namespace soccerTeamManagementApp
 
                         if (result > 0)
                         {
-                            MessageBox.Show("Goal updated");
+                            
                             ShowGoals(teamID, dataGridView); // Refresh datagridview
 
 
 
-                            // Reset tekst en combobox
+                            // Reset text en combobox
                             playerComboBox.SelectedIndex = 0;
                             minuteTextBox.Text = string.Empty;
                         }
@@ -435,81 +486,101 @@ namespace soccerTeamManagementApp
 
 
         ////////////////////////// SCORES /////////////////////////////
-        private void UpdateScores()
+        private void UpdateScores(int matchID, int teamID, int increment)
         {
             try
             {
-                // Bereken de scores voor het thuisteam en uitteam
-                int homeTeamScore = CalculateTeamScore(GetHomeTeamID(matchID));
-                int awayTeamScore = CalculateTeamScore(GetAwayTeamID(matchID));
+                string updateScoreQuery = "UPDATE Matches SET ";
 
-                // Update de scores in de database
-                string updateScoresQuery = "UPDATE Matches SET HomeTeamScore = @UpdatedHomeTeamScore, AwayTeamScore = @UpdatedAwayTeamScore WHERE MatchID = @MatchID";
-                int result = Con.SetData(updateScoresQuery,
-                    new SqlParameter("@UpdatedHomeTeamScore", homeTeamScore),
-                    new SqlParameter("@UpdatedAwayTeamScore", awayTeamScore),
-                    new SqlParameter("@MatchID_UpdateScores", matchID));
-
-                if (result > 0)
+                if (teamID == GetHomeTeamID(matchID))
                 {
-                    this.homeTeamScore = homeTeamScore;
-                    this.awayTeamScore = awayTeamScore;
+                    updateScoreQuery += "HomeTeamScore = HomeTeamScore + @Increment";
                 }
-                else
+                else if (teamID == GetAwayTeamID(matchID))
                 {
-                    MessageBox.Show("Failed to update scores");
+                    updateScoreQuery += "AwayTeamScore = AwayTeamScore + @Increment";
+                }
+
+                updateScoreQuery += " WHERE MatchID = @MatchID";
+
+                using (SqlConnection connection = new SqlConnection(Con.ConStr))
+                {
+                    connection.Open();
+
+                    using (SqlCommand cmd = new SqlCommand(updateScoreQuery, connection))
+                    {
+                        cmd.Parameters.AddWithValue("@MatchID", matchID);
+                        cmd.Parameters.AddWithValue("@Increment", increment);
+
+                        int result = cmd.ExecuteNonQuery();
+
+                        if (result > 0)
+                        {
+                            // No message needed ( already Goal added in other method)
+                        }
+                        else
+                        {
+                            MessageBox.Show("Failed to update the score");
+                        }
+                    }
                 }
             }
             catch (Exception ex)
             {
-                MessageBox.Show("An error occurred while updating scores: " + ex.Message);
+                MessageBox.Show("An error occurred: " + ex.Message);
             }
         }
 
-        private int CalculateTeamScore(int teamID)
-        {
-            // Bereken de totale score voor een team op basis van doelpunten in de database
-            string query = "SELECT COUNT(GoalID) FROM Goals WHERE MatchID = @MatchID AND TeamID = @TeamID";
 
-            using (SqlConnection connection = new SqlConnection(Con.ConStr))
-            {
-                connection.Open();
-                using (SqlCommand cmd = new SqlCommand(query, connection))
-                {
-                    cmd.Parameters.AddWithValue("@MatchID", matchID);
-                    cmd.Parameters.AddWithValue("@TeamID", teamID);
 
-                    return Convert.ToInt32(cmd.ExecuteScalar());
-                }
-            }
-        }
-
-        // Update scores after goal and refresh the page
+        /*// Update scores after goal and refresh the page
         private void UpdateScoresAfterGoal(int teamID, DataGridView dataGridView)
         {
-            UpdateScores(); 
+            UpdateScores(matchID, teamID, 1);
             ShowGoals(teamID, dataGridView);
-            UpdateScoreTextBox(teamID);
+           // UpdateScoreTextBox(teamID);
         }
+        */
+
+
 
         private void UpdateScoreTextBox(int teamID)
         {
-            if (teamID == GetHomeTeamID(matchID))
+            try
             {
-                homeTeamScore++;
-                homeTeamScoreField.Text = homeTeamScore.ToString();
+                string selectScoreQuery = "SELECT HomeTeamScore, AwayTeamScore FROM Matches WHERE MatchID = @MatchID";
+
+                using (SqlConnection connection = new SqlConnection(Con.ConStr))
+                {
+                    connection.Open();
+
+                    using (SqlCommand cmd = new SqlCommand(selectScoreQuery, connection))
+                    {
+                        cmd.Parameters.AddWithValue("@MatchID", matchID);
+
+                        using (SqlDataReader reader = cmd.ExecuteReader())
+                        {
+                            if (reader.Read())
+                            {
+                                homeTeamScore = Convert.ToInt32(reader["HomeTeamScore"]);
+                                awayTeamScore = Convert.ToInt32(reader["AwayTeamScore"]);
+
+                                homeTeamScoreField.Text = homeTeamScore.ToString();
+                                awayTeamScoreField.Text = awayTeamScore.ToString();
+                            }
+                        }
+                    }
+                }
             }
-            else if (teamID == GetAwayTeamID(matchID))
+            catch (Exception ex)
             {
-                awayTeamScore++;
-                awayTeamScoreField.Text = awayTeamScore.ToString();
+                MessageBox.Show("An error occurred: " + ex.Message);
             }
         }
+        
 
-        // waarom deze niet gebruiken om de score te zetten en aan te passen in de DB? En deze laten weergeven op de pagina ?????? ///
         private int GetHomeTeamScore(int matchID)
         {
-            // Haal de score op voor het thuisteam op basis van de matchID
             string query = "SELECT HomeTeamScore FROM Matches WHERE MatchID = @MatchID";
 
             using (SqlConnection connection = new SqlConnection(Con.ConStr))
@@ -528,7 +599,6 @@ namespace soccerTeamManagementApp
 
         private int GetAwayTeamScore(int matchID)
         {
-            // Haal de score op voor het uitteam op basis van de matchID
             string query = "SELECT AwayTeamScore FROM Matches WHERE MatchID = @MatchID";
 
             using (SqlConnection connection = new SqlConnection(Con.ConStr))
@@ -544,12 +614,6 @@ namespace soccerTeamManagementApp
                 }
             }
         }
-
-
-
-
-
-
 
 
     }
