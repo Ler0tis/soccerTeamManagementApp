@@ -8,9 +8,14 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Data.SqlClient;
+using Newtonsoft.Json;
+using System.IO;
 
 namespace soccerTeamManagementApp
 {
+
+    
+
     public partial class MatchDetails : Form
     {
 
@@ -18,14 +23,18 @@ namespace soccerTeamManagementApp
         private int matchID;
         private int homeTeamScore;
         private int awayTeamScore;
+
+        private List<MatchData> matchDataList;
        
 
-        public MatchDetails(int matchID)
+        public MatchDetails(int matchID, List<MatchData> matchDataList)
         {
             InitializeComponent();
             Con = new Functions();
 
             this.matchID = matchID;
+            this.matchDataList = matchDataList;
+
             Show_MatchDetails();
             MatchDetails_Load(this, EventArgs.Empty);
 
@@ -195,9 +204,10 @@ namespace soccerTeamManagementApp
             GoalsTeamA.CellContentClick += GoalsTeamA_CellContentClick;
             GoalsTeamB.CellContentClick += GoalsTeamB_CellContentClick;
 
+            // TODO:  necessary? already use it in InitialzeScores()
             homeTeamScoreField.Text = homeTeamScore.ToString();
             awayTeamScoreField.Text = awayTeamScore.ToString();
-            // Is dit echt nodig, omdat ik dit ook al gebruik in InitializeScores
+            
         }
 
 
@@ -245,7 +255,7 @@ namespace soccerTeamManagementApp
         private void AddHomeTeamBtn_Click(object sender, EventArgs e)
         {
             int homeTeamID = GetHomeTeamID(matchID);
-            AddGoal(homeTeamID, selectHomePlayerTb, goalMinuteTeamA, GoalsTeamA);
+            AddGoal(matchID, homeTeamID, selectHomePlayerTb, goalMinuteTeamA, GoalsTeamA);
 
         
         }
@@ -253,12 +263,14 @@ namespace soccerTeamManagementApp
         private void AddAwayTeamBtn_Click(object sender, EventArgs e)
         {
             int awayTeamID = GetAwayTeamID(matchID);
-            AddGoal(awayTeamID, selectAwayPlayerTb, goalMinuteTeamB, GoalsTeamB);
+            AddGoal(matchID, awayTeamID, selectAwayPlayerTb, goalMinuteTeamB, GoalsTeamB);
 
        
         }
 
-        private void AddGoal(int teamID, ComboBox playerComboBox, TextBox minuteTextBox, DataGridView dataGridView)
+
+        private MatchData currentMatchData = new MatchData();
+        private void AddGoal(int matchID, int teamID, ComboBox playerComboBox, TextBox minuteTextBox, DataGridView dataGridView)
         {
             try
             {
@@ -277,6 +289,41 @@ namespace soccerTeamManagementApp
 
                     int result = Con.SetData(insertQuery, parameters.ToArray());
 
+                    // Error handeling: check lenght of matchDataList
+                    //MessageBox.Show($"Number of items in matchDataList: {matchDataList.Count}");
+
+                    // Error handeling: check if there are matching MatchIDs
+                    //MessageBox.Show($"Matching MatchIDs: {string.Join(", ", matchDataList.Select(match => match.MatchID))}");
+
+                    // Error handeling: loop to see data of matchDataList if any
+                    /*foreach (var matchData in matchDataList)
+                    {
+                        MessageBox.Show($"MatchID in matchDataList: {matchData.MatchID}, HomeTeam: {matchData.HomeTeam}, AwayTeam: {matchData.AwayTeam}");
+                    }
+                    */
+
+                    // JSON //
+                    MatchData currentMatchData = matchDataList.FirstOrDefault(match => match.MatchID == matchID);
+
+                    if (currentMatchData != null)
+                    {
+                        Goal newGoal = new Goal
+                        {
+                            PlayerID = (int)playerComboBox.SelectedValue,
+                            GoalMinute = Convert.ToInt32(minuteTextBox.Text),
+                            MatchID = matchID
+                    };
+
+                        currentMatchData.Goals.Add(newGoal);
+
+
+                        // Show list with current goals from Team
+                        ShowGoals(teamID, dataGridView);
+
+                        // Save updated Matchdata in JSON
+                        SaveMatchDataToJson(matchDataList);
+                    }
+
                     if (result > 0)
                     {
                         MessageBox.Show("Goal added");
@@ -287,9 +334,9 @@ namespace soccerTeamManagementApp
 
                         UpdateScoreTextBox(teamID);
 
+                        // reset input fields
                         playerComboBox.SelectedIndex = 0;
                         minuteTextBox.Text = string.Empty;
-
                         
                     }
                     else
@@ -304,6 +351,57 @@ namespace soccerTeamManagementApp
             }
         }
 
+        // TODO: add parameter List to SaveMatchDataToJson to update list accordingly
+        private void SaveMatchDataToJson(List<MatchData> matchDataList)
+        {
+            try
+            {
+                // Find the right MatchData in list to update
+                MatchData existingMatchData = matchDataList.FirstOrDefault(match => match.MatchID == currentMatchData.MatchID);
+
+                if (existingMatchData != null)
+                {
+                    // If MatchData exist in list, replace with current MatchData
+                    int index = matchDataList.IndexOf(existingMatchData);
+                    matchDataList[index] = currentMatchData;
+                }
+                else
+                {
+                    
+                    matchDataList.Add(currentMatchData);
+                }
+
+                // write list to JSON-file
+                string json = JsonConvert.SerializeObject(matchDataList, Formatting.Indented);
+                System.IO.File.WriteAllText("matches.json", json);
+
+                string currentDirectory = Environment.CurrentDirectory;
+
+                //Error handeling: check where the file is saved
+                //MessageBox.Show("JSON content:\n" + json);
+                //MessageBox.Show("JSON file saved to: " + Path.Combine(currentDirectory, "matches.json"));
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("An error occurred while saving match data to JSON: " + ex.Message);
+            }
+        }
+
+        private List<MatchData> LoadMatchDataFromJson()
+        {
+            try
+            {
+                string json = System.IO.File.ReadAllText("matches.json");
+                List<MatchData> matchDataList = JsonConvert.DeserializeObject<List<MatchData>>(json);
+
+                return matchDataList ?? new List<MatchData>();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("An error occurred while loading match data from JSON: " + ex.Message);
+                return new List<MatchData>();
+            }
+        }
 
 
 
@@ -390,6 +488,8 @@ namespace soccerTeamManagementApp
 
                     UpdateScoreTextBox(teamID);
 
+                    SaveMatchDataToJson(matchDataList);
+
                    
                 }
                 else
@@ -413,7 +513,6 @@ namespace soccerTeamManagementApp
             DataGridView dataGridView = GoalsTeamA;
 
             HandleEditGoal(teamID, playerComboBox, minuteTextBox, dataGridView);
-            
         }
 
 
@@ -532,7 +631,7 @@ namespace soccerTeamManagementApp
         }
 
 
-
+        // TODO: still necessary?
         /*// Update scores after goal and refresh the page
         private void UpdateScoresAfterGoal(int teamID, DataGridView dataGridView)
         {
@@ -615,7 +714,7 @@ namespace soccerTeamManagementApp
             }
         }
 
-
+        
     }
 }
 

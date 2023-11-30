@@ -8,38 +8,131 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Data.SqlClient;
 using System.Windows.Forms;
+using Newtonsoft.Json;
 
 namespace soccerTeamManagementApp
 {
+
+    public class MatchData
+    {
+        public int MatchID { get; set; }
+        public string HomeTeam { get; set; }
+        public string AwayTeam { get; set; }
+        public DateTime MatchDate { get; set; }
+        public int HomeTeamScore { get; set; }
+        public int AwayTeamScore { get; set; }
+
+        public List<Goal> Goals { get; set; } = new List<Goal>();
+    }
+
+    public class Goal
+    {
+        public int PlayerID { get; set; }
+        public int MatchID { get; set; }
+        public int GoalMinute { get; set; }
+
+    }
+
+
     public partial class Match : Form
     {
         Functions Con;
 
-        private List<string> teamNamesForTeamA;
-        private List<string> teamNamesForTeamB;
         private List<int> teamIdsForTeamA;
         private List<int> teamIdsForTeamB;
 
+        private List<string> teamNamesForTeamA;
+        private List<string> teamNamesForTeamB;
+        
+        private List<MatchData> matchDataList;
+
+        
         public Match()
         {
+
             InitializeComponent();
             Con = new Functions();
-            ShowMatches();
+            
+
+            teamIdsForTeamA = new List<int>();
+            teamIdsForTeamB = new List<int>();
 
             teamNamesForTeamA = new List<string>();
             teamNamesForTeamB = new List<string>();
-            teamIdsForTeamA = new List<int>();
-            teamIdsForTeamB = new List<int>();
+
+            matchDataList = new List<MatchData>();
+
+            ShowMatches();
         }
 
         private void ShowMatches()
         {
-            string query = "SELECT M.MatchID, T1.TeamName AS HomeTeam, T2.TeamName AS AwayTeam, M.MatchDate, M.HomeTeamScore, M.AwayTeamScore " +
-                           "FROM Matches M " +
-                           "INNER JOIN Teams T1 ON M.HomeTeamID = T1.TeamID " +
-                           "INNER JOIN Teams T2 ON M.AwayTeamID = T2.TeamID";
-            MatchList.DataSource = Con.GetData(query);
+            try
+            {
+                string query = "SELECT M.MatchID, T1.TeamName AS HomeTeam, T2.TeamName AS AwayTeam, M.MatchDate, M.HomeTeamScore, M.AwayTeamScore " +
+                               "FROM Matches M " +
+                               "INNER JOIN Teams T1 ON M.HomeTeamID = T1.TeamID " +
+                               "INNER JOIN Teams T2 ON M.AwayTeamID = T2.TeamID";
+
+                DataTable matchesTable = Con.GetData(query);
+
+                //Clear matchDataList before adding DATA (JSON)
+                matchDataList.Clear();
+
+                //Error handeling: check if there are matchID present
+                //MessageBox.Show($"Matching MatchIDs: {string.Join(", ", matchesTable.Rows.Cast<DataRow>().Select(row => row["MatchID"]))}");
+
+                foreach (DataRow row in matchesTable.Rows)
+                {
+                    MatchData matchData = new MatchData
+                    {
+                        MatchID = Convert.ToInt32(row["MatchID"]),
+                        HomeTeam = row["HomeTeam"].ToString(),
+                        AwayTeam = row["AwayTeam"].ToString(),
+                        MatchDate = Convert.ToDateTime(row["MatchDate"]),
+                        HomeTeamScore = Convert.ToInt32(row["HomeTeamScore"]),
+                        AwayTeamScore = Convert.ToInt32(row["AwayTeamScore"])
+                    };
+
+                    
+                    matchDataList.Add(matchData);
+                }
+
+                // Set matchDataList as datasource for MatchList
+                MatchList.DataSource = matchDataList;
+
+                // Error handeling:   check lenght of matchDataList
+                //MessageBox.Show($"Number of items in matchDataList: {matchDataList.Count}");
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"An error occurred while fetching match data: {ex.Message}");
+            }
         }
+
+
+
+        /*
+         * TODO:  See if this is still necessary here. Or change location of MatchDetails methode
+        private static void SaveMatchesToJson(List<Match> matches)
+        {
+            string matchesJson = JsonConvert.SerializeObject(matches);
+            System.IO.File.WriteAllText("matches.json", matchesJson);
+        }
+
+        private static List<Match> LoadMatchesFromJson()
+        {
+            if (System.IO.File.Exists("matches.json"))
+            {
+                string matchesJson = System.IO.File.ReadAllText("matches.json");
+                return JsonConvert.DeserializeObject<List<Match>>(matchesJson);
+            }
+
+            return new List<Match>();
+        }
+
+        */
+
 
         public void SetTeamNames(List<string> teamNames, List<int> teamIds)
         {
@@ -160,7 +253,7 @@ namespace soccerTeamManagementApp
                             new SqlParameter("@TeamBID", teamBID),
                             new SqlParameter("@MatchDate", matchDate));
 
-                        // Error check how many matches there for these teams and this date
+                        // Error handeling: check how many matches there for these teams and this date
                         //MessageBox.Show($"Existing Matches: {existingMatches}");
 
                         if (existingMatches > 0)
@@ -200,14 +293,12 @@ namespace soccerTeamManagementApp
         }
 
 
-        // NEW
         public void RefreshData()
         {
             ShowMatches();
         }
 
 
-        // NEW /////
         private void CancelBtn_Click(object sender, EventArgs e)
         {
             Home homeForm = new Home();
@@ -255,8 +346,7 @@ namespace soccerTeamManagementApp
         {
             if (key != 0)
             {
-                MatchDetails matchDetailsForm = new MatchDetails(key);
-
+                MatchDetails matchDetailsForm = new MatchDetails(key, matchDataList);
                 matchDetailsForm.ShowDialog();
             }
             else

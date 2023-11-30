@@ -473,6 +473,7 @@ namespace soccerTeamManagementApp
             this.EditGoalA_Btn.TabIndex = 128;
             this.EditGoalA_Btn.Text = "Update";
             this.EditGoalA_Btn.UseVisualStyleBackColor = false;
+            this.EditGoalA_Btn.Click += new System.EventHandler(this.EditGoalA_Btn_Click);
             // 
             // awayTeamScoreField
             // 
