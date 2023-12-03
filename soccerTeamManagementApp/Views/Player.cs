@@ -17,7 +17,7 @@ namespace soccerTeamManagementApp
             InitializeComponent();
             Con = new Functions();
             ShowPlayers();
-            GetTeam();
+            GetTeams();
         }
 
         private void ShowPlayers()
@@ -47,7 +47,7 @@ namespace soccerTeamManagementApp
             //PlayerList.Columns["PlayerId"].Visible = false;
         }
 
-        private void GetTeam()
+        private void GetTeams()
         {
             string query = "SELECT * FROM Teams";
             selectTeamTb.DisplayMember = "TeamName";

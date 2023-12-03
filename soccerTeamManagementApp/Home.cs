@@ -88,7 +88,7 @@ namespace soccerTeamManagementApp
                     teamIds.Add(Convert.ToInt32(row["TeamId"]));
                 }
 
-                // Set lists with teamnames and id active for selectedTeamA and B.DataSource 
+                // Set lists with teamnames and ID active for selectedTeamA and B.DataSource 
                 Obj.SetTeamNames(teamNames, teamIds);
 
                 Obj.Show();
@@ -104,7 +104,9 @@ namespace soccerTeamManagementApp
 
         private void ManageTransfersLink_Click(object sender, EventArgs e)
         {
-
+            Transfer Obj = new Transfer();
+            Obj.Show();
+            this.Hide();
         }
         private void LogoutImg_Click(object sender, EventArgs e)
         {

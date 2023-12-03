@@ -65,6 +65,10 @@
     <Compile Include="MatchDetails.Designer.cs">
       <DependentUpon>MatchDetails.cs</DependentUpon>
     </Compile>
+    <Compile Include="Transfer.cs" />
+    <Compile Include="Transfer.Designer.cs">
+      <DependentUpon>Transfer.cs</DependentUpon>
+    </Compile>
     <Compile Include="Views\Coach.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -103,6 +107,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="MatchDetails.resx">
       <DependentUpon>MatchDetails.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Transfer.resx">
+      <DependentUpon>Transfer.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Views\Coach.resx">
       <DependentUpon>Coach.cs</DependentUpon>

@@ -14,8 +14,6 @@ using System.IO;
 namespace soccerTeamManagementApp
 {
 
-    
-
     public partial class MatchDetails : Form
     {
 
