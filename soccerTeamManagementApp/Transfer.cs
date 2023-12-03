@@ -8,32 +8,36 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Data.SqlClient;
+using Newtonsoft.Json;
+using System.IO;
 
 namespace soccerTeamManagementApp
 {
-
-    public class TransferData
-    {
-        public int PlayerID { get; set; }
-        public int OldTeamID { get; set; }
-        public int NewTeamID { get; set; }
-    }
 
 
     public partial class Transfer : Form
     {
         Functions Con;
+        private List<TransferData> transferHistory;
+
         public Transfer()
         {
             InitializeComponent();
             Con = new Functions();
+            transferHistory = new List<TransferData>();
 
             selectTransferTeamTb.SelectedIndexChanged += selectTransferTeamTb_SelectedIndexChanged;
-            // Need selectNewTransferTeam as well?
 
             GetTeams(selectTransferTeamTb);
             GetTeams(selectNewTransferTeamTb);
 
+        }
+
+        public class TransferData
+        {
+            public int PlayerID { get; set; }
+            public int OldTeamID { get; set; }
+            public int NewTeamID { get; set; }
         }
 
         private void label2_Click(object sender, EventArgs e)
@@ -41,6 +45,7 @@ namespace soccerTeamManagementApp
 
         }
 
+        
         private void GetTeams(ComboBox comboBox)
         {
             string query = "SELECT * FROM Teams";
@@ -95,13 +100,13 @@ namespace soccerTeamManagementApp
 
         private int selectedTeamID; // class variable 
 
-        // Event handler change selected team
+        // Event handler for change selected team
         private void selectTransferTeamTb_SelectedIndexChanged(object sender, EventArgs e)
         {
             // Is a team selected?
             if (selectTransferTeamTb.SelectedValue != null && int.TryParse(selectTransferTeamTb.SelectedValue.ToString(), out int teamID))
             {
-                // Save team ID in class cariable
+                // Save team ID in class variable
                 selectedTeamID = teamID;
 
                 GetPlayersForTeam(selectedTeamID, selectTransferPlayerTb);
@@ -137,6 +142,9 @@ namespace soccerTeamManagementApp
             }
         }
 
+
+        
+
         private void TransferPlayer(int currentTeamID, int selectedPlayerID, int newTeamID)
         {
             try
@@ -155,21 +163,43 @@ namespace soccerTeamManagementApp
                 if (result > 0)
                 {
                     MessageBox.Show("Player transferred successfully");
+
+                    //TODO: first get the lsit  filled for JSON and then save to Json
+                    var transfer = new TransferData
+                    {
+                        PlayerID = selectedPlayerID,
+                        OldTeamID = currentTeamID,
+                        NewTeamID = newTeamID
+
+                    };
+
+                    transferHistory.Add(transfer);
+
+                    SaveTransfersToJson();
+
+                    // Reset playerCombobox
                     selectTransferPlayerTb.DataSource = null;
                     
-
-                    // TODO: Voeg JSON opslaan toe voor history van transfers
                 }
                 else
                 {
                     MessageBox.Show("Failed to transfer player");
                 }
+
             }
             catch (Exception ex)
             {
                 MessageBox.Show("An error occurred: " + ex.Message);
             }
         }
+
+        private void SaveTransfersToJson()
+        {
+            string json = JsonConvert.SerializeObject(transferHistory, Formatting.Indented);
+            File.WriteAllText("transfers.json", json);
+        }
+
+    
 
         private void CancelBtn_Click(object sender, EventArgs e)
         {
