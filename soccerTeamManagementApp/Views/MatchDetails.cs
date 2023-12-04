@@ -235,35 +235,16 @@ namespace soccerTeamManagementApp
             }
         }
 
-
-        private void SelectTeamA_SelectedIndexChanged(object sender, EventArgs e)
-        {
-
-        }
-
-        private void CancelBtn_Click(object sender, EventArgs e)
-        {
-            Match matchForm = (Match)Application.OpenForms["Match"];
-            matchForm?.RefreshData(); // To refresh data from Match
-            this.Close();
-        }
-
-
-
         private void AddHomeTeamBtn_Click(object sender, EventArgs e)
         {
             int homeTeamID = GetHomeTeamID(matchID);
             AddGoal(matchID, homeTeamID, selectHomePlayerTb, goalMinuteTeamA, GoalsTeamA);
-
-        
         }
 
         private void AddAwayTeamBtn_Click(object sender, EventArgs e)
         {
             int awayTeamID = GetAwayTeamID(matchID);
             AddGoal(matchID, awayTeamID, selectAwayPlayerTb, goalMinuteTeamB, GoalsTeamB);
-
-       
         }
 
 
@@ -375,9 +356,11 @@ namespace soccerTeamManagementApp
 
                 string currentDirectory = Environment.CurrentDirectory;
 
-                //Error handeling: check where the file is saved
-                //MessageBox.Show("JSON content:\n" + json);
-                //MessageBox.Show("JSON file saved to: " + Path.Combine(currentDirectory, "matches.json"));
+                /*
+                Error handeling: check where the file is saved
+                MessageBox.Show("JSON content:\n" + json);
+                MessageBox.Show("JSON file saved to: " + Path.Combine(currentDirectory, "matches.json"));
+                */
             }
             catch (Exception ex)
             {
@@ -385,7 +368,7 @@ namespace soccerTeamManagementApp
             }
         }
 
-        private List<MatchData> LoadMatchDataFromJson()
+        /*private List<MatchData> LoadMatchDataFromJson()
         {
             try
             {
@@ -400,6 +383,7 @@ namespace soccerTeamManagementApp
                 return new List<MatchData>();
             }
         }
+        */
 
 
 
@@ -554,7 +538,7 @@ namespace soccerTeamManagementApp
                             
                             ShowGoals(teamID, dataGridView); // Refresh datagridview
 
-
+                            SaveMatchDataToJson(matchDataList);
 
                             // Reset text en combobox
                             playerComboBox.SelectedIndex = 0;
@@ -580,6 +564,14 @@ namespace soccerTeamManagementApp
                 MessageBox.Show("An error occurred: " + ex.Message);
             }
         }
+
+        private void CancelBtn_Click(object sender, EventArgs e)
+        {
+            Match matchForm = (Match)Application.OpenForms["Match"];
+            matchForm?.RefreshData(); // To refresh data from Match
+            this.Close();
+        }
+
 
 
         ////////////////////////// SCORES /////////////////////////////
@@ -627,18 +619,6 @@ namespace soccerTeamManagementApp
                 MessageBox.Show("An error occurred: " + ex.Message);
             }
         }
-
-
-        // TODO: still necessary?
-        /*// Update scores after goal and refresh the page
-        private void UpdateScoresAfterGoal(int teamID, DataGridView dataGridView)
-        {
-            UpdateScores(matchID, teamID, 1);
-            ShowGoals(teamID, dataGridView);
-           // UpdateScoreTextBox(teamID);
-        }
-        */
-
 
 
         private void UpdateScoreTextBox(int teamID)

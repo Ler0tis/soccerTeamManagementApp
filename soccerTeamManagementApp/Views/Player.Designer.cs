@@ -91,7 +91,7 @@ namespace soccerTeamManagementApp
             this.label2.Size = new System.Drawing.Size(126, 20);
             this.label2.TabIndex = 2;
             this.label2.Text = "Manage player";
-            this.label2.Click += new System.EventHandler(this.label2_Click);
+            
             // 
             // label7
             // 
@@ -171,7 +171,7 @@ namespace soccerTeamManagementApp
             this.label9.Size = new System.Drawing.Size(126, 20);
             this.label9.TabIndex = 32;
             this.label9.Text = "Jersey number";
-            this.label9.Click += new System.EventHandler(this.label9_Click);
+            
             // 
             // PositionCh
             // 
@@ -204,7 +204,7 @@ namespace soccerTeamManagementApp
             this.JerseyNumberTb.Name = "JerseyNumberTb";
             this.JerseyNumberTb.Size = new System.Drawing.Size(265, 26);
             this.JerseyNumberTb.TabIndex = 31;
-            this.JerseyNumberTb.TextChanged += new System.EventHandler(this.textBox7_TextChanged);
+            
             // 
             // AddBtn
             // 
@@ -306,7 +306,7 @@ namespace soccerTeamManagementApp
             this.selectTeamTb.Name = "selectTeamTb";
             this.selectTeamTb.Size = new System.Drawing.Size(265, 28);
             this.selectTeamTb.TabIndex = 87;
-            this.selectTeamTb.SelectedIndexChanged += new System.EventHandler(this.selectTeamTb_SelectedIndexChanged);
+            
             // 
             // PlayerList
             // 
@@ -368,7 +368,7 @@ namespace soccerTeamManagementApp
             this.FirstNameTb.Name = "FirstNameTb";
             this.FirstNameTb.Size = new System.Drawing.Size(265, 26);
             this.FirstNameTb.TabIndex = 18;
-            this.FirstNameTb.TextChanged += new System.EventHandler(this.FirstNameTb_TextChanged);
+            
             // 
             // DOBTb
             // 
@@ -383,7 +383,7 @@ namespace soccerTeamManagementApp
             this.DOBTb.Size = new System.Drawing.Size(265, 35);
             this.DOBTb.TabIndex = 38;
             this.DOBTb.Value = new System.DateTime(2023, 10, 10, 11, 24, 57, 168);
-            this.DOBTb.ValueChanged += new System.EventHandler(this.DOBTb_ValueChanged);
+            
             // 
             // label10
             // 
@@ -425,7 +425,7 @@ namespace soccerTeamManagementApp
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
             this.Name = "Player";
             this.Text = "Player";
-            this.Load += new System.EventHandler(this.Player_Load);
+            
             this.panel1.ResumeLayout(false);
             this.panel1.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.PlayerList)).EndInit();

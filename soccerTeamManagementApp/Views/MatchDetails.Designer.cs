@@ -139,7 +139,7 @@ namespace soccerTeamManagementApp
             this.HomeTeamTb.Name = "HomeTeamTb";
             this.HomeTeamTb.Size = new System.Drawing.Size(265, 28);
             this.HomeTeamTb.TabIndex = 121;
-            this.HomeTeamTb.SelectedIndexChanged += new System.EventHandler(this.SelectTeamA_SelectedIndexChanged);
+            
             // 
             // label5
             // 

@@ -365,40 +365,5 @@ namespace soccerTeamManagementApp
             }
         }
 
-
-        private void label9_Click(object sender, EventArgs e)
-        {
-
-        }
-
-        private void textBox7_TextChanged(object sender, EventArgs e)
-        {
-
-        }
-
-        private void label2_Click(object sender, EventArgs e)
-        {
-
-        }
-
-        private void Player_Load(object sender, EventArgs e)
-        {
-
-        }
-
-        private void FirstNameTb_TextChanged(object sender, EventArgs e)
-        {
-
-        }
-
-        private void DOBTb_ValueChanged(object sender, EventArgs e)
-        {
-
-        }
-
-        private void selectTeamTb_SelectedIndexChanged(object sender, EventArgs e)
-        {
-
-        }
     }
 }

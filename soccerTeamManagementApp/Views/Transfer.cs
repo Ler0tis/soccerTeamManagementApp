@@ -113,38 +113,6 @@ namespace soccerTeamManagementApp
             }
         }
 
-
-        private void TransferBtn_Click(object sender, EventArgs e)
-        {
-            try
-            {
-                if (selectTransferTeamTb.SelectedItem == null)
-                {
-                    MessageBox.Show("Select a team");
-                    return;
-                }
-
-                // Is player selected?
-                if (selectTransferPlayerTb.SelectedValue != null && int.TryParse(selectTransferPlayerTb.SelectedValue.ToString(), out int selectedPlayerID))
-                {
-                    // playerID and previous selectedTeamID then trigger TRansfer player
-                    int newTeamID = Convert.ToInt32(selectNewTransferTeamTb.SelectedValue);
-                    TransferPlayer(selectedTeamID, selectedPlayerID, newTeamID);
-                }
-                else
-                {
-                    MessageBox.Show("Select a player");
-                }
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show("An error occurred: " + ex.Message);
-            }
-        }
-
-
-        
-
         private void TransferPlayer(int currentTeamID, int selectedPlayerID, int newTeamID)
         {
             try
@@ -179,13 +147,42 @@ namespace soccerTeamManagementApp
 
                     // Reset playerCombobox
                     selectTransferPlayerTb.DataSource = null;
-                    
+
                 }
                 else
                 {
                     MessageBox.Show("Failed to transfer player");
                 }
 
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("An error occurred: " + ex.Message);
+            }
+        }
+
+
+        private void TransferBtn_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                if (selectTransferTeamTb.SelectedItem == null)
+                {
+                    MessageBox.Show("Select a team");
+                    return;
+                }
+
+                // Is player selected?
+                if (selectTransferPlayerTb.SelectedValue != null && int.TryParse(selectTransferPlayerTb.SelectedValue.ToString(), out int selectedPlayerID))
+                {
+                    // playerID and previous selectedTeamID then trigger TRansfer player
+                    int newTeamID = Convert.ToInt32(selectNewTransferTeamTb.SelectedValue);
+                    TransferPlayer(selectedTeamID, selectedPlayerID, newTeamID);
+                }
+                else
+                {
+                    MessageBox.Show("Select a player");
+                }
             }
             catch (Exception ex)
             {

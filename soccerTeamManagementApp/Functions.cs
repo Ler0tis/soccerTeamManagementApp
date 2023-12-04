@@ -76,9 +76,6 @@ namespace soccerTeamManagementApp
         }
 
 
-
-
-
         public DataTable GetTeams()
         {
             string query = "SELECT * FROM Teams";
@@ -120,8 +117,7 @@ namespace soccerTeamManagementApp
 
             return result;
         }
-
-
+        
 
         public DataTable GetCoaches()
         {

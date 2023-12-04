@@ -27,18 +27,9 @@ namespace soccerTeamManagementApp
         {
             string query = "SELECT * FROM Teams";
             TeamList.DataSource = Con.GetData(query);
-            //TeamList.Columns["TeamId"].Visible = false;
+            
         }
 
-        private void label4_Click(object sender, EventArgs e)
-        {
-
-        }
-
-        private void label2_Click(object sender, EventArgs e)
-        {
-
-        }
 
     private void AddBtn_Click(object sender, EventArgs e)
         {

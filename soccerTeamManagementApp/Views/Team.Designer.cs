@@ -80,7 +80,7 @@ namespace soccerTeamManagementApp
             this.label2.Size = new System.Drawing.Size(127, 20);
             this.label2.TabIndex = 1;
             this.label2.Text = "Manage teams";
-            this.label2.Click += new System.EventHandler(this.label2_Click);
+            
             // 
             // label3
             // 
@@ -113,7 +113,7 @@ namespace soccerTeamManagementApp
             this.label4.Size = new System.Drawing.Size(75, 20);
             this.label4.TabIndex = 9;
             this.label4.Text = "Address";
-            this.label4.Click += new System.EventHandler(this.label4_Click);
+            
             // 
             // TeamAddress
             // 

@@ -49,10 +49,6 @@ namespace soccerTeamManagementApp
             CoachesList.DataSource = coachesData;
         }
 
-        private void label2_Click(object sender, EventArgs e)
-        {
-
-        }
 
         private void AddBtn_Click(object sender, EventArgs e)
         {
@@ -352,6 +348,6 @@ namespace soccerTeamManagementApp
                 SalaryTb.Text = $"€ {salary:F2}"; // show two decimals
             }
         }
-        
+
     }
 }

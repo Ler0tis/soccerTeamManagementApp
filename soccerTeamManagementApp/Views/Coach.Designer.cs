@@ -95,7 +95,7 @@ namespace soccerTeamManagementApp
             this.label2.Size = new System.Drawing.Size(126, 20);
             this.label2.TabIndex = 42;
             this.label2.Text = "Manage coach";
-            this.label2.Click += new System.EventHandler(this.label2_Click);
+            
             // 
             // panel1
             // 
