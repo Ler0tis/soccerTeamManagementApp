@@ -76,7 +76,7 @@ namespace soccerTeamManagementApp
             this.label2.Size = new System.Drawing.Size(114, 20);
             this.label2.TabIndex = 161;
             this.label2.Text = "Current team";
-            this.label2.Click += new System.EventHandler(this.label2_Click);
+            
             // 
             // label5
             // 

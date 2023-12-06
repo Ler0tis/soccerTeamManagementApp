@@ -91,7 +91,6 @@ namespace soccerTeamManagementApp
             this.label2.Size = new System.Drawing.Size(126, 20);
             this.label2.TabIndex = 2;
             this.label2.Text = "Manage player";
-            
             // 
             // label7
             // 
@@ -171,7 +170,6 @@ namespace soccerTeamManagementApp
             this.label9.Size = new System.Drawing.Size(126, 20);
             this.label9.TabIndex = 32;
             this.label9.Text = "Jersey number";
-            
             // 
             // PositionCh
             // 
@@ -204,7 +202,6 @@ namespace soccerTeamManagementApp
             this.JerseyNumberTb.Name = "JerseyNumberTb";
             this.JerseyNumberTb.Size = new System.Drawing.Size(265, 26);
             this.JerseyNumberTb.TabIndex = 31;
-            
             // 
             // AddBtn
             // 
@@ -306,13 +303,12 @@ namespace soccerTeamManagementApp
             this.selectTeamTb.Name = "selectTeamTb";
             this.selectTeamTb.Size = new System.Drawing.Size(265, 28);
             this.selectTeamTb.TabIndex = 87;
-            
             // 
             // PlayerList
             // 
             dataGridViewCellStyle1.BackColor = System.Drawing.Color.White;
             this.PlayerList.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle1;
-            this.PlayerList.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.ColumnHeader;
+            this.PlayerList.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.None;
             dataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
             dataGridViewCellStyle2.BackColor = System.Drawing.Color.LightSteelBlue;
             dataGridViewCellStyle2.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
@@ -368,7 +364,6 @@ namespace soccerTeamManagementApp
             this.FirstNameTb.Name = "FirstNameTb";
             this.FirstNameTb.Size = new System.Drawing.Size(265, 26);
             this.FirstNameTb.TabIndex = 18;
-            
             // 
             // DOBTb
             // 
@@ -383,7 +378,6 @@ namespace soccerTeamManagementApp
             this.DOBTb.Size = new System.Drawing.Size(265, 35);
             this.DOBTb.TabIndex = 38;
             this.DOBTb.Value = new System.DateTime(2023, 10, 10, 11, 24, 57, 168);
-            
             // 
             // label10
             // 
@@ -424,8 +418,8 @@ namespace soccerTeamManagementApp
             this.Controls.Add(this.panel1);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
             this.Name = "Player";
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Player";
-            
             this.panel1.ResumeLayout(false);
             this.panel1.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.PlayerList)).EndInit();

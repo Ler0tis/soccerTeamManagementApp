@@ -27,13 +27,37 @@ namespace soccerTeamManagementApp
             Cmd.Connection = Con;
         }
 
-        public DataTable GetData(String query)
+        public DataTable GetData(string query, SqlParameter[] parameters)
+        {
+            Dt = new DataTable();
+
+            using (SqlConnection connection = new SqlConnection(ConStr))
+            {
+                connection.Open();
+
+                using (SqlCommand cmd = new SqlCommand(query, connection))
+                {
+                    cmd.Parameters.AddRange(parameters);
+
+                    using (SqlDataAdapter adapter = new SqlDataAdapter(cmd))
+                    {
+                        adapter.Fill(Dt);
+                    }
+                }
+            }
+
+            return Dt;
+        }
+
+        public DataTable GetData(string query)
         {
             Dt = new DataTable();
             Sda = new SqlDataAdapter(query, ConStr);
             Sda.Fill(Dt);
             return Dt;
         }
+
+
         public int SetData(string query, params SqlParameter[] parameters)
         {
             return SetData(query, null, parameters);

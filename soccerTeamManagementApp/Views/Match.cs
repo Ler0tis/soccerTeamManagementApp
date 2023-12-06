@@ -22,11 +22,13 @@ namespace soccerTeamManagementApp
         public int HomeTeamScore { get; set; }
         public int AwayTeamScore { get; set; }
 
-        public List<Goal> Goals { get; set; } = new List<Goal>();
+        public List<Goal> HomeTeamGoals { get; set; } = new List<Goal>();
+        public List<Goal> AwayTeamGoals { get; set; } = new List<Goal>();
     }
 
     public class Goal
     {
+        public int GoalID { get; set; }
         public int PlayerID { get; set; }
         public int MatchID { get; set; }
         public int GoalMinute { get; set; }
@@ -99,7 +101,11 @@ namespace soccerTeamManagementApp
                 }
 
                 // Set matchDataList as datasource for MatchList
+                //MatchList.DataSource = null;
                 MatchList.DataSource = matchDataList;
+                MatchList.ResetBindings();
+                
+
 
                 // Error handeling:   check lenght of matchDataList
                 //MessageBox.Show($"Number of items in matchDataList: {matchDataList.Count}");
@@ -152,7 +158,7 @@ namespace soccerTeamManagementApp
                         {
                             // Checks if there is already a match between the teams on the same date (only date, no time specified)
                             string checkQuery = "SELECT COUNT(*) FROM Matches " +
-                                                "WHERE ((HomeTeamID = @HomeTeamID AND AwayTeamID = @AwayTeamID) OR (HomeTeamID = @AwayTeamID AND AwayTeamID = @TeamAID)) " +
+                                                "WHERE ((HomeTeamID = @HomeTeamID AND AwayTeamID = @AwayTeamID) OR (HomeTeamID = @AwayTeamID AND AwayTeamID = @HomeTeamID)) " +
                                                 "AND CONVERT(DATE, MatchDate) = CONVERT(DATE, @MatchDate)";
 
                             int existingMatches = (int)Con.GetSingleValue(checkQuery,
@@ -223,7 +229,7 @@ namespace soccerTeamManagementApp
 
                         // Checks if there is already a match between the teams on the same date ( only date, no time specified )
                         string checkQuery = "SELECT COUNT(*) FROM Matches " +
-                                            "WHERE ((HomeTeamID = @HomeTeamID AND AwayTeamID = @AwayTeamID) OR (HomeTeamID = @AwayTeamID AND AwayTeamID = @TeamAID)) " +
+                                            "WHERE ((HomeTeamID = @HomeTeamID AND AwayTeamID = @AwayTeamID) OR (HomeTeamID = @AwayTeamID AND AwayTeamID = @HomeTeamID)) " +
                                             "AND CONVERT(DATE, MatchDate) = CONVERT(DATE, @MatchDate)";
 
 
@@ -282,7 +288,7 @@ namespace soccerTeamManagementApp
             this.Close();
         }
 
-        /*private void SelectTeamA_SelectedIndexChanged(object sender, EventArgs e)
+        private void SelectTeamA_SelectedIndexChanged(object sender, EventArgs e)
         {
             // Team A selected and set according TeamID
             int selectedIndex = SelectTeamA.SelectedIndex;
@@ -300,7 +306,7 @@ namespace soccerTeamManagementApp
                 int selectedTeamId = teamIdsForTeamB[selectedIndex];
             }
         }
-        */
+        
 
 
         private int key = 0;

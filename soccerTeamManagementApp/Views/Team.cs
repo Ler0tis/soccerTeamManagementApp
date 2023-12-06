@@ -137,8 +137,16 @@ namespace soccerTeamManagementApp
                             cmd.ExecuteNonQuery();
                         }
 
-                        // Update players with No Team ( TeamId 18 )
-                        string updatePlayersQuery = "UPDATE Players SET TeamID = 18 WHERE TeamID = @TeamID";
+                        // Update players with No Team ( TeamId 1 )
+                        string updatePlayersQuery = "UPDATE Players SET TeamID = 1 WHERE TeamID = @TeamID";
+                        using (SqlCommand cmd = new SqlCommand(updatePlayersQuery, connection))
+                        {
+                            cmd.Parameters.Add(new SqlParameter("@TeamID", key));
+                            cmd.ExecuteNonQuery();
+                        }
+
+                        // Update coaches with No Team ( TeamId 1 )
+                        string updateCoachesQuery = "UPDATE Coaches SET TeamID = 1 WHERE TeamID = @TeamID";
                         using (SqlCommand cmd = new SqlCommand(updatePlayersQuery, connection))
                         {
                             cmd.Parameters.Add(new SqlParameter("@TeamID", key));

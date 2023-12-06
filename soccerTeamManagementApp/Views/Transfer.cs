@@ -11,6 +11,7 @@ using System.Data.SqlClient;
 using Newtonsoft.Json;
 using System.IO;
 
+
 namespace soccerTeamManagementApp
 {
 
@@ -18,13 +19,13 @@ namespace soccerTeamManagementApp
     public partial class Transfer : Form
     {
         Functions Con;
-        private List<TransferData> transferHistory;
+        private List<Player> transferHistory;
 
         public Transfer()
         {
             InitializeComponent();
             Con = new Functions();
-            transferHistory = new List<TransferData>();
+            transferHistory = new List<Player>();
 
             selectTransferTeamTb.SelectedIndexChanged += selectTransferTeamTb_SelectedIndexChanged;
 
@@ -33,17 +34,15 @@ namespace soccerTeamManagementApp
 
         }
 
-        public class TransferData
+        public class Player
         {
             public int PlayerID { get; set; }
-            public int OldTeamID { get; set; }
-            public int NewTeamID { get; set; }
+            public string FirstName { get; set; }
+            public string LastName { get; set; }
+            public int TeamID { get; set; } // Team waar de speler momenteel bij hoort
+            public List<Goal> Goals { get; set; } = new List<Goal>(); // Lijst van doelpunten van de speler
         }
 
-        private void label2_Click(object sender, EventArgs e)
-        {
-
-        }
 
         
         private void GetTeams(ComboBox comboBox)
@@ -117,49 +116,156 @@ namespace soccerTeamManagementApp
         {
             try
             {
-                string updateQuery = "UPDATE Players SET TeamID = @NewTeamID WHERE PlayerID = @PlayerID AND TeamID = @CurrentTeamID";
+                string updatePlayerQuery = "UPDATE Players SET TeamID = @NewTeamID WHERE PlayerID = @PlayerID AND TeamID = @CurrentTeamID";
 
-                List<SqlParameter> parameters = new List<SqlParameter>
+                List<SqlParameter> playerParameters = new List<SqlParameter>
                 {
                     new SqlParameter("@NewTeamID", newTeamID),
                     new SqlParameter("@PlayerID", selectedPlayerID),
                     new SqlParameter("@CurrentTeamID", currentTeamID)
                 };
 
-                int result = Con.SetData(updateQuery, parameters.ToArray());
-
-                if (result > 0)
+                // Update speler en doelpunten binnen een transactie
+                using (SqlConnection connection = new SqlConnection(Con.ConStr))
                 {
-                    MessageBox.Show("Player transferred successfully");
-
-                    //TODO: first get the lsit  filled for JSON and then save to Json
-                    var transfer = new TransferData
+                    connection.Open();
+                    using (SqlTransaction transaction = connection.BeginTransaction())
                     {
-                        PlayerID = selectedPlayerID,
-                        OldTeamID = currentTeamID,
-                        NewTeamID = newTeamID
+                        try
+                        {
+                            // Update speler
+                            using (SqlCommand cmdPlayer = new SqlCommand(updatePlayerQuery, connection, transaction))
+                            {
+                                cmdPlayer.Parameters.AddRange(playerParameters.ToArray());
+                                cmdPlayer.ExecuteNonQuery();
+                            }
 
-                    };
+                            // Zoek de speler op basis van PlayerID
+                            Player player = GetPlayer(selectedPlayerID);
 
-                    transferHistory.Add(transfer);
+                            // Update doelpunten van de speler
+                            foreach (Goal goal in player.Goals)
+                            {
+                                string updateGoalsQuery = "UPDATE Goals SET TeamID = @NewTeamID WHERE GoalID = @GoalID";
+                                List<SqlParameter> goalsParameters = new List<SqlParameter>
+                            {
+                                new SqlParameter("@NewTeamID", newTeamID),
+                                new SqlParameter("@GoalID", goal.GoalID)
+                            };
 
-                    SaveTransfersToJson();
+                                using (SqlCommand cmdGoals = new SqlCommand(updateGoalsQuery, connection, transaction))
+                                {
+                                    cmdGoals.Parameters.AddRange(goalsParameters.ToArray());
+                                    cmdGoals.ExecuteNonQuery();
+                                }
+                            }
 
-                    // Reset playerCombobox
-                    selectTransferPlayerTb.DataSource = null;
+                            // Commit de transactie als alles goed gaat
+                            transaction.Commit();
 
+                            MessageBox.Show("Player transferred successfully");
+
+                            //TODO: first get the list filled for JSON and then save to Json
+                            var transfer = new Player
+                            {
+                                PlayerID = selectedPlayerID,
+                                TeamID = currentTeamID
+                                
+                            };
+
+                            transferHistory.Add(transfer);
+
+                            SaveTransfersToJson();
+
+                            // Reset playerCombobox
+                            selectTransferPlayerTb.DataSource = null;
+                        }
+                        catch (Exception ex)
+                        {
+                            // Bij een fout, rol de transactie terug
+                            transaction.Rollback();
+                            MessageBox.Show("An error occurred: " + ex.Message);
+                        }
+                    }
                 }
-                else
-                {
-                    MessageBox.Show("Failed to transfer player");
-                }
-
             }
             catch (Exception ex)
             {
                 MessageBox.Show("An error occurred: " + ex.Message);
             }
         }
+
+        private Player GetPlayer(int playerID)
+        {
+            Player player = null;
+
+            string query = "SELECT PlayerID, FirstName, LastName, TeamID FROM Players WHERE PlayerID = @PlayerID";
+
+            using (SqlConnection connection = new SqlConnection(Con.ConStr))
+            {
+                connection.Open();
+
+                using (SqlCommand cmd = new SqlCommand(query, connection))
+                {
+                    cmd.Parameters.AddWithValue("@PlayerID", playerID);
+
+                    using (SqlDataReader reader = cmd.ExecuteReader())
+                    {
+                        if (reader.Read())
+                        {
+                            player = new Player
+                            {
+                                PlayerID = Convert.ToInt32(reader["PlayerID"]),
+                                FirstName = reader["FirstName"].ToString(),
+                                LastName = reader["LastName"].ToString(),
+                                TeamID = Convert.ToInt32(reader["TeamID"]),
+                                Goals = GetGoalsForPlayer(playerID)
+                            };
+                        }
+                    }
+                }
+            }
+
+            return player;
+        }
+
+        private List<Goal> GetGoalsForPlayer(int playerID)
+        {
+            List<Goal> goals = new List<Goal>();
+
+            string query = "SELECT GoalID, MatchID, GoalMinute FROM Goals WHERE PlayerID = @PlayerID";
+
+            using (SqlConnection connection = new SqlConnection(Con.ConStr))
+            {
+                connection.Open();
+
+                using (SqlCommand cmd = new SqlCommand(query, connection))
+                {
+                    cmd.Parameters.AddWithValue("@PlayerID", playerID);
+
+                    using (SqlDataReader reader = cmd.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            Goal goal = new Goal
+                            {
+                                GoalID = Convert.ToInt32(reader["GoalID"]),
+                                MatchID = Convert.ToInt32(reader["MatchID"]),
+                                GoalMinute = Convert.ToInt32(reader["GoalMinute"])
+                            };
+
+                            goals.Add(goal);
+                        }
+                    }
+                }
+            }
+
+            return goals;
+        }
+
+
+
+
 
 
         private void TransferBtn_Click(object sender, EventArgs e)

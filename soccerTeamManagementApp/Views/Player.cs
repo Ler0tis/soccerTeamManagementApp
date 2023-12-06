@@ -23,8 +23,8 @@ namespace soccerTeamManagementApp
         private void ShowPlayers()
         {
             string query = "SELECT P.PlayerID, P.FirstName, P.LastName, T.TeamName AS Team, P.BirthDate, P.JerseyNumber, P.Position, P.Salary " +
-                    "FROM Players P " +
-                    "LEFT JOIN Teams T ON P.TeamID = T.TeamId"; // Use of left JOIN get all players, even without team
+                           "FROM Players P " +
+                           "LEFT JOIN Teams T ON P.TeamID = T.TeamId"; // Use of left JOIN get all players, even without team
             DataTable playerData = Con.GetData(query);
 
             // Create a new column in the DataTable to store the formatted Salary
@@ -44,7 +44,15 @@ namespace soccerTeamManagementApp
             // Set the DataGridView's data source to the DataTable with the formatted Salary
             PlayerList.DataSource = playerData;
 
-            //PlayerList.Columns["PlayerId"].Visible = false;
+
+            PlayerList.Columns["Salary"].Visible = false;
+
+            PlayerList.Columns["PlayerID"].Width = 50;
+            PlayerList.Columns["Team"].Width = 100;
+            PlayerList.Columns["JerseyNumber"].Width = 55;
+            PlayerList.Columns["Position"].Width = 150;
+            PlayerList.Columns["FormattedSalary"].Width = 150;
+
         }
 
         private void GetTeams()

@@ -24,7 +24,7 @@ namespace soccerTeamManagementApp
 
         private List<MatchData> matchDataList;
        
-
+        // constructor
         public MatchDetails(int matchID, List<MatchData> matchDataList)
         {
             InitializeComponent();
@@ -40,6 +40,8 @@ namespace soccerTeamManagementApp
             {
                 InitializeScores();
             }
+
+            
         }
 
         private void InitializeScores()
@@ -235,93 +237,71 @@ namespace soccerTeamManagementApp
             }
         }
 
+
+        private MatchData currentMatchData = new MatchData();
+
         private void AddHomeTeamBtn_Click(object sender, EventArgs e)
         {
+            
             int homeTeamID = GetHomeTeamID(matchID);
             AddGoal(matchID, homeTeamID, selectHomePlayerTb, goalMinuteTeamA, GoalsTeamA);
         }
 
         private void AddAwayTeamBtn_Click(object sender, EventArgs e)
         {
+            
             int awayTeamID = GetAwayTeamID(matchID);
             AddGoal(matchID, awayTeamID, selectAwayPlayerTb, goalMinuteTeamB, GoalsTeamB);
         }
 
-
-        private MatchData currentMatchData = new MatchData();
         private void AddGoal(int matchID, int teamID, ComboBox playerComboBox, TextBox minuteTextBox, DataGridView dataGridView)
         {
             try
             {
-                using (SqlConnection connection = new SqlConnection(Con.ConStr))
+                
+                // Get the MatchData from database. Needed when saving to JSON under the right Team
+                currentMatchData = GetMatchDataFromDatabase(matchID);
+
+                // Add Goal to current matchDate
+                int generatedGoalID = InsertGoalIntoDatabase(matchID, playerComboBox, minuteTextBox);
+
+                if (generatedGoalID > 0)
                 {
-                    connection.Open();
-
-                    string insertQuery = "INSERT INTO Goals (MatchID, PlayerID, GoalMinute) VALUES (@MatchID, @PlayerID, @GoalMinute)";
-
-                    List<SqlParameter> parameters = new List<SqlParameter>
+                    Goal newGoal = new Goal
                     {
-                        new SqlParameter("@MatchID", matchID),
-                        new SqlParameter("@PlayerID", (int)playerComboBox.SelectedValue),
-                        new SqlParameter("@GoalMinute", Convert.ToInt32(minuteTextBox.Text))
+                        PlayerID = (int)playerComboBox.SelectedValue,
+                        GoalMinute = Convert.ToInt32(minuteTextBox.Text),
+                        MatchID = matchID,
+                        GoalID = generatedGoalID
                     };
 
-                    int result = Con.SetData(insertQuery, parameters.ToArray());
-
-                    // Error handeling: check lenght of matchDataList
-                    //MessageBox.Show($"Number of items in matchDataList: {matchDataList.Count}");
-
-                    // Error handeling: check if there are matching MatchIDs
-                    //MessageBox.Show($"Matching MatchIDs: {string.Join(", ", matchDataList.Select(match => match.MatchID))}");
-
-                    // Error handeling: loop to see data of matchDataList if any
-                    /*foreach (var matchData in matchDataList)
+                    // Add goal to correct list
+                    if (teamID == GetHomeTeamID(matchID))
                     {
-                        MessageBox.Show($"MatchID in matchDataList: {matchData.MatchID}, HomeTeam: {matchData.HomeTeam}, AwayTeam: {matchData.AwayTeam}");
+                        currentMatchData.HomeTeamGoals.Add(newGoal);
                     }
-                    */
-
-                    // JSON //
-                    MatchData currentMatchData = matchDataList.FirstOrDefault(match => match.MatchID == matchID);
-
-                    if (currentMatchData != null)
+                    else if (teamID == GetAwayTeamID(matchID))
                     {
-                        Goal newGoal = new Goal
-                        {
-                            PlayerID = (int)playerComboBox.SelectedValue,
-                            GoalMinute = Convert.ToInt32(minuteTextBox.Text),
-                            MatchID = matchID
-                    };
-
-                        currentMatchData.Goals.Add(newGoal);
-
-
-                        // Show list with current goals from Team
-                        ShowGoals(teamID, dataGridView);
-
-                        // Save updated Matchdata in JSON
-                        SaveMatchDataToJson(matchDataList);
+                        currentMatchData.AwayTeamGoals.Add(newGoal);
                     }
 
-                    if (result > 0)
-                    {
-                        MessageBox.Show("Goal added");
 
-                        UpdateScores(matchID, teamID, 1);
+                    SaveMatchDataToJson(matchDataList);
 
-                        ShowGoals(teamID, dataGridView);
+                    ShowGoals(teamID, dataGridView);
+                    MessageBox.Show("Goal added");
 
-                        UpdateScoreTextBox(teamID);
+                    // Update scores/textbox
+                    UpdateScores(matchID, teamID, 1);
+                    UpdateScoreTextBox(teamID);
 
-                        // reset input fields
-                        playerComboBox.SelectedIndex = 0;
-                        minuteTextBox.Text = string.Empty;
-                        
-                    }
-                    else
-                    {
-                        MessageBox.Show("Failed to add the goal");
-                    }
+                    // Reset inputfields
+                    playerComboBox.SelectedIndex = 0;
+                    minuteTextBox.Text = string.Empty;
+                }
+                else
+                {
+                    MessageBox.Show("Failed to add the goal");
                 }
             }
             catch (Exception ex)
@@ -330,61 +310,146 @@ namespace soccerTeamManagementApp
             }
         }
 
-        // TODO: add parameter List to SaveMatchDataToJson to update list accordingly
+
+
+
+
+        private MatchData GetMatchDataFromDatabase(int matchID)
+        {
+            try
+            {
+                string query = "SELECT M.MatchID, T1.TeamName AS HomeTeam, T2.TeamName AS AwayTeam, M.MatchDate, M.HomeTeamScore, M.AwayTeamScore " +
+                               "FROM Matches M " +
+                               "INNER JOIN Teams T1 ON M.HomeTeamID = T1.TeamID " +
+                               "INNER JOIN Teams T2 ON M.AwayTeamID = T2.TeamID " +
+                               "WHERE M.MatchID = @MatchID";
+
+                List<SqlParameter> parameters = new List<SqlParameter>
+                {
+                    new SqlParameter("@MatchID", matchID)
+                };
+
+                DataTable matchDataTable = Con.GetData(query, parameters.ToArray());
+
+                if (matchDataTable.Rows.Count > 0)
+                {
+                    DataRow row = matchDataTable.Rows[0];
+
+                    MatchData matchData = new MatchData
+                    {
+                        MatchID = Convert.ToInt32(row["MatchID"]),
+                        HomeTeam = row["HomeTeam"].ToString(),
+                        AwayTeam = row["AwayTeam"].ToString(),
+                        MatchDate = Convert.ToDateTime(row["MatchDate"]),
+                        HomeTeamScore = Convert.ToInt32(row["HomeTeamScore"]),
+                        AwayTeamScore = Convert.ToInt32(row["AwayTeamScore"]),
+                        
+                    };
+
+                    return matchData;
+                }
+                else
+                {
+                    MessageBox.Show("Match not found");
+                    return null;
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("An error occurred while fetching match data from the database: " + ex.Message);
+                return null;
+            }
+        }
+
+
+
+        private int InsertGoalIntoDatabase(int matchID, ComboBox playerComboBox, TextBox minuteTextBox)
+        {
+            using (SqlConnection connection = new SqlConnection(Con.ConStr))
+            {
+                connection.Open();
+
+                string insertQuery = "INSERT INTO Goals (MatchID, PlayerID, GoalMinute) " +
+                                     "VALUES (@MatchID, @PlayerID, @GoalMinute); " +
+                                     "SELECT SCOPE_IDENTITY();";
+
+                List<SqlParameter> parameters = new List<SqlParameter>
+                {
+                    new SqlParameter("@MatchID", matchID),
+                    new SqlParameter("@PlayerID", (int)playerComboBox.SelectedValue),
+                    new SqlParameter("@GoalMinute", Convert.ToInt32(minuteTextBox.Text))
+                };
+
+                using (SqlCommand cmd = new SqlCommand(insertQuery, connection))
+                {
+                    cmd.Parameters.AddRange(parameters.ToArray());
+                    return Convert.ToInt32(cmd.ExecuteScalar());
+                }
+            }
+        }
+
+
+
         private void SaveMatchDataToJson(List<MatchData> matchDataList)
         {
             try
             {
-                // Find the right MatchData in list to update
+                // Read current data from JSON file
+                string json;
+                if (File.Exists("matches.json"))
+                {
+                    json = File.ReadAllText("matches.json");
+                    matchDataList = JsonConvert.DeserializeObject<List<MatchData>>(json) ?? new List<MatchData>();
+                }
+
+                // Add new matchData to list
                 MatchData existingMatchData = matchDataList.FirstOrDefault(match => match.MatchID == currentMatchData.MatchID);
 
                 if (existingMatchData != null)
                 {
-                    // If MatchData exist in list, replace with current MatchData
+                    MatchData updatedMatchData = new MatchData
+                    {
+                        MatchID = existingMatchData.MatchID,
+                        HomeTeam = existingMatchData.HomeTeam,
+                        AwayTeam = existingMatchData.AwayTeam,
+                        MatchDate = existingMatchData.MatchDate,
+                        HomeTeamScore = existingMatchData.HomeTeamScore,
+                        AwayTeamScore = existingMatchData.AwayTeamScore,
+                        HomeTeamGoals = existingMatchData.HomeTeamGoals.ToList(),
+                        AwayTeamGoals = existingMatchData.AwayTeamGoals.ToList()
+
+                    };
+
+                    if (currentMatchData.HomeTeamGoals != null)
+                    {
+                        updatedMatchData.HomeTeamGoals.AddRange(currentMatchData.HomeTeamGoals);
+                    }
+
+                    if (currentMatchData.AwayTeamGoals != null)
+                    {
+                        updatedMatchData.AwayTeamGoals.AddRange(currentMatchData.AwayTeamGoals);
+                    }
+
                     int index = matchDataList.IndexOf(existingMatchData);
-                    matchDataList[index] = currentMatchData;
+                    matchDataList[index] = updatedMatchData;
+
                 }
                 else
                 {
-                    
                     matchDataList.Add(currentMatchData);
                 }
 
-                // write list to JSON-file
-                string json = JsonConvert.SerializeObject(matchDataList, Formatting.Indented);
-                System.IO.File.WriteAllText("matches.json", json);
+                // write edited list back to JSON
+                json = JsonConvert.SerializeObject(matchDataList, Formatting.Indented);
+                File.WriteAllText("matches.json", json);
 
-                string currentDirectory = Environment.CurrentDirectory;
-
-                /*
-                Error handeling: check where the file is saved
-                MessageBox.Show("JSON content:\n" + json);
-                MessageBox.Show("JSON file saved to: " + Path.Combine(currentDirectory, "matches.json"));
-                */
+                MessageBox.Show("Match data saved successfully.");
             }
             catch (Exception ex)
             {
                 MessageBox.Show("An error occurred while saving match data to JSON: " + ex.Message);
             }
         }
-
-        /*private List<MatchData> LoadMatchDataFromJson()
-        {
-            try
-            {
-                string json = System.IO.File.ReadAllText("matches.json");
-                List<MatchData> matchDataList = JsonConvert.DeserializeObject<List<MatchData>>(json);
-
-                return matchDataList ?? new List<MatchData>();
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show("An error occurred while loading match data from JSON: " + ex.Message);
-                return new List<MatchData>();
-            }
-        }
-        */
-
 
 
         private void GoalsTeamA_CellContentClick(object sender, DataGridViewCellEventArgs e)

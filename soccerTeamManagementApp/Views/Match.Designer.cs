@@ -265,7 +265,7 @@ namespace soccerTeamManagementApp
             this.SelectTeamA.Name = "SelectTeamA";
             this.SelectTeamA.Size = new System.Drawing.Size(265, 28);
             this.SelectTeamA.TabIndex = 106;
-            this.SelectTeamA.SelectedIndexChanged += new System.EventHandler(this.SelectTeamA_SelectedIndexChanged);
+            
             // 
             // SelectTeamB
             // 
@@ -275,7 +275,7 @@ namespace soccerTeamManagementApp
             this.SelectTeamB.Name = "SelectTeamB";
             this.SelectTeamB.Size = new System.Drawing.Size(265, 28);
             this.SelectTeamB.TabIndex = 108;
-            this.SelectTeamB.SelectedIndexChanged += new System.EventHandler(this.SelectTeamB_SelectedIndexChanged);
+            
             // 
             // MatchDetailsBtn
             // 
