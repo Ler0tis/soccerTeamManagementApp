@@ -30,7 +30,6 @@ namespace soccerTeamManagementApp
     {
         public int GoalID { get; set; }
         public int PlayerID { get; set; }
-        public int MatchID { get; set; }
         public int GoalMinute { get; set; }
 
     }
@@ -105,7 +104,6 @@ namespace soccerTeamManagementApp
                 MatchList.DataSource = matchDataList;
                 MatchList.ResetBindings();
                 
-
 
                 // Error handeling:   check lenght of matchDataList
                 //MessageBox.Show($"Number of items in matchDataList: {matchDataList.Count}");
@@ -278,7 +276,6 @@ namespace soccerTeamManagementApp
         }
 
 
-        
 
 
         private void CancelBtn_Click(object sender, EventArgs e)
@@ -393,7 +390,6 @@ namespace soccerTeamManagementApp
         {
             ShowMatches();
         }
-
 
     }
 }

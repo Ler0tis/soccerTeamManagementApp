@@ -18,9 +18,11 @@ namespace soccerTeamManagementApp
     {
 
         private Functions Con;
+
         private int matchID;
         private int homeTeamScore;
         private int awayTeamScore;
+        private int goalIDToRemove = -1;
 
         private List<MatchData> matchDataList;
        
@@ -254,16 +256,33 @@ namespace soccerTeamManagementApp
             AddGoal(matchID, awayTeamID, selectAwayPlayerTb, goalMinuteTeamB, GoalsTeamB);
         }
 
-        private void AddGoal(int matchID, int teamID, ComboBox playerComboBox, TextBox minuteTextBox, DataGridView dataGridView)
+        private void AddGoal(int matchID, int teamID, ComboBox playerComboBox, TextBox minuteTextBox, DataGridView dataGridView, int goalID = -1)
         {
             try
             {
-                
-                // Get the MatchData from database. Needed when saving to JSON under the right Team
+                // Get the MatchData from the database. Needed when saving to JSON under the correct team + MatchID
                 currentMatchData = GetMatchDataFromDatabase(matchID);
 
-                // Add Goal to current matchDate
-                int generatedGoalID = InsertGoalIntoDatabase(matchID, playerComboBox, minuteTextBox);
+                int generatedGoalID = -1;
+
+                using (SqlConnection connection = new SqlConnection(Con.ConStr))
+                {
+                    connection.Open();
+
+                    string insertQuery = "INSERT INTO Goals (MatchID, PlayerID, GoalMinute) VALUES (@MatchID, @PlayerID, @GoalMinute); SELECT SCOPE_IDENTITY();";
+
+                    using (SqlCommand cmd = new SqlCommand(insertQuery, connection))
+                    {
+                        cmd.Parameters.AddWithValue("@MatchID", matchID);
+                        cmd.Parameters.AddWithValue("@PlayerID", (int)playerComboBox.SelectedValue);
+                        cmd.Parameters.AddWithValue("@GoalMinute", Convert.ToInt32(minuteTextBox.Text));
+
+                        
+                        //goalID is geenerated by SCOPE_IDENTITY()
+                        generatedGoalID = Convert.ToInt32(cmd.ExecuteScalar());
+                    }
+                }
+
 
                 if (generatedGoalID > 0)
                 {
@@ -271,11 +290,10 @@ namespace soccerTeamManagementApp
                     {
                         PlayerID = (int)playerComboBox.SelectedValue,
                         GoalMinute = Convert.ToInt32(minuteTextBox.Text),
-                        MatchID = matchID,
                         GoalID = generatedGoalID
                     };
 
-                    // Add goal to correct list
+                    // Add goal to the correct list
                     if (teamID == GetHomeTeamID(matchID))
                     {
                         currentMatchData.HomeTeamGoals.Add(newGoal);
@@ -285,8 +303,8 @@ namespace soccerTeamManagementApp
                         currentMatchData.AwayTeamGoals.Add(newGoal);
                     }
 
-
-                    SaveMatchDataToJson(matchDataList);
+                    // Save match data to JSON
+                    SaveMatchDataToJson(matchDataList, matchID);
 
                     ShowGoals(teamID, dataGridView);
                     MessageBox.Show("Goal added");
@@ -295,7 +313,7 @@ namespace soccerTeamManagementApp
                     UpdateScores(matchID, teamID, 1);
                     UpdateScoreTextBox(teamID);
 
-                    // Reset inputfields
+                    // Reset input fields
                     playerComboBox.SelectedIndex = 0;
                     minuteTextBox.Text = string.Empty;
                 }
@@ -306,11 +324,9 @@ namespace soccerTeamManagementApp
             }
             catch (Exception ex)
             {
-                MessageBox.Show("An error occurred while establishing database connection: " + ex.Message);
+                MessageBox.Show("An error occurred while establishing a database connection: " + ex.Message);
             }
         }
-
-
 
 
 
@@ -362,96 +378,6 @@ namespace soccerTeamManagementApp
         }
 
 
-
-        private int InsertGoalIntoDatabase(int matchID, ComboBox playerComboBox, TextBox minuteTextBox)
-        {
-            using (SqlConnection connection = new SqlConnection(Con.ConStr))
-            {
-                connection.Open();
-
-                string insertQuery = "INSERT INTO Goals (MatchID, PlayerID, GoalMinute) " +
-                                     "VALUES (@MatchID, @PlayerID, @GoalMinute); " +
-                                     "SELECT SCOPE_IDENTITY();";
-
-                List<SqlParameter> parameters = new List<SqlParameter>
-                {
-                    new SqlParameter("@MatchID", matchID),
-                    new SqlParameter("@PlayerID", (int)playerComboBox.SelectedValue),
-                    new SqlParameter("@GoalMinute", Convert.ToInt32(minuteTextBox.Text))
-                };
-
-                using (SqlCommand cmd = new SqlCommand(insertQuery, connection))
-                {
-                    cmd.Parameters.AddRange(parameters.ToArray());
-                    return Convert.ToInt32(cmd.ExecuteScalar());
-                }
-            }
-        }
-
-
-
-        private void SaveMatchDataToJson(List<MatchData> matchDataList)
-        {
-            try
-            {
-                // Read current data from JSON file
-                string json;
-                if (File.Exists("matches.json"))
-                {
-                    json = File.ReadAllText("matches.json");
-                    matchDataList = JsonConvert.DeserializeObject<List<MatchData>>(json) ?? new List<MatchData>();
-                }
-
-                // Add new matchData to list
-                MatchData existingMatchData = matchDataList.FirstOrDefault(match => match.MatchID == currentMatchData.MatchID);
-
-                if (existingMatchData != null)
-                {
-                    MatchData updatedMatchData = new MatchData
-                    {
-                        MatchID = existingMatchData.MatchID,
-                        HomeTeam = existingMatchData.HomeTeam,
-                        AwayTeam = existingMatchData.AwayTeam,
-                        MatchDate = existingMatchData.MatchDate,
-                        HomeTeamScore = existingMatchData.HomeTeamScore,
-                        AwayTeamScore = existingMatchData.AwayTeamScore,
-                        HomeTeamGoals = existingMatchData.HomeTeamGoals.ToList(),
-                        AwayTeamGoals = existingMatchData.AwayTeamGoals.ToList()
-
-                    };
-
-                    if (currentMatchData.HomeTeamGoals != null)
-                    {
-                        updatedMatchData.HomeTeamGoals.AddRange(currentMatchData.HomeTeamGoals);
-                    }
-
-                    if (currentMatchData.AwayTeamGoals != null)
-                    {
-                        updatedMatchData.AwayTeamGoals.AddRange(currentMatchData.AwayTeamGoals);
-                    }
-
-                    int index = matchDataList.IndexOf(existingMatchData);
-                    matchDataList[index] = updatedMatchData;
-
-                }
-                else
-                {
-                    matchDataList.Add(currentMatchData);
-                }
-
-                // write edited list back to JSON
-                json = JsonConvert.SerializeObject(matchDataList, Formatting.Indented);
-                File.WriteAllText("matches.json", json);
-
-                MessageBox.Show("Match data saved successfully.");
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show("An error occurred while saving match data to JSON: " + ex.Message);
-            }
-        }
-
-
         private void GoalsTeamA_CellContentClick(object sender, DataGridViewCellEventArgs e)
         {
             if (e.RowIndex >= 0)
@@ -484,34 +410,39 @@ namespace soccerTeamManagementApp
 
         private void DeleteGoalA_Btn_Click(object sender, EventArgs e)
         {
-
-            if (GoalsTeamA.SelectedRows.Count > 0)
+            if (GoalsTeamA.Rows.Count > 0 && GoalsTeamA.SelectedRows.Count > 0)
             {
-                int goalID = Convert.ToInt32(GoalsTeamA.SelectedRows[0].Cells["GoalID"].Value);
+                int selectedIndex = GoalsTeamA.SelectedRows[0].Index;
+                int goalIDToRemove = Convert.ToInt32(GoalsTeamA.SelectedRows[0].Cells["GoalID"].Value);
 
-                GoalsTeamA.Rows.RemoveAt(GoalsTeamA.SelectedRows[0].Index);
+                // Remove the selected row from the DataGridView
+                GoalsTeamA.Rows.RemoveAt(selectedIndex);
 
-                RemoveGoal(GetHomeTeamID(matchID), goalID, GoalsTeamA);
+                // Remove the goal from the data
+                RemoveGoal(GetHomeTeamID(matchID), goalIDToRemove, GoalsTeamA);
             }
             else
             {
-                MessageBox.Show("Select a goal to remove.");
+                MessageBox.Show("No goal selected to remove.");
             }
         }
 
         private void DeleteGoalB_Btn_Click(object sender, EventArgs e)
         {
-            if (GoalsTeamB.SelectedRows.Count > 0)
+            if (GoalsTeamB.Rows.Count > 0 && GoalsTeamB.SelectedRows.Count > 0)
             {
-                int goalID = Convert.ToInt32(GoalsTeamB.SelectedRows[0].Cells["GoalID"].Value);
+                int selectedIndex = GoalsTeamB.SelectedRows[0].Index;
+                int goalIDToRemove = Convert.ToInt32(GoalsTeamB.SelectedRows[0].Cells["GoalID"].Value);
 
-                GoalsTeamB.Rows.RemoveAt(GoalsTeamB.SelectedRows[0].Index);
+                // Remove the selected row from the DataGridView
+                GoalsTeamB.Rows.RemoveAt(selectedIndex);
 
-                RemoveGoal(GetAwayTeamID(matchID), goalID, GoalsTeamB);
+                // Remove the goal from the data
+                RemoveGoal(GetAwayTeamID(matchID), goalIDToRemove, GoalsTeamB);
             }
             else
             {
-                MessageBox.Show("Select a goal to remove.");
+                MessageBox.Show("No goal selected to remove.");
             }
         }
 
@@ -531,13 +462,11 @@ namespace soccerTeamManagementApp
                     // Refresh Matches, datagrid, textbox
                     UpdateScores(matchID, teamID, -1);
 
+                    // Remove the goal from the JSON data
+                    SaveMatchDataToJson(matchDataList, matchID);
+
                     ShowGoals(teamID, dataGridView);
-
                     UpdateScoreTextBox(teamID);
-
-                    SaveMatchDataToJson(matchDataList);
-
-                   
                 }
                 else
                 {
@@ -549,6 +478,103 @@ namespace soccerTeamManagementApp
                 MessageBox.Show("An error occurred: " + ex.Message);
             }
         }
+
+
+        private void SaveMatchDataToJson(List<MatchData> matchDataList, int matchID)
+        {
+            try
+            {
+                string jsonPath = "matches.json";
+
+                // Read current data from JSON file
+                List<MatchData> existingMatchDataList = JsonConvert.DeserializeObject<List<MatchData>>(File.ReadAllText(jsonPath)) ?? new List<MatchData>();
+
+                // Find the match in the list
+                MatchData existingMatchData = existingMatchDataList.FirstOrDefault(match => match.MatchID == matchID);
+
+                if (existingMatchData != null)
+                {
+                    // Update the existing match data with the updated goal information
+                    existingMatchData.HomeTeamGoals = GetGoalsFromDatabase(matchID, existingMatchData.HomeTeam, existingMatchData.HomeTeamGoals);
+                    existingMatchData.AwayTeamGoals = GetGoalsFromDatabase(matchID, existingMatchData.AwayTeam, existingMatchData.AwayTeamGoals);
+
+                    // Write the updated list back to JSON
+                    File.WriteAllText(jsonPath, JsonConvert.SerializeObject(existingMatchDataList, Formatting.Indented));
+
+                    MessageBox.Show("Match data saved successfully.");
+                }
+                else
+                {
+                    MessageBox.Show($"Match not found in JSON. MatchID: {matchID}");
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("An error occurred while saving match data to JSON: " + ex.Message);
+            }
+        }
+
+
+        private List<Goal> GetGoalsFromDatabase(int matchID, string teamName, List<Goal> currentGoals)
+        {
+            List<Goal> updatedGoals = new List<Goal>();
+
+            try
+            {
+                string query = "SELECT G.GoalID, P.PlayerID, G.GoalMinute " +
+                               "FROM Goals G " +
+                               "INNER JOIN Players P ON G.PlayerID = P.PlayerID " +
+                               "WHERE G.MatchID = @MatchID AND P.TeamID = (SELECT TeamID FROM Teams WHERE TeamName = @TeamName)";
+
+                using (SqlConnection connection = new SqlConnection(Con.ConStr))
+                {
+                    connection.Open();
+                    using (SqlCommand cmd = new SqlCommand(query, connection))
+                    {
+                        cmd.Parameters.AddWithValue("@MatchID", matchID);
+                        cmd.Parameters.AddWithValue("@TeamName", teamName);
+
+                        using (SqlDataReader reader = cmd.ExecuteReader())
+                        {
+                            while (reader.Read())
+                            {
+                                int goalID = Convert.ToInt32(reader["GoalID"]);
+                                int playerID = Convert.ToInt32(reader["PlayerID"]);
+                                int goalMinute = Convert.ToInt32(reader["GoalMinute"]);
+
+                                // Check if the goalID is in the current goals list
+                                Goal existingGoal = currentGoals.FirstOrDefault(goal => goal.GoalID == goalID);
+
+                                if (existingGoal != null)
+                                {
+                                    // Use the existing goal if found
+                                    updatedGoals.Add(existingGoal);
+                                }
+                                else
+                                {
+                                    // If not found, create a new goal
+                                    Goal newGoal = new Goal
+                                    {
+                                        GoalID = goalID,
+                                        PlayerID = playerID,
+                                        GoalMinute = goalMinute
+                                    };
+
+                                    updatedGoals.Add(newGoal);
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("An error occurred while fetching goals from the database: " + ex.Message);
+            }
+
+            return updatedGoals;
+        }
+
 
 
 
@@ -603,7 +629,7 @@ namespace soccerTeamManagementApp
                             
                             ShowGoals(teamID, dataGridView); // Refresh datagridview
 
-                            SaveMatchDataToJson(matchDataList);
+                            SaveMatchDataToJson(matchDataList, matchID);
 
                             // Reset text en combobox
                             playerComboBox.SelectedIndex = 0;

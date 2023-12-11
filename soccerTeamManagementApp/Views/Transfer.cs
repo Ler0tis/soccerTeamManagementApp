@@ -20,6 +20,7 @@ namespace soccerTeamManagementApp
     {
         Functions Con;
         private List<Player> transferHistory;
+        private int selectedTeamID;
 
         public Transfer()
         {
@@ -39,12 +40,19 @@ namespace soccerTeamManagementApp
             public int PlayerID { get; set; }
             public string FirstName { get; set; }
             public string LastName { get; set; }
-            public int TeamID { get; set; } // Team waar de speler momenteel bij hoort
-            public List<Goal> Goals { get; set; } = new List<Goal>(); // Lijst van doelpunten van de speler
+            public List<TeamHistory> TeamHistory { get; set; } = new List<TeamHistory>();
+            public List<Goal> Goals { get; set; } = new List<Goal>();
+        }
+
+        public class TeamHistory
+        {
+            public int TeamID { get; set; }
+            public DateTime StartDate { get; set; }
+            public DateTime? EndDate { get; set; }
         }
 
 
-        
+
         private void GetTeams(ComboBox comboBox)
         {
             string query = "SELECT * FROM Teams";
@@ -97,7 +105,6 @@ namespace soccerTeamManagementApp
             return players;
         }
 
-        private int selectedTeamID; // class variable 
 
         // Event handler for change selected team
         private void selectTransferTeamTb_SelectedIndexChanged(object sender, EventArgs e)
@@ -105,7 +112,7 @@ namespace soccerTeamManagementApp
             // Is a team selected?
             if (selectTransferTeamTb.SelectedValue != null && int.TryParse(selectTransferTeamTb.SelectedValue.ToString(), out int teamID))
             {
-                // Save team ID in class variable
+                // Save team ID in the class variable
                 selectedTeamID = teamID;
 
                 GetPlayersForTeam(selectedTeamID, selectTransferPlayerTb);
@@ -119,72 +126,35 @@ namespace soccerTeamManagementApp
                 string updatePlayerQuery = "UPDATE Players SET TeamID = @NewTeamID WHERE PlayerID = @PlayerID AND TeamID = @CurrentTeamID";
 
                 List<SqlParameter> playerParameters = new List<SqlParameter>
-                {
-                    new SqlParameter("@NewTeamID", newTeamID),
-                    new SqlParameter("@PlayerID", selectedPlayerID),
-                    new SqlParameter("@CurrentTeamID", currentTeamID)
-                };
+            {
+                new SqlParameter("@NewTeamID", newTeamID),
+                new SqlParameter("@PlayerID", selectedPlayerID),
+                new SqlParameter("@CurrentTeamID", currentTeamID)
+            };
 
-                // Update speler en doelpunten binnen een transactie
                 using (SqlConnection connection = new SqlConnection(Con.ConStr))
                 {
                     connection.Open();
-                    using (SqlTransaction transaction = connection.BeginTransaction())
+
+                    using (SqlCommand cmdPlayer = new SqlCommand(updatePlayerQuery, connection))
                     {
-                        try
+                        cmdPlayer.Parameters.AddRange(playerParameters.ToArray());
+                        int rowsAffected = cmdPlayer.ExecuteNonQuery();
+
+                        if (rowsAffected > 0)
                         {
-                            // Update speler
-                            using (SqlCommand cmdPlayer = new SqlCommand(updatePlayerQuery, connection, transaction))
-                            {
-                                cmdPlayer.Parameters.AddRange(playerParameters.ToArray());
-                                cmdPlayer.ExecuteNonQuery();
-                            }
+                            // Update playerhistory with new team
 
-                            // Zoek de speler op basis van PlayerID
-                            Player player = GetPlayer(selectedPlayerID);
-
-                            // Update doelpunten van de speler
-                            foreach (Goal goal in player.Goals)
-                            {
-                                string updateGoalsQuery = "UPDATE Goals SET TeamID = @NewTeamID WHERE GoalID = @GoalID";
-                                List<SqlParameter> goalsParameters = new List<SqlParameter>
-                            {
-                                new SqlParameter("@NewTeamID", newTeamID),
-                                new SqlParameter("@GoalID", goal.GoalID)
-                            };
-
-                                using (SqlCommand cmdGoals = new SqlCommand(updateGoalsQuery, connection, transaction))
-                                {
-                                    cmdGoals.Parameters.AddRange(goalsParameters.ToArray());
-                                    cmdGoals.ExecuteNonQuery();
-                                }
-                            }
-
-                            // Commit de transactie als alles goed gaat
-                            transaction.Commit();
+                            UpdatePlayerHistory(selectedPlayerID, newTeamID);
 
                             MessageBox.Show("Player transferred successfully");
-
-                            //TODO: first get the list filled for JSON and then save to Json
-                            var transfer = new Player
-                            {
-                                PlayerID = selectedPlayerID,
-                                TeamID = currentTeamID
-                                
-                            };
-
-                            transferHistory.Add(transfer);
-
-                            SaveTransfersToJson();
 
                             // Reset playerCombobox
                             selectTransferPlayerTb.DataSource = null;
                         }
-                        catch (Exception ex)
+                        else
                         {
-                            // Bij een fout, rol de transactie terug
-                            transaction.Rollback();
-                            MessageBox.Show("An error occurred: " + ex.Message);
+                            MessageBox.Show("Player transfer failed. The selected player may not exist in the current team or the team IDs may not match.");
                         }
                     }
                 }
@@ -195,77 +165,42 @@ namespace soccerTeamManagementApp
             }
         }
 
-        private Player GetPlayer(int playerID)
+        private void UpdatePlayerHistory(int playerID, int newTeamID)
         {
-            Player player = null;
+            // Load current player
+            Player player = LoadPlayerHistory(playerID);
 
-            string query = "SELECT PlayerID, FirstName, LastName, TeamID FROM Players WHERE PlayerID = @PlayerID";
-
-            using (SqlConnection connection = new SqlConnection(Con.ConStr))
+            TeamHistory teamHistory = new TeamHistory
             {
-                connection.Open();
+                TeamID = newTeamID,
+                StartDate = DateTime.Now // Transfer date
+            };
 
-                using (SqlCommand cmd = new SqlCommand(query, connection))
-                {
-                    cmd.Parameters.AddWithValue("@PlayerID", playerID);
+            player.TeamHistory.Add(teamHistory);
 
-                    using (SqlDataReader reader = cmd.ExecuteReader())
-                    {
-                        if (reader.Read())
-                        {
-                            player = new Player
-                            {
-                                PlayerID = Convert.ToInt32(reader["PlayerID"]),
-                                FirstName = reader["FirstName"].ToString(),
-                                LastName = reader["LastName"].ToString(),
-                                TeamID = Convert.ToInt32(reader["TeamID"]),
-                                Goals = GetGoalsForPlayer(playerID)
-                            };
-                        }
-                    }
-                }
-            }
-
-            return player;
+            // Update to JSON
+            SavePlayerHistory(player);
         }
 
-        private List<Goal> GetGoalsForPlayer(int playerID)
+        private Player LoadPlayerHistory(int playerID)
         {
-            List<Goal> goals = new List<Goal>();
-
-            string query = "SELECT GoalID, MatchID, GoalMinute FROM Goals WHERE PlayerID = @PlayerID";
-
-            using (SqlConnection connection = new SqlConnection(Con.ConStr))
+            string filePath = $"player_{playerID}_history.json";
+            if (File.Exists(filePath))
             {
-                connection.Open();
-
-                using (SqlCommand cmd = new SqlCommand(query, connection))
-                {
-                    cmd.Parameters.AddWithValue("@PlayerID", playerID);
-
-                    using (SqlDataReader reader = cmd.ExecuteReader())
-                    {
-                        while (reader.Read())
-                        {
-                            Goal goal = new Goal
-                            {
-                                GoalID = Convert.ToInt32(reader["GoalID"]),
-                                MatchID = Convert.ToInt32(reader["MatchID"]),
-                                GoalMinute = Convert.ToInt32(reader["GoalMinute"])
-                            };
-
-                            goals.Add(goal);
-                        }
-                    }
-                }
+                string json = File.ReadAllText(filePath);
+                return JsonConvert.DeserializeObject<Player>(json) ?? new Player();
             }
-
-            return goals;
+            else
+            {
+                return new Player { PlayerID = playerID };
+            }
         }
 
-
-
-
+        private void SavePlayerHistory(Player player)
+        {
+            string json = JsonConvert.SerializeObject(player, Formatting.Indented);
+            File.WriteAllText($"player_{player.PlayerID}_history.json", json);
+        }
 
 
         private void TransferBtn_Click(object sender, EventArgs e)
@@ -296,14 +231,6 @@ namespace soccerTeamManagementApp
             }
         }
 
-        private void SaveTransfersToJson()
-        {
-            string json = JsonConvert.SerializeObject(transferHistory, Formatting.Indented);
-            File.WriteAllText("transfers.json", json);
-        }
-
-    
-
         private void CancelBtn_Click(object sender, EventArgs e)
         {
             Home homeForm = new Home();
@@ -311,5 +238,6 @@ namespace soccerTeamManagementApp
 
             this.Close();
         }
+
     }
 }
