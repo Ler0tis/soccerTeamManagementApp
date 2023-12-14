@@ -70,7 +70,7 @@ namespace soccerTeamManagementApp
 
             playerComboBox.DisplayMember = "Value";
             playerComboBox.ValueMember = "Key";
-            playerComboBox.DataSource = players; // set the list directly as DS
+            playerComboBox.DataSource = players; // set the list of players directly as DS
         }
 
 
@@ -119,43 +119,43 @@ namespace soccerTeamManagementApp
             }
         }
 
+        // Transfer player to new team. Keep reminding oldTeamID for later use if needed.
         private void TransferPlayer(int currentTeamID, int selectedPlayerID, int newTeamID)
         {
             try
             {
-                string updatePlayerQuery = "UPDATE Players SET TeamID = @NewTeamID WHERE PlayerID = @PlayerID AND TeamID = @CurrentTeamID";
-
-                List<SqlParameter> playerParameters = new List<SqlParameter>
-            {
-                new SqlParameter("@NewTeamID", newTeamID),
-                new SqlParameter("@PlayerID", selectedPlayerID),
-                new SqlParameter("@CurrentTeamID", currentTeamID)
-            };
-
                 using (SqlConnection connection = new SqlConnection(Con.ConStr))
                 {
                     connection.Open();
+                    SqlTransaction transaction = connection.BeginTransaction();
 
-                    using (SqlCommand cmdPlayer = new SqlCommand(updatePlayerQuery, connection))
+                    try
                     {
-                        cmdPlayer.Parameters.AddRange(playerParameters.ToArray());
-                        int rowsAffected = cmdPlayer.ExecuteNonQuery();
-
-                        if (rowsAffected > 0)
+                        string updatePlayerQuery = "UPDATE Players SET OldTeamID = TeamID, TeamID = @NewTeamID WHERE PlayerID = @PlayerID AND TeamID = @CurrentTeamID";
+                        using (SqlCommand cmdPlayer = new SqlCommand(updatePlayerQuery, connection, transaction))
                         {
-                            // Update playerhistory with new team
+                            cmdPlayer.Parameters.AddWithValue("@NewTeamID", newTeamID);
+                            cmdPlayer.Parameters.AddWithValue("@PlayerID", selectedPlayerID);
+                            cmdPlayer.Parameters.AddWithValue("@CurrentTeamID", currentTeamID);
+                            int rowsAffected = cmdPlayer.ExecuteNonQuery();
 
-                            UpdatePlayerHistory(selectedPlayerID, newTeamID);
+                            if (rowsAffected > 0)
+                            {
+                                transaction.Commit();
+                                MessageBox.Show("Player transferred successfully");
 
-                            MessageBox.Show("Player transferred successfully");
-
-                            // Reset playerCombobox
-                            selectTransferPlayerTb.DataSource = null;
+                                UpdatePlayerHistory(selectedPlayerID, newTeamID);
+                            }
+                            else
+                            {
+                                MessageBox.Show("Player transfer failed. The selected player doesn't exist in the current team, or the team IDs don't match.");
+                            }
                         }
-                        else
-                        {
-                            MessageBox.Show("Player transfer failed. The selected player may not exist in the current team or the team IDs may not match.");
-                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        transaction.Rollback();
+                        MessageBox.Show("An error occurred during the transfer: " + ex.Message);
                     }
                 }
             }
@@ -165,20 +165,20 @@ namespace soccerTeamManagementApp
             }
         }
 
+
+
         private void UpdatePlayerHistory(int playerID, int newTeamID)
         {
-            // Load current player
             Player player = LoadPlayerHistory(playerID);
 
             TeamHistory teamHistory = new TeamHistory
             {
                 TeamID = newTeamID,
-                StartDate = DateTime.Now // Transfer date
+                StartDate = DateTime.Now // Transfer date is set on moment the transfer is done
             };
 
             player.TeamHistory.Add(teamHistory);
 
-            // Update to JSON
             SavePlayerHistory(player);
         }
 
@@ -216,9 +216,9 @@ namespace soccerTeamManagementApp
                 // Is player selected?
                 if (selectTransferPlayerTb.SelectedValue != null && int.TryParse(selectTransferPlayerTb.SelectedValue.ToString(), out int selectedPlayerID))
                 {
-                    // playerID and previous selectedTeamID then trigger TRansfer player
                     int newTeamID = Convert.ToInt32(selectNewTransferTeamTb.SelectedValue);
                     TransferPlayer(selectedTeamID, selectedPlayerID, newTeamID);
+
                 }
                 else
                 {

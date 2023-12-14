@@ -31,6 +31,7 @@ namespace soccerTeamManagementApp
         public int GoalID { get; set; }
         public int PlayerID { get; set; }
         public int GoalMinute { get; set; }
+        public int TeamID { get; set; }
 
     }
 
@@ -100,10 +101,9 @@ namespace soccerTeamManagementApp
                 }
 
                 // Set matchDataList as datasource for MatchList
-                //MatchList.DataSource = null;
+                MatchList.DataSource = null;
                 MatchList.DataSource = matchDataList;
                 MatchList.ResetBindings();
-                
 
                 // Error handeling:   check lenght of matchDataList
                 //MessageBox.Show($"Number of items in matchDataList: {matchDataList.Count}");
@@ -182,7 +182,9 @@ namespace soccerTeamManagementApp
 
                                 if (result > 0)
                                 {
+                                    MatchList.Refresh();
                                     MessageBox.Show("Match added");
+
                                     ShowMatches();
                                 }
                                 else
@@ -206,6 +208,17 @@ namespace soccerTeamManagementApp
 
 
 
+
+        private int GetSelectedMatchID()
+        {
+            if (MatchList.SelectedRows.Count > 0)
+            {
+                DataGridViewRow selectedRow = MatchList.SelectedRows[0];
+                return Convert.ToInt32(selectedRow.Cells["MatchID"].Value);
+            }
+            return -1;
+        }
+
         private void EditMatch_Btn_Click(object sender, EventArgs e)
         {
             try
@@ -216,7 +229,6 @@ namespace soccerTeamManagementApp
                     int homeTeamID = teamIdsForTeamA[SelectTeamA.SelectedIndex];
                     int awayTeamID = teamIdsForTeamB[SelectTeamB.SelectedIndex];
                     DateTime matchDate = matchDayTb.Value;
-                
 
                     if (homeTeamID == awayTeamID)
                     {
@@ -224,43 +236,50 @@ namespace soccerTeamManagementApp
                     }
                     else
                     {
+                        // Get matchID from selected row ( match)
+                        int selectedMatchID = GetSelectedMatchID();
 
-                        // Checks if there is already a match between the teams on the same date ( only date, no time specified )
-                        string checkQuery = "SELECT COUNT(*) FROM Matches " +
-                                            "WHERE ((HomeTeamID = @HomeTeamID AND AwayTeamID = @AwayTeamID) OR (HomeTeamID = @AwayTeamID AND AwayTeamID = @HomeTeamID)) " +
-                                            "AND CONVERT(DATE, MatchDate) = CONVERT(DATE, @MatchDate)";
-
-
-                        int existingMatches = (int)Con.GetSingleValue(checkQuery,
-                            new SqlParameter("@HomeTeamID", homeTeamID),
-                            new SqlParameter("@AwayTeamID", awayTeamID),
-                            new SqlParameter("@MatchDate", matchDate));
-
-                        // Error handeling: check how many matches there for these teams and this date
-                        //MessageBox.Show($"Existing Matches: {existingMatches}");
-
-                        if (existingMatches > 0)
+                        if (selectedMatchID != -1)
                         {
-                            MessageBox.Show("There already exists a match between these teams on the selected date. Please select different teams or a different date.");
-                        }
-                        else
-                        {
-                            string query = "UPDATE Matches SET HomeTeamID = @HomeTeamID, AwayTeamID = @AwayTeamID, MatchDate = @MatchDate";
+                            // check for same team on same date
+                            string checkQuery = "SELECT COUNT(*) FROM Matches " +
+                                                "WHERE ((HomeTeamID = @HomeTeamID AND AwayTeamID = @AwayTeamID) OR (HomeTeamID = @AwayTeamID AND AwayTeamID = @HomeTeamID)) " +
+                                                "AND CONVERT(DATE, MatchDate) = CONVERT(DATE, @MatchDate)";
 
-                            int result = Con.SetData(query,
+                            int existingMatches = (int)Con.GetSingleValue(checkQuery,
                                 new SqlParameter("@HomeTeamID", homeTeamID),
                                 new SqlParameter("@AwayTeamID", awayTeamID),
                                 new SqlParameter("@MatchDate", matchDate));
 
-                            if (result > 0)
+                            if (existingMatches > 0)
                             {
-                                MessageBox.Show("Match updated");
-                                ShowMatches();
+                                MessageBox.Show("There already exists a match between these teams on the selected date. Please select different teams or a different date.");
                             }
                             else
                             {
-                                MessageBox.Show("Failed to update the match");
+                                
+                                string query = "UPDATE Matches SET HomeTeamID = @HomeTeamID, AwayTeamID = @AwayTeamID, MatchDate = @MatchDate WHERE MatchID = @MatchID";
+
+                                int result = Con.SetData(query,
+                                    new SqlParameter("@MatchID", selectedMatchID),
+                                    new SqlParameter("@HomeTeamID", homeTeamID),
+                                    new SqlParameter("@AwayTeamID", awayTeamID),
+                                    new SqlParameter("@MatchDate", matchDate));
+
+                                if (result > 0)
+                                {
+                                    MessageBox.Show("Match updated");
+                                    RefreshData();
+                                }
+                                else
+                                {
+                                    MessageBox.Show("Failed to update the match");
+                                }
                             }
+                        }
+                        else
+                        {
+                            MessageBox.Show("Selecteer eerst een wedstrijd om bij te werken.");
                         }
                     }
                 }
@@ -275,15 +294,9 @@ namespace soccerTeamManagementApp
             }
         }
 
+        
+        
 
-
-
-        private void CancelBtn_Click(object sender, EventArgs e)
-        {
-            Home homeForm = new Home();
-            homeForm.Show();
-            this.Close();
-        }
 
         private void SelectTeamA_SelectedIndexChanged(object sender, EventArgs e)
         {
@@ -292,8 +305,10 @@ namespace soccerTeamManagementApp
             if (selectedIndex >= 0 && selectedIndex < teamIdsForTeamA.Count)
             {
                 int selectedTeamId = teamIdsForTeamA[selectedIndex];
+                // Doe hier iets met selectedTeamId als dat nodig is
             }
         }
+
         private void SelectTeamB_SelectedIndexChanged(object sender, EventArgs e)
         {
             // Team B selected and set according TeamID
@@ -301,9 +316,11 @@ namespace soccerTeamManagementApp
             if (selectedIndex >= 0 && selectedIndex < teamIdsForTeamB.Count)
             {
                 int selectedTeamId = teamIdsForTeamB[selectedIndex];
+                // Doe hier iets met selectedTeamId als dat nodig is
             }
         }
-        
+
+
 
 
         private int key = 0;
@@ -312,6 +329,7 @@ namespace soccerTeamManagementApp
             if (e.RowIndex >= 0)
             {
                 DataGridViewRow row = MatchList.Rows[e.RowIndex];
+
                 // Gets values for selected match
                 SelectTeamA.Text = row.Cells[1].Value.ToString();
                 SelectTeamB.Text = row.Cells[2].Value.ToString();
@@ -344,40 +362,25 @@ namespace soccerTeamManagementApp
                 if (key == 0)
                 {
                     MessageBox.Show("Please select a match to delete");
+                    return;
                 }
 
-                else if (SelectTeamA.SelectedIndex >= 0 && SelectTeamB.SelectedIndex >= 0)
+                string query = "DELETE FROM Matches WHERE MatchID = @MatchID";
+
+                int result = Con.SetData(query, new SqlParameter("@MatchID", key));
+
+                if (result > 0)
                 {
-                    string teamAName = SelectTeamA.Text;
-                    string teamBName = SelectTeamB.Text;
+                    ShowMatches();
+                    MessageBox.Show("Match deleted");
 
-                    // Search for other matches based on TeamID
-                    int homeTeamID = teamIdsForTeamA[SelectTeamA.SelectedIndex];
-                    int awayTeamID = teamIdsForTeamB[SelectTeamB.SelectedIndex];
-
-                    string query = "DELETE FROM Matches WHERE (HomeTeamID = @HomeTeamID AND AwayTeamID = @AwayTeamID) OR (HomeTeamID = @AwayTeamID AND AwayTeamID = @HomeTeamID)";
-
-                    int result = Con.SetData(query,
-                        new SqlParameter("@HomeTeamID", homeTeamID),
-                        new SqlParameter("@AwayTeamID", awayTeamID));
-
-                    if (result > 0)
-                    {
-                        ShowMatches();
-                        MessageBox.Show("Match deleted");
-                    }
-                    else
-                    {
-                        MessageBox.Show("No match found or there was an error while deleting the match.");
-                    }
-
-                    // Reset input fields
-                    SelectTeamA.SelectedIndex = -1;
-                    SelectTeamB.SelectedIndex = -1;
+                    // Clear the selection in datagrid
+                    MatchList.ClearSelection();
+                    key = 0;
                 }
                 else
                 {
-                    MessageBox.Show("Select valid teams to remove the match");
+                    MessageBox.Show("No match found or there was an error while deleting the match.");
                 }
             }
             catch (Exception ex)
@@ -385,6 +388,18 @@ namespace soccerTeamManagementApp
                 MessageBox.Show("An error occurred: " + ex.Message);
             }
         }
+
+
+
+        private void CancelBtn_Click(object sender, EventArgs e)
+        {
+            Home homeForm = new Home();
+            homeForm.Show();
+            this.Close();
+        }
+
+
+
 
         public void RefreshData()
         {
